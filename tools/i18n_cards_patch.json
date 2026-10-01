@@ -1,0 +1,9 @@
+{
+  "_comment": "官方 zh-Hans 串表里留空的牌名，手工补译。loc_build.py 会在官方表之后 merge 本文件，重跑不会丢。术语约定：toasty = 烤菇。",
+  "by_key": {
+    "CARD_NAMES_FLAME_TURRET_TEST": "火焰炮台 TEST",
+    "CARD_NAMES_BODY_HAMMER": "肉身锤",
+    "CARD_NAMES_CHAINSAW_HANDS": "电锯手"
+  },
+  "by_name": {}
+}
