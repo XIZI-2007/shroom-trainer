@@ -69,8 +69,10 @@ echo.
 if errorlevel 1 (
   echo.
   echo [失败] 推送没成功。常见原因：
-  echo    1) 登录窗口没完成授权（重新双击本文件再试）
-  echo    2) 网络连不上 github.com（稍后再试）
+  echo    1) Clash 没开 —— git 走的是 127.0.0.1:7897 这个代理，
+  echo       请先打开 Clash Verge 再双击本文件。
+  echo    2) 登录窗口没完成授权（重新双击本文件再试）
+  echo    3) 网络波动（稍后再试）
   echo.
   pause
   exit /b 1
