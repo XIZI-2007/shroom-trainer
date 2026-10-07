@@ -4,7 +4,7 @@
 
 ## 下载
 
-1. 打开右侧 **[Releases](../../releases)** 页
+1. 打开 **[Releases 下载页](https://github.com/XIZI-2007/shroom-trainer/releases/latest)**
 2. 下载最新版的 `ShroomTrainer.exe`
 
 > **不需要装 Python，不需要管理员权限。** 就一个 exe（约 80 MB），双击即用。
@@ -66,7 +66,7 @@
 游戏更新过就会这样 —— 内存地址变了。等新版本。
 
 **游戏更新了还能用吗？**
-不一定。游戏一更新，内存偏移就可能变，需要重新做一次适配。关注 Releases 页有没有新版本。
+不一定。游戏一更新，内存偏移就可能变，需要重新做一次适配。关注 [Releases](https://github.com/XIZI-2007/shroom-trainer/releases) 有没有新版本。
 
 **设置存哪？**
 Windows 注册表 `HKCU\Software\XIZI\ShroomTrainer`。**不会在 exe 旁边生成任何文件。**
