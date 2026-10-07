@@ -1,4 +1,6 @@
 /*
+ * Copyright (C) 2026 XIZI-2007. All rights reserved.
+ * 未经作者书面许可，禁止复制、修改、衍生、二次分发或商用本项目全部或部分代码。
  * Shroom & Gloom 辅助 - Frida agent
  * Unity 2022.3.62f3 / IL2CPP (metadata v31) / GameAssembly.dll x64
  *

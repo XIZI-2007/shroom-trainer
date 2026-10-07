@@ -1,3 +1,5 @@
+# Copyright (C) 2026 XIZI-2007. All rights reserved.
+# 未经作者书面许可，禁止复制、修改、衍生、二次分发或商用本项目全部或部分代码。
 """Shroom & Gloom 辅助 - Frida 控制器"""
 import os
 import time

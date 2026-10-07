@@ -1,3 +1,5 @@
+# Copyright (C) 2026 XIZI-2007. All rights reserved.
+# 未经作者书面许可，禁止复制、修改、衍生、二次分发或商用本项目全部或部分代码。
 """真机验证：点面板不抢游戏焦点（WS_EX_NOACTIVATE + WM_MOUSEACTIVATE）。
 
 为什么单开一个脚本：这件事**必须真点鼠标**才有意义 ——

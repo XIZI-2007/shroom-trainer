@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+# Copyright (C) 2026 XIZI-2007. All rights reserved.
+# 未经作者书面许可，禁止复制、修改、衍生、二次分发或商用本项目全部或部分代码。
 """intent_reader 单测：把结构化意图渲染成人话，用真实词典数据过一遍。
 
 跑法：python tools/intent_reader_test.py

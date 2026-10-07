@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+# Copyright (C) 2026 XIZI-2007. All rights reserved.
+# 未经作者书面许可，禁止复制、修改、衍生、二次分发或商用本项目全部或部分代码。
 """由 card_intent_dict.json 生成语义层 src/intent_semantics.json。
 
 「理解效果」= 把 (意图名, 数值, 目标数) 变成可计算的效力。词典只给**文本模板**，

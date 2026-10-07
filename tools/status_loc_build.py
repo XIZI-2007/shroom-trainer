@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+# Copyright (C) 2026 XIZI-2007. All rights reserved.
+# 未经作者书面许可，禁止复制、修改、衍生、二次分发或商用本项目全部或部分代码。
 """从游戏 Unity Localization 的 `Enemy` 串表抽「状态名 → 中英名 + 本地化键」。
 
 状态名在 `Enemy` 表里，key 形如 `STATUS_CHARGED` / `STATUS_MARKED` / `STATUS_SPELL_WEAKNESS`

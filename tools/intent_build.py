@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+# Copyright (C) 2026 XIZI-2007. All rights reserved.
+# 未经作者书面许可，禁止复制、修改、衍生、二次分发或商用本项目全部或部分代码。
 """从游戏串表抽「卡牌意图词典」，产出 src/card_intents.json。
 
 为什么需要它：游戏把卡牌效果建模成 `(CardIntent 枚举, 数值)` 的列表（实测元数据里

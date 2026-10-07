@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+# Copyright (C) 2026 XIZI-2007. All rights reserved.
+# 未经作者书面许可，禁止复制、修改、衍生、二次分发或商用本项目全部或部分代码。
 """把 66 个状态压成**推演引擎能算的模型**（src/status_model.json）。
 
 为什么单开一份：`status_tips.json` 是**官方文案**（原样抽取，权威但不可计算），

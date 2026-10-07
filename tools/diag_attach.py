@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+# Copyright (C) 2026 XIZI-2007. All rights reserved.
+# 未经作者书面许可，禁止复制、修改、衍生、二次分发或商用本项目全部或部分代码。
 """连接诊断：绕过 GUI，直接走 GameTrainer 的 attach 链路，把真实报错打出来。
 
 用法（游戏进到存档后再跑）：

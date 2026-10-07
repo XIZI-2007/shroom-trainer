@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+# Copyright (C) 2026 XIZI-2007. All rights reserved.
+# 未经作者书面许可，禁止复制、修改、衍生、二次分发或商用本项目全部或部分代码。
 """battle_planner 单测：用真实词典数据造牌，验证推演结论是否符合直觉。
 
 跑法：python tools/battle_planner_test.py

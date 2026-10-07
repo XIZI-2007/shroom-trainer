@@ -1,4 +1,6 @@
 @echo off
+rem Copyright (C) 2026 XIZI-2007. All rights reserved.
+rem 未经作者书面许可，禁止复制、修改、衍生、二次分发或商用本项目全部或部分代码。
 rem 注意：本文件必须存成 GBK/ANSI 编码（中文 Windows 的默认代码页），配合下面的 chcp 936。
 rem   曾用 UTF-8 + chcp 65001，个别中文 echo 行会被 cmd 拆错成"'xx' 不是内部或外部命令"。
 rem   另外 GBK 编不出 U+26A0 等符号，bat 里不要用。

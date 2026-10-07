@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+# Copyright (C) 2026 XIZI-2007. All rights reserved.
+# 未经作者书面许可，禁止复制、修改、衍生、二次分发或商用本项目全部或部分代码。
 """从游戏 Unity Localization 抽「状态 → 官方说明文案」（TOOLTIP_STATUS_*）。
 
 这是**游戏自己的权威口径**：每个状态干什么，官方 tooltip 写得很清楚。

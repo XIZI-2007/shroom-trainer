@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+# Copyright (C) 2026 XIZI-2007. All rights reserved.
+# 未经作者书面许可，禁止复制、修改、衍生、二次分发或商用本项目全部或部分代码。
 """从 global-metadata.dat 抽 CardIntent 枚举的**权威成员表**。
 
 为什么不用串表：串表（Card Shared Data 的 `// Intents` 段）只有 235 条文本，

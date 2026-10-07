@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+# Copyright (C) 2026 XIZI-2007. All rights reserved.
+# 未经作者书面许可，禁止复制、修改、衍生、二次分发或商用本项目全部或部分代码。
 """从游戏串表抽「术语词表 + 意图一句话释义」，产出 src/term_glossary.json。
 
 为什么要它：意图词典里的文案模板长这样 ——

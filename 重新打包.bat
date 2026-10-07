@@ -1,4 +1,6 @@
 @echo off
+rem Copyright (C) 2026 XIZI-2007. All rights reserved.
+rem 未经作者书面许可，禁止复制、修改、衍生、二次分发或商用本项目全部或部分代码。
 rem 注意：本文件必须存成 GBK/ANSI 编码（中文 Windows 的默认代码页），配合下面的 chcp 936。
 rem   曾用 UTF-8 + chcp 65001，结果个别中文 echo 行被 cmd 拆错，冒出
 rem   "'xx' is not recognized as an internal or external command"，功能不受影响但很难看。
