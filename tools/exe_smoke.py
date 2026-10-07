@@ -467,6 +467,18 @@ ensure_sheet(True)                       # 重新开页
 for _h in (620, 700, 780, 720, 660, 740):
     user32.SetWindowPos(hwnd, None, 0, 0, 0, int(_h * scale), SWP_NOMOVE | SWP_NOZORDER)
     time.sleep(0.12)                     # 快节奏 → 必然制造布局重入
+def sheet_bottom_px(im):
+    """状态页**底部**的像素 —— 取最左那条 8px 窄边（x≈3），不取正中。
+
+    ⚠️ 以前取「底部正中」：状态页加进第三张卡（打法建议）之后卡片往下挪了一格，
+       在矮窗口下那个点正好落在**控制台卡面**上（浅玻璃 r≈250），于是不管页面铺没铺满
+       都读成"面板背景" ⇒ 假 FAIL（exe_smoke 实测踩到）。
+    取窄边既避开所有卡片（页内卡片一律从 x=8 起），又仍然验的是"页面铺到底"这件事：
+    页面若短一截/没跟着窗口重算，露出来的就是面板底色。
+    """
+    return im.pixelColor(int(3 * scale), max(0, im.height() - int(40 * scale)))
+
+
 time.sleep(1.2)
 check("前置：状态页确实开着（否则下面那条量到的不是页面）", sheet_shown())
 _drag_pix = app.primaryScreen().grabWindow(int(hwnd))
@@ -474,9 +486,9 @@ if WRITE_SHOT:
     _drag_pix.save(SHOT_SHEET_DRAG)
 _di = _drag_pix.toImage()
 _dw, _dh = _di.width(), _di.height()
-# 取底部中间：避开下方 18px 圆角（物理 27px），往上留 40
-_probe = _di.pixelColor(_dw // 2, _dh - 40)
-print(f"[7] 连续拖拽后 尺寸物理 {_dw}x{_dh}  底部中间像素 {_probe.name()}")
+# 取底部最左窄边（见 sheet_bottom_px 的说明：正中会被卡面吃掉）
+_probe = sheet_bottom_px(_di)
+print(f"[7] 连续拖拽后 尺寸物理 {_dw}x{_dh}  底部窄边像素 {_probe.name()}")
 check("★ 连续拖拽后状态页仍铺满（底部是液体色，不是面板背景）",
       _probe.red() < 220,
       f"{_probe.name()}（面板背景 r≈245 / 液体色 r≈157-183）")
@@ -509,8 +521,8 @@ time.sleep(1.2)
 check("前置：状态页确实开着（否则下面那条量到的不是页面）", sheet_shown())
 _wh_pix = app.primaryScreen().grabWindow(int(hwnd))
 _wi = _wh_pix.toImage()
-_wr = _wi.pixelColor(_wi.width() // 2, _wi.height() - 40)
-print(f"[8] 在状态页上滚滚轮后 底部中间像素 {_wr.name()}")
+_wr = sheet_bottom_px(_wi)
+print(f"[8] 在状态页上滚滚轮后 底部窄边像素 {_wr.name()}")
 check("★ 滚轮之后页底仍是液体色（帘子没盖到状态页上面来）",
       _wr.red() < 220, f"{_wr.name()}（面板背景 r≈245 / 液体色 r≈157-183）")
 user32.SetCursorPos(0, 0)
@@ -841,6 +853,120 @@ time.sleep(0.4)
 _drive_glow("color")               # 还原成彩色，别把机器上的设置改坏
 ensure_sheet(False)
 QSettings("XIZI", "ShroomTrainer").setValue("glowMode", _pref_glow0)
+user32.SetCursorPos(0, 0)
+time.sleep(0.4)
+
+# ---- [12] 打法建议卡（滚动区最后一张）：黑盒端到端 ----
+# 这条是补上的：之前**没有任何黑盒覆盖**（grep 打法/plan = 0 命中）。
+# ui_check 证明得了"源码里长这样"，证明不了"真点得开、真画得出来"。
+# 打法卡是**整卡点击开关**（同牌库卡），所以黑盒判据用「点前后画面差异」。
+print("[12] 打法建议卡：黑盒端到端（滚动到底 → 点开/点关）")
+
+
+def scroll_to_bottom(times=24):
+    """把滚动区别到最底（打法卡是滚动区最后一张）。
+
+    ⚠️⚠️ 光标**必须放在滚动视口里**才能滚 —— 第一版图省事用了 `dash_xy()`
+       （那是标题栏上控制台按钮的位置），滚轮事件被标题栏吃掉、`diff=0.0%`，
+       于是"滚到底"这一步静默失效、点到了空白处（症状：点击前后只差 0.3%）。
+       视口中心 = 左内边距 20 + 半宽 268 → 逻辑 x≈288；纵向上缘 64 往下一点取 200。
+    """
+    _org = wt.POINT(0, 0)
+    user32.ClientToScreen(wt.HWND(hwnd), ctypes.byref(_org))
+    user32.SetCursorPos(_org.x + int(288 * scale), _org.y + int(200 * scale))
+    time.sleep(0.25)
+    for _ in range(times):
+        user32.mouse_event(0x0800, 0, 0, -120, 0)      # MOUSEEVENTF_WHEEL 下滚
+        time.sleep(0.08)
+    time.sleep(0.8)
+
+
+def plan_candidates():
+    """打法卡的候选点击点：卡面内的几个 y（从视口底往上扫）。
+
+    ⚠️ 不写死单个坐标：卡片高度自适应（收起 70 / 展开更高），而"卡底距窗口底"
+       还隔着内容底衬（CONTENT_PAD_B）和滚动余量 —— 写死一个 y 会出现
+       "展开点得动、收起点不动"（实测踩过）。所以给一组候选，按黑盒判据驱到目标态。
+    ⚠️ x 取 250：卡片横跨 20~544（面板坐标），250 稳稳在卡面里。
+    """
+    _org = wt.POINT(0, 0)
+    user32.ClientToScreen(wt.HWND(hwnd), ctypes.byref(_org))
+    _wh = wt.RECT()
+    user32.GetClientRect(wt.HWND(hwnd), ctypes.byref(_wh))
+    return [(_org.x + int(250 * scale), _org.y + _wh.bottom - int(_dy * scale))
+            for _dy in (44, 58, 72, 30, 86)]
+
+
+def shot_at_bottom():
+    """滚到最底 + 把光标挪到面板外，再抓一帧。
+
+    ⚠️ 三次抓图的**光标位置必须一致且不在面板上**，否则差异里会混进按钮 hover
+       的荧光/白底变化，归因不到"打法卡开没开"上（点击后光标本来就停在卡上）。
+    """
+    scroll_to_bottom()
+    user32.SetCursorPos(0, 0)
+    time.sleep(0.5)
+    return app.primaryScreen().grabWindow(int(hwnd))
+
+
+def drive_plan(want_open, tries=6):
+    """按**黑盒判据**把打法卡驱到目标开合态，返回 (用掉的点击次数, 与收起基准的差异)。
+
+    判据：抓一帧，与「收起基准帧」比 —— 差异 >1% 即视为开着（展开会多出牌格/摘要行）。
+    ⚠️ 同 §6 的 ensure_sheet：注入的点击开头几次可能被系统吞掉，所以是"驱到"而不是
+       "点一下就当它翻转了"。
+    """
+    used = 0
+    d = 0.0
+    for _p in plan_candidates():
+        for _ in range(2):
+            _cand = app.primaryScreen().grabWindow(int(hwnd))
+            d = img_diff(_plan_off, _cand)
+            if (d > 0.01) == bool(want_open):
+                return used, d
+            click_phys(*_p)
+            used += 1
+        if used >= tries:
+            break
+    return used, img_diff(_plan_off, app.primaryScreen().grabWindow(int(hwnd)))
+
+
+# 先把窗口压回 350 逻辑高，保证"必须滚动才能看到打法卡"这个前提成立
+user32.SetWindowPos(hwnd, None, 0, 0, 0, int(350 * scale), SWP_NOMOVE | SWP_NOZORDER)
+time.sleep(1.2)
+
+_plan_off = shot_at_bottom()
+_px12, _py12 = plan_candidates()[0]
+_hit12 = user32.WindowFromPoint(wt.POINT(int(_px12), int(_py12)))
+check("前置：打法卡卡面上的点确实落在面板上", _hit12 == hwnd,
+      f"WindowFromPoint={_hit12} 面板={hwnd}")
+
+# 滚动这一步本身也要立得住（否则下面的点击是在"没滚下去"的画面上做的）
+user32.SetCursorPos(int(_bx), int(_by))
+time.sleep(0.5)
+for _ in range(24):
+    user32.mouse_event(0x0800, 0, 0, 120, 0)           # 滚回顶部
+    time.sleep(0.08)
+user32.SetCursorPos(0, 0)
+time.sleep(0.6)
+_top = app.primaryScreen().grabWindow(int(hwnd))
+_plan_off = shot_at_bottom()
+_r_scroll = img_diff(_top, _plan_off)
+print(f"[12] 滚动区到底 vs 顶：画面差异 {_r_scroll:.1%}")
+check("★ 滚动区真的能滚（否则下面点的是没滚下去的那一屏）",
+      _r_scroll > 0.05, f"diff={_r_scroll:.1%}")
+
+_used12, _r_plan = drive_plan(True)
+print(f"[12] 点开打法卡：用了 {_used12} 次点击 → 画面差异 {_r_plan:.1%}")
+check("★ 点一下打法卡真的会展开（画面变了、不是只有内部状态在变）",
+      _r_plan > 0.01, f"diff={_r_plan:.1%}（点了 {_used12} 次）")
+
+# 反向：再驱回收起态（正向只证明"新的在"，反向才证明"真的能关"）
+_used12b, _r_back = drive_plan(False)
+print(f"[12] 再点收起：用了 {_used12b} 次点击 → 与收起初始差异 {_r_back:.1%}")
+check("★ 再点一次能收回去（双向开关，不是单向锁死）",
+      _r_back < 0.01, f"diff={_r_back:.1%}（点了 {_used12b} 次）")
+
 user32.SetCursorPos(0, 0)
 time.sleep(0.4)
 

@@ -1,0 +1,417 @@
+{
+ "_comment": "状态 → 游戏官方 tooltip 文案（Enemy 串表 TOOLTIP_STATUS_*）。这是状态效果的权威口径，推演引擎的伤害模型以此为准。",
+ "source": "D:\\SteamLibrary\\steamapps\\common\\Shroom and Gloom\\Shroom and Gloom_Data\\StreamingAssets\\aa\\StandaloneWindows64",
+ "count": 68,
+ "missing": [],
+ "enemy_status_members": 68,
+ "tips": {
+  "Airborne": {
+   "key": "TOOLTIP_STATUS_AIRBORNE",
+   "en": "HARD TO REACH, TAKES 50% LESS DAMAGE. [PNUM] HITS TO GROUND.",
+   "zh": "难以触及，承受伤害降低 50%。命中 [PNUM] 次令其落地。",
+   "raw_zh": "[HEXCODE]\\n难以触及，承受伤害降低 50%。命中 [PNUM] 次令其落地。</color>"
+  },
+  "Armoured": {
+   "key": "TOOLTIP_STATUS_ARMOURED",
+   "en": "REDUCE INCOMING DAMAGE.",
+   "zh": "降低受到的伤害。",
+   "raw_zh": "[HEXCODE]\\n降低受到的伤害。</color>"
+  },
+  "Blessed": {
+   "key": "TOOLTIP_STATUS_BLESSED",
+   "en": "WILL INCREASE THE DAMAGE OF THE KILLING CARD BY [PNUM].",
+   "zh": "会使击杀牌的 伤害提升 [PNUM] 点。",
+   "raw_zh": "[HEXCODE]\\n会使击杀牌的\\n伤害提升 [PNUM] 点。</color>"
+  },
+  "Brainless": {
+   "key": "TOOLTIP_STATUS_BRAINLESS",
+   "en": "WILL ADD [PNUM] CONFUSION EVERY TIME IT TAKES DAMAGE.",
+   "zh": "每次受到伤害时，会添加 [PNUM][JNUM=WORD_QUANTIFIERB]困惑。",
+   "raw_zh": "[HEXCODE]\\n每次受到伤害时，会添加 [PNUM][JNUM=WORD_QUANTIFIERB]困惑。</color>"
+  },
+  "Buzzkill": {
+   "key": "TOOLTIP_STATUS_BUZZKILL",
+   "en": "IF THEY DAMAGE YOU, REMOVE 1 RANDOM BATTERY.",
+   "zh": "如果你受到其伤害，随机移除 1 点电池。",
+   "raw_zh": "[HEXCODE]\\n如果你受到其伤害，随机移除 1 点电池。</color>"
+  },
+  "CardLodged": {
+   "key": "TOOLTIP_STATUS_CARD_LODGED",
+   "en": "HAS [CARD_NAME] LODGED IN IT.",
+   "zh": "[CARD_NAME]贴附于其中。",
+   "raw_zh": "[HEXCODE]\\n[CARD_NAME]贴附于其中。</color>"
+  },
+  "Charged": {
+   "key": "TOOLTIP_STATUS_CHARGED",
+   "en": "WILL SPAWN BATTERY RECHARGE CARD UPON DEATH.",
+   "zh": "死亡时将生成为电池充能的牌。",
+   "raw_zh": "[HEXCODE]\\n死亡时将生成为电池充能的牌。</color>"
+  },
+  "Conductive": {
+   "key": "TOOLTIP_STATUS_CONDUCTIVE",
+   "en": "WHEN DAMAGED, DAMAGE NEIGHBOURING ENEMIES FOR HALF.",
+   "zh": "受伤时，对相邻的敌人造成半数伤害。",
+   "raw_zh": "[HEXCODE]\\n受伤时，对相邻的敌人造成半数伤害。</color>"
+  },
+  "Confused": {
+   "key": "TOOLTIP_STATUS_CONFUSED",
+   "en": "ATTACK DAMAGE IS DECREASED BY [PNUM].",
+   "zh": "攻击伤害降低 [PNUM]。",
+   "raw_zh": "[HEXCODE]\\n攻击伤害降低 [PNUM]。</color>"
+  },
+  "Corrupt": {
+   "key": "TOOLTIP_STATUS_CORRUPT",
+   "en": "WILL DISCARD A RANDOM CARD IF DAMAGED.",
+   "zh": "受伤时会弃置一张随机牌。",
+   "raw_zh": "[HEXCODE]\\n受伤时会弃置一张随机牌。</color>"
+  },
+  "CountDown": {
+   "key": "TOOLTIP_STATUS_COUNTDOWN",
+   "en": "WILL EXPLODE WHEN THE COUNTDOWN ENDS.",
+   "zh": "倒计时结束时将爆炸。",
+   "raw_zh": "[HEXCODE]\\n倒计时结束时将爆炸。</color>"
+  },
+  "Crippled": {
+   "key": "TOOLTIP_STATUS_CRIPPLED",
+   "en": "WILL NOT RECOVER FROM VULNERABILITY.",
+   "zh": "无法从易伤中恢复。",
+   "raw_zh": "[HEXCODE]\\n无法从易伤中恢复。</color>"
+  },
+  "Decay": {
+   "key": "TOOLTIP_STATUS_DECAY",
+   "en": "WHEN DAMAGED, WILL TAKE EXTRA DAMAGE",
+   "zh": "受到伤害时，将会受到额外伤害",
+   "raw_zh": "[HEXCODE]\\n受到伤害时，将会受到额外伤害</color>"
+  },
+  "Dividing": {
+   "key": "TOOLTIP_STATUS_DIVIDING",
+   "en": "WILL CREATE A NEW ENEMY WHEN DAMAGED.",
+   "zh": "受伤时会创造一个新的敌人。",
+   "raw_zh": "[HEXCODE]\\n受伤时会创造一个新的敌人。</color>"
+  },
+  "Enraged": {
+   "key": "TOOLTIP_STATUS_ENRAGED",
+   "en": "DEALS [PNUM] EXTRA DAMAGE. WILL CANCEL ATTACK IF DAMAGED.",
+   "zh": "造成 [PNUM] 点额外伤害。 如果受到伤害，则会取消攻击。",
+   "raw_zh": "[HEXCODE]\\n造成 [PNUM] 点额外伤害。</color>\\n<#77AAFF>\\n如果受到伤害，则会取消攻击。</color>"
+  },
+  "Ethereal": {
+   "key": "TOOLTIP_STATUS_ETHEREAL",
+   "en": "WILL LEAVE THE BATTLEFIELD ONCE ALL NON-ETHEREAL ENEMIES ARE DEAD.",
+   "zh": "所有非灵体敌人死去后， 便会离开战场。",
+   "raw_zh": "[HEXCODE]\\n所有非灵体敌人死去后，\\n便会离开战场。</color>"
+  },
+  "Evolving": {
+   "key": "TOOLTIP_STATUS_EVOLVING",
+   "en": "WILL EVOLVE UPON DEATH.",
+   "zh": "死亡时将进化。",
+   "raw_zh": "[HEXCODE]\\n死亡时将进化。</color>"
+  },
+  "Fruiting": {
+   "key": "TOOLTIP_STATUS_FRUITING",
+   "en": "ON DEATH SPAWN COLLEAGUES.",
+   "zh": "死亡时生成同类。",
+   "raw_zh": "[HEXCODE]\\n死亡时生成同类。</color>"
+  },
+  "Gestating": {
+   "key": "TOOLTIP_STATUS_GESTATING",
+   "en": "WILL BIRTH [ENEMY_NAME].",
+   "zh": "会诞下[ENEMY_NAME]。",
+   "raw_zh": "[HEXCODE]\\n会诞下[ENEMY_NAME]。</color>"
+  },
+  "GloomCreatureCosmicHorror": {
+   "key": "TOOLTIP_STATUS_GLOOMCREATURECOSMICHORROR",
+   "en": "\\u0021\\u0335\\u0311\\u0349\\u0327\\u0021\\u0336\\u0311\\u033F\\u030E\\u034E\\u032E\\u003F\\u0337\\u0342\\u030F\\u032C\\u0329\\u032B\\u005F\\u0337\\u035D\\u030B\\u0341\\u0324\\u0356\\u0323\\u005F\\u0334\\u0360\\u031B\\u030F\\u032D\\u003F\\u0335\\u0344\\u0343\\u0332\\u0021\\u0335\\u0308\\u030E\\u034D\\u0331\\u0021\\u0338\\u030C\\u0341\\u0348",
+   "zh": "\\u0021\\u0335\\u0311\\u0349\\u0327\\u0021\\u0336\\u0311\\u033F\\u030E\\u034E\\u032E\\u003F\\u0337\\u0342\\u030F\\u032C\\u0329\\u032B\\u005F\\u0337\\u035D\\u030B\\u0341\\u0324\\u0356\\u0323\\u005F\\u0334\\u0360\\u031B\\u030F\\u032D\\u003F\\u0335\\u0344\\u0343\\u0332\\u0021\\u0335\\u0308\\u030E\\u034D\\u0331\\u0021\\u0338\\u030C\\u0341\\u0348",
+   "raw_zh": "[HEXCODE]\\u0021\\u0335\\u0311\\u0349\\u0327\\u0021\\u0336\\u0311\\u033F\\u030E\\u034E\\u032E\\u003F\\u0337\\u0342\\u030F\\u032C\\u0329\\u032B\\u005F\\u0337\\u035D\\u030B\\u0341\\u0324\\u0356\\u0323\\u005F\\u0334\\u0360\\u031B\\u030F\\u032D\\u003F\\u0335\\u0344\\u0343\\u0332\\u0021\\u0335\\u0308\\u030E\\u034D\\u0331\\u0021\\u0338\\u030C\\u0341\\u0348</color>"
+  },
+  "GloomCreatureCreepingHorror": {
+   "key": "TOOLTIP_STATUS_GLOOMCREATURECREEPINGHORROR",
+   "en": "\\u0021\\u0335\\u0311\\u0349\\u0327\\u0021\\u0336\\u0311\\u033F\\u030E\\u034E\\u032E\\u003F\\u0337\\u0342\\u030F\\u032C\\u0329\\u032B\\u005F\\u0337\\u035D\\u030B\\u0341\\u0324\\u0356\\u0323\\u005F\\u0334\\u0360\\u031B\\u030F\\u032D\\u003F\\u0335\\u0344\\u0343\\u0332\\u0021\\u0335\\u0308\\u030E\\u034D\\u0331\\u0021\\u0338\\u030C\\u0341\\u0348",
+   "zh": "\\u0021\\u0335\\u0311\\u0349\\u0327\\u0021\\u0336\\u0311\\u033F\\u030E\\u034E\\u032E\\u003F\\u0337\\u0342\\u030F\\u032C\\u0329\\u032B\\u005F\\u0337\\u035D\\u030B\\u0341\\u0324\\u0356\\u0323\\u005F\\u0334\\u0360\\u031B\\u030F\\u032D\\u003F\\u0335\\u0344\\u0343\\u0332\\u0021\\u0335\\u0308\\u030E\\u034D\\u0331\\u0021\\u0338\\u030C\\u0341\\u0348",
+   "raw_zh": "[HEXCODE]\\u0021\\u0335\\u0311\\u0349\\u0327\\u0021\\u0336\\u0311\\u033F\\u030E\\u034E\\u032E\\u003F\\u0337\\u0342\\u030F\\u032C\\u0329\\u032B\\u005F\\u0337\\u035D\\u030B\\u0341\\u0324\\u0356\\u0323\\u005F\\u0334\\u0360\\u031B\\u030F\\u032D\\u003F\\u0335\\u0344\\u0343\\u0332\\u0021\\u0335\\u0308\\u030E\\u034D\\u0331\\u0021\\u0338\\u030C\\u0341\\u0348</color>"
+  },
+  "GloomCreatureShiveringHorror": {
+   "key": "TOOLTIP_STATUS_GLOOMCREATURESHIVERINGHORROR",
+   "en": "\\u0021\\u0335\\u0311\\u0349\\u0327\\u0021\\u0336\\u0311\\u033F\\u030E\\u034E\\u032E\\u003F\\u0337\\u0342\\u030F\\u032C\\u0329\\u032B\\u005F\\u0337\\u035D\\u030B\\u0341\\u0324\\u0356\\u0323\\u005F\\u0334\\u0360\\u031B\\u030F\\u032D\\u003F\\u0335\\u0344\\u0343\\u0332\\u0021\\u0335\\u0308\\u030E\\u034D\\u0331\\u0021\\u0338\\u030C\\u0341\\u0348",
+   "zh": "\\u0021\\u0335\\u0311\\u0349\\u0327\\u0021\\u0336\\u0311\\u033F\\u030E\\u034E\\u032E\\u003F\\u0337\\u0342\\u030F\\u032C\\u0329\\u032B\\u005F\\u0337\\u035D\\u030B\\u0341\\u0324\\u0356\\u0323\\u005F\\u0334\\u0360\\u031B\\u030F\\u032D\\u003F\\u0335\\u0344\\u0343\\u0332\\u0021\\u0335\\u0308\\u030E\\u034D\\u0331\\u0021\\u0338\\u030C\\u0341\\u0348",
+   "raw_zh": "[HEXCODE]\\u0021\\u0335\\u0311\\u0349\\u0327\\u0021\\u0336\\u0311\\u033F\\u030E\\u034E\\u032E\\u003F\\u0337\\u0342\\u030F\\u032C\\u0329\\u032B\\u005F\\u0337\\u035D\\u030B\\u0341\\u0324\\u0356\\u0323\\u005F\\u0334\\u0360\\u031B\\u030F\\u032D\\u003F\\u0335\\u0344\\u0343\\u0332\\u0021\\u0335\\u0308\\u030E\\u034D\\u0331\\u0021\\u0338\\u030C\\u0341\\u0348</color>"
+  },
+  "Gutsy": {
+   "key": "TOOLTIP_STATUS_GUTSY",
+   "en": "WHEN KILLED WILL DROP GUTS.",
+   "zh": "死去时会掉落内脏。",
+   "raw_zh": "[HEXCODE]\\n死去时会掉落内脏。"
+  },
+  "HotSauce": {
+   "key": "TOOLTIP_STATUS_HOT_SAUCE",
+   "en": "WILL SPAWN [PNUM] SPICY TOASTIES UPON DEATH.",
+   "zh": "死亡时将生成 [PNUM] 个热辣烤菇。",
+   "raw_zh": "[HEXCODE]\\n死亡时将生成 [PNUM] 个热辣烤菇。</color>"
+  },
+  "Infested": {
+   "key": "TOOLTIP_STATUS_INFESTED",
+   "en": "WILL DEAL [PNUM] TO ALL ENEMIES WHEN IT DIES.",
+   "zh": "死去时，会对所有敌人造成 [PNUM] 点伤害。",
+   "raw_zh": "[HEXCODE]\\n死去时，会对所有敌人造成 [PNUM] 点伤害。</color>"
+  },
+  "Insight": {
+   "key": "TOOLTIP_STATUS_INSIGHT",
+   "en": "WILL DRAW [PNUM] CARDS UPON LEAVING.",
+   "zh": "离开时会抽 [PNUM] 张牌。",
+   "raw_zh": "[HEXCODE]\\n离开时会抽 [PNUM] 张牌。</color>"
+  },
+  "Inspired": {
+   "key": "TOOLTIP_STATUS_INSPIRED",
+   "en": "INSPIRED ENEMIES DEAL DOUBLE DAMAGE.",
+   "zh": "被激励的敌人造成双倍伤害。",
+   "raw_zh": "[HEXCODE]\\n被激励的敌人造成双倍伤害。</color>"
+  },
+  "Irritable": {
+   "key": "TOOLTIP_STATUS_IRRITABLE",
+   "en": "WILL BECOME ENRAGED IF DAMAGED.",
+   "zh": "受伤时将被激怒。",
+   "raw_zh": "[HEXCODE]\\n受伤时将被激怒。</color>"
+  },
+  "Leech": {
+   "key": "TOOLTIP_STATUS_LEECH",
+   "en": "GIVES [PNUM] ESSENCE ON DEATH.",
+   "zh": "死亡时给出 [PNUM][JNUM=WORD_QUANTIFIERA]精华。",
+   "raw_zh": "[HEXCODE]\\n死亡时给出\\n[PNUM][JNUM=WORD_QUANTIFIERA]精华。</color>"
+  },
+  "Limb": {
+   "key": "TOOLTIP_STATUS_LIMB",
+   "en": "ON DEATH, APPLY [PNUM] VULNERABLE TO BODY. DIES WITH BODY.",
+   "zh": "死亡时，为身体增加 [PNUM][JNUM=WORD_QUANTIFIERB]易伤。 随身体一起死亡。",
+   "raw_zh": "[HEXCODE]\\n死亡时，为身体增加 [PNUM][JNUM=WORD_QUANTIFIERB]<color=#77FFAA>易伤</color>。\\n随身体一起死亡。</color>"
+  },
+  "Loot": {
+   "key": "TOOLTIP_STATUS_LOOT",
+   "en": "WILL DROP CARDS.",
+   "zh": "会掉落卡牌。",
+   "raw_zh": "[HEXCODE]\\n会掉落卡牌。</color>"
+  },
+  "Loving": {
+   "key": "TOOLTIP_STATUS_LOVING",
+   "en": "HEALS YOU WHEN FED.",
+   "zh": "喂食时治疗你。",
+   "raw_zh": "[HEXCODE]\\n喂食时治疗你。</color>"
+  },
+  "Marked": {
+   "key": "TOOLTIP_STATUS_MARKED",
+   "en": "RANDOM PRIORITIZES THIS ENEMY",
+   "zh": "随机效果优先以 此敌人为目标。",
+   "raw_zh": "[HEXCODE]\\n随机效果优先以\\n此敌人为目标。</color>"
+  },
+  "Melting": {
+   "key": "TOOLTIP_STATUS_MELTING",
+   "en": "GIVES [PNUM] MELTY ON DEATH.",
+   "zh": "死亡时给出 [PNUM][JNUM=WORD_QUANTIFIERA]易融。",
+   "raw_zh": "[HEXCODE]\\n死亡时给出\\n[PNUM][JNUM=WORD_QUANTIFIERA]易融。</color>"
+  },
+  "Moody": {
+   "key": "TOOLTIP_STATUS_MOODY",
+   "en": "WILL LEAVE BEHIND A BAD MOOD.",
+   "zh": "会留下坏情绪。",
+   "raw_zh": "[HEXCODE]\\n会留下坏情绪。</color>"
+  },
+  "Mossy": {
+   "key": "TOOLTIP_STATUS_MOSSY",
+   "en": "REGENERATES [PNUM] HEALTH AT THE START OF TURN",
+   "zh": "回合开始时再生 [PNUM] 点生命值",
+   "raw_zh": "[HEXCODE]\\n回合开始时再生 [PNUM] 点生命值</color>"
+  },
+  "Mutant": {
+   "key": "TOOLTIP_STATUS_MUTANT",
+   "en": "DEALS [PNUM] EXTRA DAMAGE. WILL DOUBLE IF DAMAGED.",
+   "zh": "造成 [PNUM] 点额外伤害。 如果受到伤害则翻倍。",
+   "raw_zh": "[HEXCODE]\\n造成 [PNUM] 点额外伤害。</color>\\n<#40EE90>如果受到伤害则翻倍。</color>"
+  },
+  "NanoLaced": {
+   "key": "TOOLTIP_STATUS_NANO_LACED",
+   "en": "GAIN TEMPORARY COPY OF KILLING CARD ON DEATH",
+   "zh": "死亡时令你 获得击杀牌 的临时复制",
+   "raw_zh": "[HEXCODE]\\n死亡时令你\\n获得击杀牌\\n的临时复制</color>"
+  },
+  "Necrobloom": {
+   "key": "TOOLTIP_STATUS_NECROBLOOM",
+   "en": "AFTER DEATH, BECOME UNDYING AND GESTATE [ENEMY_NAME]",
+   "zh": "死亡后，变得不死 并孕育[ENEMY_NAME]",
+   "raw_zh": "[HEXCODE]\\n死亡后，变得不死\n并孕育[ENEMY_NAME]</color>"
+  },
+  "Plump": {
+   "key": "TOOLTIP_STATUS_PLUMP",
+   "en": "WILL BE MORE DELICIOUS IF COOKED",
+   "zh": "烹饪后更美味",
+   "raw_zh": "烹饪后更美味"
+  },
+  "Poisoned": {
+   "key": "TOOLTIP_STATUS_POISONED",
+   "en": "LOSE [PNUM] HEALTH ON TURN END.",
+   "zh": "回合结束时失去 [PNUM] 点生命值。",
+   "raw_zh": "[HEXCODE]\\n回合结束时失去\n[PNUM] 点生命值。</color>"
+  },
+  "Protective": {
+   "key": "TOOLTIP_STATUS_PROTECTIVE",
+   "en": "GAIN [PNUM] INSPIRATION WHEN OTHER ENEMIES DIE.",
+   "zh": "其他敌人死去时，获得 [PNUM][JNUM=WORD_QUANTIFIERB]激励。",
+   "raw_zh": "\\n其他敌人死去时，获得 [HEXCODE][PNUM][JNUM=WORD_QUANTIFIERB]激励</color>。"
+  },
+  "Regrowth": {
+   "key": "TOOLTIP_STATUS_REGROWTH",
+   "en": "WILL REGENERATE HEALTH.",
+   "zh": "会再生生命值。",
+   "raw_zh": "[HEXCODE]\\n会再生生命值。</color>"
+  },
+  "Resurgence": {
+   "key": "TOOLTIP_STATUS_RESURGENCE",
+   "en": "WILL PROVIDE [PNUM] ENERGY UPON LEAVING.",
+   "zh": "离开时会提供 [PNUM] 点精力。",
+   "raw_zh": "[HEXCODE]\\n离开时会提供 [PNUM] 点精力。</color>"
+  },
+  "Rotten": {
+   "key": "TOOLTIP_STATUS_ROTTEN",
+   "en": "WILL GUNK ALL CARDS IF KILLED.",
+   "zh": "死亡时会令所有牌变得黏糊。",
+   "raw_zh": "[HEXCODE]\\n死亡时会令所有牌变得黏糊。</color>"
+  },
+  "Scaredy": {
+   "key": "TOOLTIP_STATUS_SCAREDY",
+   "en": "WILL RETREAT IF DAMAGED.",
+   "zh": "如果受到伤害，则会撤退。",
+   "raw_zh": "[HEXCODE]\\n如果受到伤害，则会撤退。</color>"
+  },
+  "Seasoned": {
+   "key": "TOOLTIP_STATUS_SEASONED",
+   "en": "WILL SPAWN [PNUM] TOASTIES UPON DEATH.",
+   "zh": "死亡时将生成 [PNUM] 个烤菇。",
+   "raw_zh": "[HEXCODE]\\n死亡时将生成 [PNUM] 个烤菇。</color>"
+  },
+  "SlimeMom": {
+   "key": "TOOLTIP_STATUS_SLIMEMOM",
+   "en": "THE MOTHER OF SLIMES. ON TAKING 10+ DAMAGE, SPAWN SNOTLINGS.",
+   "zh": "软泥之母。 受到 10 点或更多伤害时，生成小软泥。",
+   "raw_zh": "软泥之母。\\n[HEXCODE]\\n受到 10 点或更多伤害时，生成小软泥。</color>"
+  },
+  "Slimey": {
+   "key": "TOOLTIP_STATUS_SLIMEY",
+   "en": "WILL HEAL 10% OF MAX HP AT THE START OF EACH TURN.",
+   "zh": "每回合开始时会治疗生命值上限的 10%。",
+   "raw_zh": "[HEXCODE]\\n每回合开始时会治疗生命值上限的 10%。</color>"
+  },
+  "Sludgy": {
+   "key": "TOOLTIP_STATUS_SLUDGY",
+   "en": "WHEN KILLED WILL DROP Thick Sludge.",
+   "zh": "死去时会掉落厚重淤泥。",
+   "raw_zh": "[HEXCODE]\\n死去时会掉落厚重淤泥。"
+  },
+  "SpellWeakness": {
+   "key": "TOOLTIP_STATUS_SPELL_WEAKNESS",
+   "en": "WILL TAKE [PNUM] DAMAGE WHENEVER YOU PLAY A CARD.",
+   "zh": "当你打出一张牌时，将会受到 [PNUM] 点伤害。",
+   "raw_zh": "[HEXCODE]\\n当你打出一张牌时，将会受到 [PNUM] 点伤害。</color>"
+  },
+  "Spellshield": {
+   "key": "TOOLTIP_STATUS_SPELLSHIELD",
+   "en": "WILL IGNORE THE NEXT [PNUM] EFFECTS.",
+   "zh": "会忽视下 [PNUM] 次效果。",
+   "raw_zh": "[HEXCODE]\\n会忽视下 [PNUM] 次效果。</color>"
+  },
+  "Sporey": {
+   "key": "TOOLTIP_STATUS_SPOREY",
+   "en": "ON DEATH ADD GUNKLUNG TO YOUR HAND.",
+   "zh": "死亡时，将黏糊肺加入你的手牌。",
+   "raw_zh": "[HEXCODE]\\n死亡时，将黏糊肺加入你的手牌。</color>"
+  },
+  "Starving": {
+   "key": "TOOLTIP_STATUS_STARVING",
+   "en": "WILL INCREASE ATTACK DAMAGE WHEN YOU EAT.",
+   "zh": "当你进食时，将会提升攻击伤害。",
+   "raw_zh": "[HEXCODE]\\n当你进食时，将会提升攻击伤害。</color>"
+  },
+  "Sticky": {
+   "key": "TOOLTIP_STATUS_STICKY",
+   "en": "GIVES [PNUM] STICKY RESIDUE ON DEATH.",
+   "zh": "死亡时给出 [PNUM][JNUM=WORD_QUANTIFIERA]粘合废料。",
+   "raw_zh": "[HEXCODE]\\n死亡时给出\\n[PNUM][JNUM=WORD_QUANTIFIERA]粘合废料。</color>"
+  },
+  "StrangeExit": {
+   "key": "TOOLTIP_STATUS_STRANGE_EXIT",
+   "en": "WILL CAUSE [PNUM] CONFUSION UPON LEAVING.",
+   "zh": "离开时会造成 [PNUM][JNUM=WORD_QUANTIFIERB]困惑。",
+   "raw_zh": "[HEXCODE]\\n离开时会造成 [PNUM][JNUM=WORD_QUANTIFIERB]困惑。</color>"
+  },
+  "Studied": {
+   "key": "TOOLTIP_STATUS_STUDIED",
+   "en": "GIVES DATA ON DEATH.",
+   "zh": "死亡时给出 数据。",
+   "raw_zh": "[HEXCODE]\\n死亡时给出\\n数据。</color>"
+  },
+  "Stunned": {
+   "key": "TOOLTIP_STATUS_STUNNED",
+   "en": "SKIPS ITS ACTION.",
+   "zh": "跳过其行动。",
+   "raw_zh": "[HEXCODE]\\n跳过其行动。</color>"
+  },
+  "Swift": {
+   "key": "TOOLTIP_STATUS_SWIFT",
+   "en": "WILL ATTACK AS SOON AS IT ARRIVES.",
+   "zh": "抵达时会立即造成伤害。",
+   "raw_zh": "[HEXCODE]\\n抵达时会立即造成伤害。</color>"
+  },
+  "TeamPlayer": {
+   "key": "TOOLTIP_STATUS_TEAM_PLAYER",
+   "en": "ATTEMPTS TO JOIN FORCES WITH KIN.",
+   "zh": "会试图与同族合力。",
+   "raw_zh": "[HEXCODE]\\n会试图与同族合力。</color>"
+  },
+  "Thorned": {
+   "key": "TOOLTIP_STATUS_THORNED",
+   "en": "THORNED.",
+   "zh": "长有荆棘。",
+   "raw_zh": "[HEXCODE]\\n长有荆棘。</color>"
+  },
+  "Thorns": {
+   "key": "TOOLTIP_STATUS_THORNS",
+   "en": "RETALIATES FOR [PNUM] WHEN DAMAGED. UNLESS FATAL.",
+   "zh": "受伤时除非伤害致命，否则反击 [PNUM] 点伤害。",
+   "raw_zh": "[HEXCODE]\\n受伤时除非伤害致命，否则反击 [PNUM] 点伤害。</color>"
+  },
+  "Timid": {
+   "key": "TOOLTIP_STATUS_TIMID",
+   "en": "WILL CANCEL ATTACK IF DAMAGED.",
+   "zh": "如果受到伤害，则会取消攻击。",
+   "raw_zh": "[HEXCODE]\\n如果受到伤害，则会取消攻击。</color>"
+  },
+  "Undying": {
+   "key": "TOOLTIP_STATUS_UNDYING",
+   "en": "CONTINUES TO ACT AFTER DEATH",
+   "zh": "死亡后仍继续行动",
+   "raw_zh": "[HEXCODE]\\n死亡后仍继续行动</color>"
+  },
+  "Unnerving": {
+   "key": "TOOLTIP_STATUS_UNNERVING",
+   "en": "WHEN TARGETED ADD A 'DEATH STARE' INTO YOUR HAND.",
+   "zh": "成为目标时，将一张“死亡凝视”加入你的手牌。",
+   "raw_zh": "[HEXCODE]\\n成为目标时，将一张“死亡凝视”加入你的手牌。</color>"
+  },
+  "Vibrating": {
+   "key": "TOOLTIP_STATUS_VIBRATING",
+   "en": "GIVES CHEMICAL SLUGS ON DEATH.",
+   "zh": "死亡时给出 化学蛞蝓。",
+   "raw_zh": "[HEXCODE]\\n死亡时给出\\n化学蛞蝓。</color>"
+  },
+  "Vile": {
+   "key": "TOOLTIP_STATUS_VILE",
+   "en": "WILL ADD GUNK TO A RANDOM CARD IF DAMAGED.",
+   "zh": "受伤时会令一张随机牌变得黏糊。",
+   "raw_zh": "[HEXCODE]\\n受伤时会令一张随机牌变得黏糊。</color>"
+  },
+  "Vulnerable": {
+   "key": "TOOLTIP_STATUS_VULNERABLE",
+   "en": "WILL RECEIVE [P2NUM]% MORE DAMAGE.",
+   "zh": "会额外受到 [P2NUM]% 伤害。",
+   "raw_zh": "[HEXCODE]\\n会额外受到 [P2NUM]% 伤害。</color>"
+  }
+ }
+}

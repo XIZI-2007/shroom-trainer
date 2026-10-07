@@ -1,0 +1,1910 @@
+{
+ "_comment": "术语词表 + 意图一句话释义。模板里 [LINKKEY=…]/[JOINER=…]/[MULTIPLICITY_…] 的中英对照，及 TOOLTIP_INTENT_* 的短释义。由 tools/term_glossary_build.py 生成；游戏更新后重跑并重新打包。",
+ "source": "StandaloneWindows64",
+ "sections": [
+  "Class names",
+  "Property names",
+  "Trigger names",
+  "Common words"
+ ],
+ "count": 305,
+ "tipCount": 84,
+ "terms": {
+  "CLASS_NONE": {
+   "en": "None",
+   "zh": "无"
+  },
+  "CLASS_FOOD": {
+   "en": "FOOD",
+   "zh": "食物"
+  },
+  "CLASS_PASSIVE": {
+   "en": "Passive",
+   "zh": "被动"
+  },
+  "CLASS_SKILL": {
+   "en": "Skill",
+   "zh": "技能"
+  },
+  "CLASS_ATTACK": {
+   "en": "Attack",
+   "zh": "攻击"
+  },
+  "CLASS_MOOD": {
+   "en": "MOOD",
+   "zh": "情绪"
+  },
+  "CLASS_CURSE": {
+   "en": "Curse",
+   "zh": "诅咒"
+  },
+  "CLASS_MACHINE": {
+   "en": "MACHINE",
+   "zh": "机械"
+  },
+  "CLASS_CHARGE": {
+   "en": "Charge",
+   "zh": "充能"
+  },
+  "CLASS_DATA": {
+   "en": "DATA",
+   "zh": "数据"
+  },
+  "CLASS_CREATURE": {
+   "en": "Creature",
+   "zh": "生物"
+  },
+  "CLASS_CAMP": {
+   "en": "Camp",
+   "zh": "营地"
+  },
+  "CLASS_PICK": {
+   "en": "Pick",
+   "zh": "开锁物"
+  },
+  "CLASS_SEARCH": {
+   "en": "Search",
+   "zh": "搜索"
+  },
+  "CLASS_DEATH": {
+   "en": "Death",
+   "zh": "死亡"
+  },
+  "CLASS_SPECIAL": {
+   "en": "Special",
+   "zh": "特殊"
+  },
+  "CLASS_FORESIGHT": {
+   "en": "Foresight",
+   "zh": "先见"
+  },
+  "PROPERTY_ABSORB": {
+   "en": "Absorb",
+   "zh": "吸收"
+  },
+  "PROPERTY_AMPLIFY_GLOOM": {
+   "en": "[HEXCODE][LINKKEY]AMPLIFY GLOOM</link></color> <b>X[PNUM].</b>\\n",
+   "zh": ""
+  },
+  "PROPERTY_ANALOG": {
+   "en": "Analog",
+   "zh": "模拟"
+  },
+  "PROPERTY_ANY": {
+   "en": "Any",
+   "zh": ""
+  },
+  "PROPERTY_BATTERY": {
+   "en": "BATTERY",
+   "zh": "电池"
+  },
+  "PROPERTY_BIOHEAL": {
+   "en": "Bioheal",
+   "zh": "生物医疗"
+  },
+  "PROPERTY_CAMP": {
+   "en": "Camp",
+   "zh": "营地"
+  },
+  "PROPERTY_COUPON": {
+   "en": "Coupon",
+   "zh": "优惠券"
+  },
+  "PROPERTY_DATA": {
+   "en": "Data",
+   "zh": "数据"
+  },
+  "PROPERTY_DEATHLESS": {
+   "en": "Deathless",
+   "zh": "不死"
+  },
+  "PROPERTY_NERVOUS": {
+   "en": "Nervous",
+   "zh": ""
+  },
+  "PROPERTY_SHROOM": {
+   "en": "Shroom",
+   "zh": "菌菇"
+  },
+  "PROPERTY_SINGED": {
+   "en": "Singed",
+   "zh": ""
+  },
+  "PROPERTY_WEIRD": {
+   "en": "Weird",
+   "zh": ""
+  },
+  "PROPERTY_WILD": {
+   "en": "Wild",
+   "zh": ""
+  },
+  "PROPERTY_ENERGIZE": {
+   "en": "ENERGISE",
+   "zh": "振奋"
+  },
+  "PROPERTY_ENERGY_COST": {
+   "en": "ENERGY COST",
+   "zh": "花费精力"
+  },
+  "PROPERTY_ENERGY": {
+   "en": "ENERGY",
+   "zh": "精力"
+  },
+  "PROPERTY_EVOLVE": {
+   "en": "Evolve",
+   "zh": "进化"
+  },
+  "PROPERTY_EXHAUST": {
+   "en": "Exhaust",
+   "zh": "消耗"
+  },
+  "PROPERTY_WARMTH": {
+   "en": "Warmth",
+   "zh": "温暖"
+  },
+  "PROPERTY_FOOD": {
+   "en": "Food",
+   "zh": "食物"
+  },
+  "PROPERTY_FRAGILE": {
+   "en": "Fragile",
+   "zh": "易碎"
+  },
+  "PROPERTY_GOLD": {
+   "en": "Gold",
+   "zh": "黄金"
+  },
+  "PROPERTY_DRAW_WITH_GUNK": {
+   "en": "Draw With Gunk",
+   "zh": "抽取时黏糊"
+  },
+  "PROPERTY_GUNK": {
+   "en": "Gunk",
+   "zh": "黏糊"
+  },
+  "PROPERTY_SPARKLING": {
+   "en": "Sparkling",
+   "zh": "闪闪发亮"
+  },
+  "PROPERTY_STORED_GUNK": {
+   "en": "Stored Gunk",
+   "zh": ""
+  },
+  "PROPERTY_THIRSTY": {
+   "en": "Thirsty",
+   "zh": ""
+  },
+  "PROPERTY_HANDY": {
+   "en": "HANDY",
+   "zh": "趁手"
+  },
+  "PROPERTY_HORROR": {
+   "en": "Horror",
+   "zh": "恐怖"
+  },
+  "PROPERTY_IF_FATAL_TRIGGER": {
+   "en": "If Fatal Trigger",
+   "zh": "如果致命触发"
+  },
+  "PROPERTY_INESCAPABLE": {
+   "en": "Inescapable",
+   "zh": "难逃"
+  },
+  "PROPERTY_LINGER": {
+   "en": "Linger",
+   "zh": "留存"
+  },
+  "PROPERTY_MACHINE": {
+   "en": "[HEXCODE]Uses [PNUM] [LINKKEY][PROPERTY_NAME]</link></color>. ",
+   "zh": "[HEXCODE]使用 [PNUM] [LINKKEY][PROPERTY_NAME]</link></color> "
+  },
+  "PROPERTY_MOOD": {
+   "en": "Mood",
+   "zh": "情绪"
+  },
+  "PROPERTY_ODD_USE_FREE": {
+   "en": "OddUseFree",
+   "zh": ""
+  },
+  "PROPERTY_PERSISTENT": {
+   "en": "Persistent",
+   "zh": "持久"
+  },
+  "PROPERTY_PET": {
+   "en": " IS YOUR PET. ",
+   "zh": ""
+  },
+  "PROPERTY_RAGE": {
+   "en": "RAGE",
+   "zh": "暴怒"
+  },
+  "PROPERTY_REPLENISH": {
+   "en": "REPLENISH",
+   "zh": "补充"
+  },
+  "PROPERTY_EAGER": {
+   "en": "Eager",
+   "zh": "急切"
+  },
+  "PROPERTY_STAINLESS": {
+   "en": "Stainless",
+   "zh": "不锈"
+  },
+  "PROPERTY_STORED_GLOOM": {
+   "en": "Gloom",
+   "zh": "幽暗"
+  },
+  "PROPERTY_TEMPORARY": {
+   "en": "Temporary",
+   "zh": "临时"
+  },
+  "PROPERTY_UNPLAYABLE": {
+   "en": "Unplayable",
+   "zh": "无法打出"
+  },
+  "PROPERTY_USES": {
+   "en": "Uses",
+   "zh": "使用次数"
+  },
+  "PROPERTY_FIXABLE": {
+   "en": "FIXABLE",
+   "zh": "可修复"
+  },
+  "PROPERTY_BREAKABLE": {
+   "en": "BREAKABLE",
+   "zh": "可击破"
+  },
+  "PROPERTY_DIGGABLE": {
+   "en": "DIGGABLE",
+   "zh": "可挖掘"
+  },
+  "PROPERTY_FEEDABLE": {
+   "en": "FEEDABLE",
+   "zh": "可喂食"
+  },
+  "PROPERTY_IGNITABLE": {
+   "en": "IGNITABLE",
+   "zh": "可点燃"
+  },
+  "PROPERTY_REVEALABLE": {
+   "en": "REVEALABLE",
+   "zh": "可揭示"
+  },
+  "PROPERTY_UNLOCKABLE": {
+   "en": "UNLOCKABLE",
+   "zh": "可解锁"
+  },
+  "PROPERTY_TRIVIAL": {
+   "en": "TRIVIAL",
+   "zh": "琐物"
+  },
+  "PROPERTY_STUBBORN": {
+   "en": "STUBBORN",
+   "zh": "顽固"
+  },
+  "PROPERTY_SCATTERED": {
+   "en": "SCATTERED",
+   "zh": "散射"
+  },
+  "PROPERTY_POISONED": {
+   "en": "POISONED",
+   "zh": "中毒"
+  },
+  "PROPERTY_ENDLESS": {
+   "en": "ENDLESS",
+   "zh": "无尽"
+  },
+  "PROPERTY_TEMP_DECAY": {
+   "en": "TEMP DECAY",
+   "zh": "暂时腐朽"
+  },
+  "PROPERTY_LETHARGY": {
+   "en": "Lethargy",
+   "zh": "昏沉"
+  },
+  "PROPERTY_OVERCLEANED": {
+   "en": "Sparkling",
+   "zh": "闪闪发亮"
+  },
+  "PROPERTY_NECROTIC": {
+   "en": "Necrotic",
+   "zh": "死冥"
+  },
+  "PROPERTY_FEROCIOUS": {
+   "en": "Ferocious",
+   "zh": ""
+  },
+  "PROPERTY_UNDERSTOOD": {
+   "en": "Understood",
+   "zh": ""
+  },
+  "TRIGGER_IF_FATAL": {
+   "en": "[HEXCODE][LINKKEY]IF FATAL</link></color>,",
+   "zh": "[HEXCODE][LINKKEY]如果致命</link></color>，"
+  },
+  "TRIGGER_IF_GUNK_REMOVED": {
+   "en": "[HEXCODE][LINKKEY]IF GUNK IS REMOVED</link></color> on this card,",
+   "zh": "[HEXCODE][LINKKEY]每当此牌的黏糊被移除时</link></color>，"
+  },
+  "TRIGGER_FOR_EVERY_GUNK_REMOVED": {
+   "en": "[HEXCODE][LINKKEY]FOR EVERY GUNK REMOVED</link></color>,",
+   "zh": "[HEXCODE][LINKKEY]每移除一层黏糊</link></color>，"
+  },
+  "TRIGGER_IF_UNGUNKED": {
+   "en": "[HEXCODE][LINKKEY]IF FULLY UNGUNKED</link></color>,",
+   "zh": "[HEXCODE][LINKKEY]如果彻底移除黏糊</link></color>，"
+  },
+  "TRIGGER_IF_CARD_UNGUNKED_ON_TARGET_CARD": {
+   "en": "[HEXCODE][LINKKEY]IF UNGUNKING CARD</link></color>,",
+   "zh": "[HEXCODE][LINKKEY]如果用于彻底移除黏糊</link></color>，"
+  },
+  "TRIGGER_IF_STORED_GUNK_CONSUMED": {
+   "en": "[HEXCODE][LINKKEY]IF STORED GUNK CONSUMED</link></color>,",
+   "zh": ""
+  },
+  "TRIGGER_IF_GUNK_REMOVED_ON_TARGET_CARD": {
+   "en": "[HEXCODE][LINKKEY]IF GUNK REMOVED</link></color> on target,",
+   "zh": ""
+  },
+  "TRIGGER_IF_GUNK_REMOVED_ON_ANY_CARD": {
+   "en": "If you remove gunk from a card,",
+   "zh": "如果你移除了一张牌的黏糊，"
+  },
+  "TRIGGER_IF_ANY_CARD_GUNKED": {
+   "en": "[HEXCODE][LINKKEY]IF ANY CARD GUNKED</link></color>,",
+   "zh": "[HEXCODE][LINKKEY]如果有牌变得黏糊</link></color>，"
+  },
+  "TRIGGER_IF_UNGUNKED_ANY_CARD": {
+   "en": "[HEXCODE][LINKKEY]IF ALL GUNK REMOVED</link></color> ON ANY CARD,",
+   "zh": "[HEXCODE][LINKKEY]如果有牌彻底移除黏糊</link></color>，"
+  },
+  "TRIGGER_IF_CARD_GUNKED": {
+   "en": "[HEXCODE][LINKKEY]IF GUNKED</link></color>,",
+   "zh": "[HEXCODE][LINKKEY]如果变得黏糊</link></color>，"
+  },
+  "TRIGGER_IF_ENEMY_DIES": {
+   "en": "When an enemy dies,",
+   "zh": "当一个敌人死去时，"
+  },
+  "TRIGGER_IF_ENEMY_KILLED_WITH_GUNKED_CARD": {
+   "en": "When a gunked card kills an enemy,",
+   "zh": "当一张具有黏糊的牌杀死敌人时，"
+  },
+  "TRIGGER_IF_CARD_IS_EATEN": {
+   "en": "IF YOU EAT,",
+   "zh": "如果你进食，"
+  },
+  "TRIGGER_IF_CARD_GROWS": {
+   "en": "When a card grows,",
+   "zh": "当一张卡牌成长时，"
+  },
+  "TRIGGER_IF_ENEMY_KILLS_ITSELF": {
+   "en": "When an enemy kills itself,",
+   "zh": "当一个敌人自尽时，"
+  },
+  "TRIGGER_IF_CARD_IS_PLAYED": {
+   "en": "When you play a card,",
+   "zh": "当你打出一张牌时，"
+  },
+  "TRIGGER_IF_CARD_IS_DRAWN": {
+   "en": "When you draw a card,",
+   "zh": "当你抽牌时，"
+  },
+  "TRIGGER_IFCARDISDRAWN": {
+   "en": "When you draw a card,",
+   "zh": "当你抽牌时，"
+  },
+  "TRIGGER_IF_ATTACK_OR_SKILL_CARD_PLAYED": {
+   "en": "When you play an attack or skill,",
+   "zh": "当你打出一张攻击或技能牌时，"
+  },
+  "TRIGGER_IF_THREE_CARDS_PLAYED": {
+   "en": "When you play 3 cards,",
+   "zh": "当你打出3张牌时，"
+  },
+  "TRIGGER_IF_FOUR_CARDS_PLAYED": {
+   "en": "When you play 4 cards,",
+   "zh": "当你打出4张牌时，"
+  },
+  "TRIGGER_IF_FIVE_CARDS_PLAYED": {
+   "en": "When you play 5 cards,",
+   "zh": "当你打出5张牌时，"
+  },
+  "TRIGGER_IF_MAX_HEALTH_INCREASES": {
+   "en": "When you gain max HP,",
+   "zh": "当你获得生命值上限时，"
+  },
+  "TRIGGER_IF_PLAYER_TAKES_DAMAGE": {
+   "en": "If you take damage,",
+   "zh": "如果你受到伤害，"
+  },
+  "TRIGGER_IF_YOU_DIG": {
+   "en": "If you dig,",
+   "zh": "如果你挖掘，"
+  },
+  "TRIGGER_IF_YOU_REVEAL": {
+   "en": "When you reveal,",
+   "zh": "当你揭示时，"
+  },
+  "TRIGGER_IF_YOU_SET_UP_CAMP": {
+   "en": "When you set up a camp,",
+   "zh": "当你扎营时，"
+  },
+  "TRIGGER_IF_YOU_UNLOCK": {
+   "en": "When you open a lock,",
+   "zh": "当你开锁时，"
+  },
+  "TRIGGER_IF_YOU_BREAK": {
+   "en": "If you break,",
+   "zh": "如果你击破，"
+  },
+  "TRIGGER_IF_YOU_IGNITE": {
+   "en": "If you ignite,",
+   "zh": "如果你点燃，"
+  },
+  "TRIGGER_IF_YOU_FEED": {
+   "en": "If you feed,",
+   "zh": "如果你喂食，"
+  },
+  "TRIGGER_IF_YOU_FIX": {
+   "en": "If you fix,",
+   "zh": "如果你修理，"
+  },
+  "TRIGGER_IF_YOU_ADD_A_STATUS": {
+   "en": "If you add a status to an enemy,",
+   "zh": "如果你为敌人施加一种状态，"
+  },
+  "TRIGGER_IF_PLAYER_DEALS_DAMAGE": {
+   "en": "When you deal damage,",
+   "zh": "当你造成伤害时，"
+  },
+  "TRIGGER_IF_PLAYER_TURN_ENDS": {
+   "en": "When you end your turn,",
+   "zh": "当你结束回合时，"
+  },
+  "TRIGGER_IF_PLAYER_TURN_BEGINS": {
+   "en": "When you begin your turn,",
+   "zh": "当你开始回合时，"
+  },
+  "TRIGGER_AFTER_ENEMIES_ATTACK": {
+   "en": "After enemies attack,",
+   "zh": "在敌人攻击后，"
+  },
+  "TRIGGER_IF_ENEMY_BELOW_HEALTH": {
+   "en": "After hitting an enemy, if their health is below [PNUM],",
+   "zh": "在你命中一个敌人后，若其生命值低于[PNUM]，"
+  },
+  "TRIGGER_IF_WOULD_BE_DISCARDED": {
+   "en": "If would be discarded by another card, instead",
+   "zh": "当此牌将被另一张牌弃置时，改为"
+  },
+  "TRIGGER_IF_DISCARDED": {
+   "en": "When discarded,",
+   "zh": "弃置时，"
+  },
+  "TRIGGER_IF_DISCARD": {
+   "en": "When a card is discarded,",
+   "zh": "当一张牌被弃置时，"
+  },
+  "TRIGGER_IF_MOOD_IS_DISPELLED": {
+   "en": "When a mood is dispelled,",
+   "zh": "当一个情绪消解时，"
+  },
+  "TRIGGER_IF_ENEMY_ATTACKS_ITSELF": {
+   "en": "When an enemy attacks itself,",
+   "zh": "当一个敌人攻击该敌人自身时，"
+  },
+  "TRIGGER_IF_PET_IS_DRAWN": {
+   "en": "When a pet is drawn,",
+   "zh": ""
+  },
+  "TRIGGER_IF_YOU_OVERHEAL": {
+   "en": "When you heal past max health,",
+   "zh": "当你治疗超过生命值上限时，"
+  },
+  "TRIGGER_IF_YOU_HEAL": {
+   "en": "When you heal,",
+   "zh": "当你治疗时，"
+  },
+  "TRIGGER_IF_YOU_GAIN_ENERGY": {
+   "en": "When you gain energy,",
+   "zh": "当你获得精力时，"
+  },
+  "TRIGGER_IF_IS_NOT_CHOSEN": {
+   "en": "<#DD0000>If you do not choose this card,</color>",
+   "zh": "<#DD0000>如果未选择此牌，</color>"
+  },
+  "TRIGGER_IF_OVERCHARGED": {
+   "en": "[HEXCODE][LINKKEY]WHEN OVERCHARGED</link></color>,",
+   "zh": "[HEXCODE][LINKKEY]当过量充能时</link></color>，"
+  },
+  "TRIGGER_IF_OVERCHARGE_ENDED": {
+   "en": "[HEXCODE][LINKKEY]WHEN OVERCHARGE ENDS</link></color>,",
+   "zh": "[HEXCODE][LINKKEY]当过量充能结束时</link></color>，"
+  },
+  "TRIGGER_IF_ANY_CARD_OVERCHARGED": {
+   "en": "[HEXCODE][LINKKEY]WHEN ANY CARD OVERCHARGES</link></color>,",
+   "zh": "[HEXCODE][LINKKEY]当有牌过量充能时</link></color>，"
+  },
+  "TRIGGER_IF_ANY_CARD_OVERCHARGE_ENDED": {
+   "en": "[HEXCODE][LINKKEY]WHEN ANY OVERCHARGE ENDS</link></color>,",
+   "zh": "[HEXCODE][LINKKEY]当有过量充能结束时</link></color>，"
+  },
+  "TRIGGER_IF_THIS_CARD_BECOMES_SPARKLING": {
+   "en": "When overcleaned,",
+   "zh": "过度清洁时，"
+  },
+  "TRIGGER_IF_ANY_CARD_BECOMES_SPARKLING": {
+   "en": "When a card is overcleaned,",
+   "zh": "当一张牌过度清洁时，"
+  },
+  "TRIGGER_IF_PLAYED_AND_SPARKLING": {
+   "en": "When played, while sparkling,",
+   "zh": "打出时，如果闪闪发亮，"
+  },
+  "TRIGGER_IF_ANY_SPARKLING_CARD_PLAYED": {
+   "en": "When a sparkling card is played,",
+   "zh": "当一张闪闪发亮的牌打出时，"
+  },
+  "TRIGGER_IF_ATTACK_ENTERS_HAND": {
+   "en": "When an attack enters your hand,",
+   "zh": "当一张攻击牌进入你的手牌时，"
+  },
+  "TRIGGER_IF_CAMP_ENTERS_HAND": {
+   "en": "When a camp enters your hand,",
+   "zh": "当一张营地牌进入你的手牌时，"
+  },
+  "TRIGGER_IF_CHARGE_ENTERS_HAND": {
+   "en": "When a charge enters your hand,",
+   "zh": "当一张充能牌进入你的手牌时，"
+  },
+  "TRIGGER_IF_CURSE_ENTERS_HAND": {
+   "en": "When a curse enters your hand,",
+   "zh": "当一张诅咒牌进入你的手牌时，"
+  },
+  "TRIGGER_IF_DATA_ENTERS_HAND": {
+   "en": "When data enters your hand,",
+   "zh": "当一张数据牌进入你的手牌时，"
+  },
+  "TRIGGER_IF_FOOD_ENTERS_HAND": {
+   "en": "When food enters your hand,",
+   "zh": "当一张食物牌进入你的手牌时，"
+  },
+  "TRIGGER_IF_FOOD_IS_MADE": {
+   "en": "When food is made,",
+   "zh": "创造食物时，"
+  },
+  "TRIGGER_IF_MOOD_ENTERS_HAND": {
+   "en": "When a mood enters your hand,",
+   "zh": "当一张情绪牌进入你的手牌时，"
+  },
+  "TRIGGER_IF_PASSIVE_ENTERS_HAND": {
+   "en": "When a passive enters your hand,",
+   "zh": "当一张被动牌进入你的手牌时，"
+  },
+  "TRIGGER_IF_PICK_ENTERS_HAND": {
+   "en": "When a pick enters your hand,",
+   "zh": "当一张开锁物进入你的手牌时，"
+  },
+  "TRIGGER_IF_SEARCH_ENTERS_HAND": {
+   "en": "When a search enters your hand,",
+   "zh": "当一张搜索牌进入你的手牌时，"
+  },
+  "TRIGGER_IF_SKILL_ENTERS_HAND": {
+   "en": "When a skill enters your hand,",
+   "zh": "当一张技能牌进入你的手牌时，"
+  },
+  "TRIGGER_IF_TURRET_ENTERS_HAND": {
+   "en": "When a turret enters your hand,",
+   "zh": "当一张炮台牌进入你的手牌时，"
+  },
+  "TRIGGER_IF_CREATURE_ENTERS_HAND": {
+   "en": "When a creature enters your hand,",
+   "zh": "当一张生物牌进入你的手牌时，"
+  },
+  "TRIGGER_IF_ENEMY_ATTACKS": {
+   "en": "When an enemy attacks,",
+   "zh": "当一个敌人攻击时，"
+  },
+  "TRIGGER_IF_PET_IS_CREATED": {
+   "en": "When a pet is created,",
+   "zh": ""
+  },
+  "TRIGGER_IF_ANY_CARD_LODGED": {
+   "en": "When any card is lodged,",
+   "zh": "当有牌贴附时，"
+  },
+  "TRIGGER_IF_THIS_CARD_LODGED": {
+   "en": "When this card is lodged,",
+   "zh": "当此牌贴附时，"
+  },
+  "TRIGGER_IF_ENEMY_MARKED": {
+   "en": "When an enemy is marked",
+   "zh": "当一个敌人被标记时，"
+  },
+  "TRIGGER_IF_DECAY_APPLIED": {
+   "en": "When [LINKKEY=STATUS_DECAY] is applied",
+   "zh": "当[LINKKEY=STATUS_DECAY]被施加时，"
+  },
+  "TRIGGER_IF_CARD_IS_EXHAUSTED": {
+   "en": "If card is exhaused,",
+   "zh": "当此牌被消耗时，"
+  },
+  "TRIGGER_IF_CARD_FED": {
+   "en": "[HEXCODE][LINKKEY]IF FED</link></color>,",
+   "zh": "[HEXCODE][LINKKEY]如果被喂食</link></color>，"
+  },
+  "TRIGGER_IF_CARD_BROKEN": {
+   "en": "[HEXCODE][LINKKEY]IF BROKEN</link></color>,",
+   "zh": "[HEXCODE][LINKKEY]如果被击破</link></color>，"
+  },
+  "TRIGGER_IF_CARD_IGNITED": {
+   "en": "[HEXCODE][LINKKEY]IF IGNITED</link></color>,",
+   "zh": "[HEXCODE][LINKKEY]如果被点燃</link></color>，"
+  },
+  "TRIGGER_IF_CARD_REVEALED": {
+   "en": "[HEXCODE][LINKKEY]IF REVEALED</link></color>,",
+   "zh": "[HEXCODE][LINKKEY]如果被揭示</link></color>，"
+  },
+  "TRIGGER_IF_CARD_FIXED": {
+   "en": "[HEXCODE][LINKKEY]IF FIXED</link></color>,",
+   "zh": "[HEXCODE][LINKKEY]如果被修理</link></color>，"
+  },
+  "TRIGGER_AUTO_TRIGGER": {
+   "en": "[HEXCODE][LINKKEY]AUTO TRIGGER</link></color>,",
+   "zh": "[HEXCODE][LINKKEY]自动触发</link></color>，"
+  },
+  "TRIGGER_IF_WARMTH_INCREASED": {
+   "en": "When warmth increases,",
+   "zh": "当温暖提升时，"
+  },
+  "TRIGGER_WHEN_DRAWN": {
+   "en": "When drawn,",
+   "zh": "抽到时，"
+  },
+  "TRIGGER_IF_YOU_TRIGGER_MACHINE": {
+   "en": "When a Machine is triggered,",
+   "zh": "当一张机械牌触发时，"
+  },
+  "WORD_TOAD": {
+   "en": "TOAD",
+   "zh": "蟾蜍"
+  },
+  "WORD_EAT": {
+   "en": "EAT",
+   "zh": "食用"
+  },
+  "WORD_EAT_CREATURE": {
+   "en": "YUM!",
+   "zh": "美味！"
+  },
+  "WORD_CHARGE": {
+   "en": "CHARGE",
+   "zh": "充能"
+  },
+  "WORD_STRUCTURE": {
+   "en": "STRUCTURE",
+   "zh": "设施"
+  },
+  "WORD_ODD": {
+   "en": "ODD",
+   "zh": "奇数"
+  },
+  "WORD_STORE": {
+   "en": "STORE",
+   "zh": "存储"
+  },
+  "WORD_STORED_GUNK": {
+   "en": "STORED GUNK",
+   "zh": ""
+  },
+  "WORD_GUNKY": {
+   "en": "GUNKY",
+   "zh": "黏稠"
+  },
+  "WORD_GEAR": {
+   "en": "GEAR",
+   "zh": "装备"
+  },
+  "WORD_EXILE": {
+   "en": "EXILE",
+   "zh": "放逐"
+  },
+  "WORD_CAST": {
+   "en": "CAST",
+   "zh": "施放"
+  },
+  "WORD_DISCARD": {
+   "en": "DISCARD",
+   "zh": "弃置"
+  },
+  "WORD_DISCARD_CARD": {
+   "en": "I PERSIST!",
+   "zh": "我不走！"
+  },
+  "WORD_EXHAUST": {
+   "en": "EXHAUST",
+   "zh": "消耗"
+  },
+  "WORD_STORE_PROTEIN": {
+   "en": "STORE PROTEIN",
+   "zh": ""
+  },
+  "WORD_SWALLOW": {
+   "en": "SWALLOW",
+   "zh": "吞食"
+  },
+  "WORD_DISCHARGE": {
+   "en": "DISCHARGE",
+   "zh": "耗能"
+  },
+  "WORD_CHARGED": {
+   "en": "CHARGED",
+   "zh": "已充能"
+  },
+  "WORD_CONSUME": {
+   "en": "CONSUME",
+   "zh": "销毁"
+  },
+  "WORD_CRIPPLE": {
+   "en": "CRIPPLE",
+   "zh": "致残"
+  },
+  "WORD_LAY_A_SPIDER_EGG": {
+   "en": "LAY A SPIDER EGG",
+   "zh": "产下蛛卵"
+  },
+  "WORD_CALL_A_PET": {
+   "en": "CALL A PET",
+   "zh": ""
+  },
+  "WORD_FAT_GRUB": {
+   "en": "FAT GRUB",
+   "zh": ""
+  },
+  "WORD_TRUFFLE_PIG": {
+   "en": "TRUFFLE PIG",
+   "zh": "松露猪"
+  },
+  "WORD_STRAY_DOG": {
+   "en": "STRAY DOG",
+   "zh": "流浪狗"
+  },
+  "WORD_SHRINE": {
+   "en": "SHRINE",
+   "zh": "神龛"
+  },
+  "WORD_STICKY_GOO": {
+   "en": "STICKY GOO",
+   "zh": "粘液"
+  },
+  "WORD_OR": {
+   "en": "OR",
+   "zh": "或"
+  },
+  "WORD_AND": {
+   "en": "AND",
+   "zh": "并"
+  },
+  "WORD_QUANTIFIERA": {
+   "en": "",
+   "zh": "张"
+  },
+  "WORD_QUANTIFIERB": {
+   "en": "",
+   "zh": "层"
+  },
+  "WORD_QUANTIFIERC": {
+   "en": "",
+   "zh": "点"
+  },
+  "WORD_QUANTIFIERD": {
+   "en": "",
+   "zh": "个"
+  },
+  "WORD_BREAKABLE": {
+   "en": "BREAKABLE",
+   "zh": "可击破"
+  },
+  "WORD_DIGGABLE": {
+   "en": "DIGGABLE",
+   "zh": "可挖掘"
+  },
+  "WORD_FEEDABLE": {
+   "en": "FEEDABLE",
+   "zh": "可喂食"
+  },
+  "WORD_IGNITABLE": {
+   "en": "IGNITABLE",
+   "zh": "可点燃"
+  },
+  "WORD_FIXABLE": {
+   "en": "FIXABLE",
+   "zh": "可修复"
+  },
+  "WORD_REVEALABLE": {
+   "en": "REVEALABLE",
+   "zh": "可揭示"
+  },
+  "WORD_UNLOCKABLE": {
+   "en": "UNLOCKABLE",
+   "zh": "可解锁"
+  },
+  "WORD_WHEN_USED": {
+   "en": "WHEN USED",
+   "zh": "使用时"
+  },
+  "WORD_TO_SELF": {
+   "en": "to SELF",
+   "zh": "对自身"
+  },
+  "WORD_UP_TO": {
+   "en": "up to ",
+   "zh": "至多 "
+  },
+  "WORD_EXPLORE": {
+   "en": "Explore",
+   "zh": "探索"
+  },
+  "WORD_COMBAT": {
+   "en": "Combat",
+   "zh": "战斗"
+  },
+  "WORD_FORESIGHT": {
+   "en": "Foresight",
+   "zh": "先见"
+  },
+  "WORD_PERMANENT": {
+   "en": "Permanent",
+   "zh": "永久"
+  },
+  "WORD_TWICE": {
+   "en": "twice",
+   "zh": "两次"
+  },
+  "WORD_TIMES": {
+   "en": "times",
+   "zh": "次"
+  },
+  "WORD_DEAD_BATTERY": {
+   "en": "Dead Battery",
+   "zh": "耗尽的电池"
+  },
+  "WORD_EVOLVE_NOW": {
+   "en": "EVOLVE NOW",
+   "zh": "即将进化"
+  },
+  "WORD_WILL_EVOLVE_NEXT_CAST": {
+   "en": "THE CARD WRIGGLES IN YOUR GRIP.",
+   "zh": "这张牌在你的手中扭动着。"
+  },
+  "WORD_CARD_COST": {
+   "en": "COST: [PNUM]",
+   "zh": "花费：[PNUM] "
+  },
+  "WORD_TRIGGERED": {
+   "en": "Triggered",
+   "zh": "触发"
+  },
+  "WORD_DEGUNK": {
+   "en": "Degunk",
+   "zh": "移除黏糊"
+  },
+  "WORD_NEW": {
+   "en": "New",
+   "zh": "新"
+  },
+  "WORD_GUNKED": {
+   "en": "GUNKED: [PNUM]",
+   "zh": "黏糊：[PNUM] 层"
+  },
+  "WORD_OVERCHARGED": {
+   "en": "OVERCHARGED",
+   "zh": "过量充能"
+  },
+  "WORD_SPARKLING": {
+   "en": "SPARKLING",
+   "zh": "闪闪发亮"
+  },
+  "WORD_SPARKLING_TIMES_TWO": {
+   "en": "2X",
+   "zh": "2X"
+  },
+  "WORD_CLEAN": {
+   "en": "CLEAN",
+   "zh": ""
+  },
+  "WORD_INCREASE_DAMAGE": {
+   "en": "DAMAGE INCREASED",
+   "zh": "伤害提升"
+  },
+  "WORD_LEACH_COST": {
+   "en": "COST INCREASED",
+   "zh": "费用提升"
+  },
+  "WORD_STORE_GUNK": {
+   "en": "GUNK STORED:",
+   "zh": ""
+  },
+  "WORD_TRIGGER_TURRET": {
+   "en": "TURRET TRIGGERED",
+   "zh": "炮台触发"
+  },
+  "WORD_INCREASE_BATTERY": {
+   "en": "BATTERY INCREASED",
+   "zh": "电池提升"
+  },
+  "WORD_EXHAUST_TARGET_CARD": {
+   "en": "CARD EXHAUSTED",
+   "zh": "已消耗卡牌"
+  },
+  "WORD_REDUCE_COST": {
+   "en": "COST REDUCED",
+   "zh": "费用降低"
+  },
+  "WORD_REDUCE_COST_PERMANENTLY": {
+   "en": "COST REDUCED PERMANENTLY",
+   "zh": "费用永久降低"
+  },
+  "WORD_SET_COST_TO_ZERO": {
+   "en": "ZERO COST",
+   "zh": "零费用"
+  },
+  "WORD_SET_COST_TO_ZERO_PERMANENTLY": {
+   "en": "ZERO COST",
+   "zh": "零费用"
+  },
+  "WORD_ZERO_COST": {
+   "en": "ZERO COST",
+   "zh": "零费用"
+  },
+  "WORD_MAKE_A_PERMANENT_COPY": {
+   "en": "MADE A COPY",
+   "zh": "复制"
+  },
+  "WORD_INCREASE_GUNK": {
+   "en": "GUNK INCREASED",
+   "zh": "黏糊增加"
+  },
+  "WORD_INCREASE_HEALING": {
+   "en": "HEALING INCREASED",
+   "zh": "治疗提升"
+  },
+  "WORD_INCREASE_USES": {
+   "en": "USES INCREASED",
+   "zh": "使用次数增加"
+  },
+  "WORD_INCREASE_APPLIED_DECAY": {
+   "en": "DECAY INCREASED",
+   "zh": "腐朽增加"
+  },
+  "WORD_INCREASE_APPLIED_DECAY_MULTIPLY": {
+   "en": "DECAY MULTIPLIED",
+   "zh": "腐朽翻倍"
+  },
+  "WORD_MODIFIED": {
+   "en": "UNUSUAL",
+   "zh": "异常的"
+  },
+  "WORD_AUTO_TRIGGER": {
+   "en": "AUTO TRIGGER",
+   "zh": "自动触发"
+  },
+  "WORD_USED": {
+   "en": "CONSUMED",
+   "zh": "已移除"
+  },
+  "WORD_PLUMP": {
+   "en": "Plump",
+   "zh": "膨胀"
+  },
+  "WORD_ADD": {
+   "en": "add",
+   "zh": "增加"
+  },
+  "WORD_FORGET": {
+   "en": "FORGET",
+   "zh": "遗忘"
+  },
+  "WORD_TO": {
+   "en": "to",
+   "zh": "对"
+  },
+  "WORD_ON": {
+   "en": "on",
+   "zh": "至"
+  },
+  "WORD_OFF": {
+   "en": "off",
+   "zh": "为"
+  },
+  "WORD_FROM": {
+   "en": "from",
+   "zh": "自"
+  },
+  "WORD_BY": {
+   "en": "by",
+   "zh": "以"
+  },
+  "WORD_IN": {
+   "en": "in",
+   "zh": "对"
+  },
+  "WORD_LODGED": {
+   "en": "Lodged",
+   "zh": "贴附"
+  },
+  "WORD_STOLEN": {
+   "en": "Stolen",
+   "zh": "窃取"
+  },
+  "WORD_INCREASE": {
+   "en": "increase",
+   "zh": "提升"
+  },
+  "WORD_REDUSE": {
+   "en": "reduce",
+   "zh": "降低"
+  },
+  "WORD_ADD_PROPERTY_TO_CARD": {
+   "en": "stubborn added ",
+   "zh": "添加顽固 "
+  },
+  "WORD_MAKE_A_TEMPORARY_COPY": {
+   "en": "temporary copy made",
+   "zh": "创造临时复制"
+  },
+  "WORD_ADD_MAKE_CARD": {
+   "en": "Make Card",
+   "zh": "创造牌"
+  },
+  "WORD_INCREASE_MAKE_CARD": {
+   "en": "Increase Cards Made",
+   "zh": "提升创造的牌张数"
+  },
+  "WORD_ADOPT": {
+   "en": "Adopt",
+   "zh": "收养"
+  },
+  "WORD_DAMAGE": {
+   "en": "Damage",
+   "zh": "伤害 "
+  },
+  "WORD_STAINLESS": {
+   "en": "Stainless",
+   "zh": "不锈"
+  },
+  "WORD_MECHANIZE": {
+   "en": "Mechanize",
+   "zh": ""
+  },
+  "WORD_STERILE": {
+   "en": "Stainless",
+   "zh": "不锈"
+  },
+  "WORD_CONSUME_CARD": {
+   "en": "Consume card",
+   "zh": "销毁牌"
+  },
+  "WORD_HEAL_TARGET": {
+   "en": "to",
+   "zh": "对"
+  },
+  "WORD_FOR": {
+   "en": "for",
+   "zh": "令"
+  },
+  "WORD_REPLICATE": {
+   "en": "Replicate card",
+   "zh": "复制牌"
+  },
+  "MULT_ENEMY_NONE": {
+   "en": "_",
+   "zh": "_"
+  },
+  "MULT_ENEMY_SELF": {
+   "en": "_",
+   "zh": "_"
+  },
+  "MULT_ENEMY_SINGLE": {
+   "en": "enemy",
+   "zh": "敌人"
+  },
+  "MULT_ENEMY_SINGLE_SPECIFY": {
+   "en": "enemy",
+   "zh": "敌人"
+  },
+  "MULT_ENEMY_ALL": {
+   "en": "all enemies",
+   "zh": "所有敌人"
+  },
+  "MULT_ENEMY_ALLBUTSELF": {
+   "en": "all enemies",
+   "zh": "所有敌人"
+  },
+  "MULT_ENEMY_RANDOM": {
+   "en": "a random enemy",
+   "zh": "一个随机敌人"
+  },
+  "MULT_ENEMY_TOTHELEFT": {
+   "en": "enemies to the LEFT",
+   "zh": "左侧敌人"
+  },
+  "MULT_ENEMY_TOTHERIGHT": {
+   "en": "enemies to the RIGHT",
+   "zh": "右侧敌人"
+  },
+  "MULT_CARD_SINGLE": {
+   "en": "[CLASS_NAME] card",
+   "zh": "[CLASS_NAME]牌"
+  },
+  "MULT_CARD_SELF": {
+   "en": "_",
+   "zh": "_"
+  },
+  "MULT_CARD_ALL": {
+   "en": "all [CLASS_NAME] cards",
+   "zh": "所有[CLASS_NAME]牌"
+  },
+  "MULT_CARD_ALLBUTSELF": {
+   "en": "all [CLASS_NAME] cards",
+   "zh": "所有[CLASS_NAME]牌"
+  },
+  "MULT_CARD_RANDOM": {
+   "en": "a random [CLASS_NAME] card",
+   "zh": "一张随机[CLASS_NAME]牌"
+  },
+  "MULT_CARD_TOTHELEFT": {
+   "en": "[CLASS_NAME] cards to the LEFT",
+   "zh": "左侧的[CLASS_NAME]牌"
+  },
+  "MULT_CARD_TOTHERIGHT": {
+   "en": "[CLASS_NAME] cards to the RIGHT",
+   "zh": "右侧的[CLASS_NAME]牌"
+  },
+  "MULT_CARD_DEFAULT": {
+   "en": "[CLASS_NAME] card",
+   "zh": "[CLASS_NAME]牌"
+  },
+  "MULTIPLY_MOD_1_FILTER": {
+   "en": "<nobr>for every [HEXCODE]<link=kW>[CLASS_NAME]</color></link></nobr> in hand.",
+   "zh": "<nobr>手牌中每有一张[HEXCODE]<link=kW>[CLASS_NAME]</color></link></nobr>牌，"
+  },
+  "MULTIPLY_MOD_2_FILTER": {
+   "en": "[CLASS_NAME]: [HEXCODE]<b>[PNUM]</b></color>",
+   "zh": "[CLASS_NAME]：[HEXCODE]<b>[PNUM]</b></color>"
+  },
+  "MULTIPLY_MOD_1_GUNK": {
+   "en": "<nobr>for every [LINKKEY=PROPERTY_GUNK]</nobr> on This Card.",
+   "zh": "<nobr>手牌中每有 1 层[LINKKEY=PROPERTY_GUNK]</nobr>，<nobr>此牌上每有 1 层[LINKKEY=PROPERTY_GUNK]</nobr>，"
+  },
+  "MULTIPLY_MOD_2_GUNK": {
+   "en": "Gunk: [HEXCODE]<b>[PNUM]</b></color>",
+   "zh": "黏糊：[HEXCODE]<b>[PNUM]</b></color>"
+  },
+  "MULTIPLY_MOD_3_GUNK": {
+   "en": "<nobr>for every [LINKKEY=PROPERTY_GUNK]</nobr> on Target Card.",
+   "zh": "<nobr>目标牌每有 1 层[LINKKEY=PROPERTY_GUNK]</nobr>，"
+  },
+  "MULTIPLY_MOD_1_WARMTH": {
+   "en": "<nobr>for every [LINKKEY=PROPERTY_WARMTH]</nobr> in room.",
+   "zh": "<nobr>房间内每有 1 点[LINKKEY=PROPERTY_WARMTH]</nobr>，"
+  },
+  "MULTIPLY_MOD_2_WARMTH": {
+   "en": "Warmth: [HEXCODE]<b>[PNUM]</b></color>",
+   "zh": "温暖：[HEXCODE]<b>[PNUM]</b></color>"
+  },
+  "MULTIPLY_MOD_1_NET_WARMTH": {
+   "en": "<nobr>for Net [LINKKEY=PROPERTY_WARMTH]</nobr> in room.",
+   "zh": "<nobr>房间内每有 1 点净[LINKKEY=PROPERTY_WARMTH]</nobr>，"
+  },
+  "MULTIPLY_MOD_2_NET_WARMTH": {
+   "en": "Warmth: [HEXCODE]<b>[PNUM]</b></color>",
+   "zh": "温暖：[HEXCODE]<b>[PNUM]</b></color>"
+  },
+  "MULTIPLY_MOD_1_ENEMY_COUNT": {
+   "en": "<nobr>for every Enemy.",
+   "zh": "<nobr>每有一个敌人，"
+  },
+  "MULTIPLY_MOD_2_ENEMY_COUNT": {
+   "en": "Enemies: [HEXCODE]<b>[PNUM]</b></color>",
+   "zh": "敌人：[HEXCODE]<b>[PNUM]</b></color>"
+  }
+ },
+ "tips": {
+  "UNLOCK": {
+   "en": "Can be used on locks.",
+   "zh": "可以用于开锁。"
+  },
+  "DIG": {
+   "en": "Can be used on dig sites.",
+   "zh": "可以用于挖掘点。"
+  },
+  "BREAK": {
+   "en": "Used to break things.",
+   "zh": "用于击破物品。"
+  },
+  "FIX": {
+   "en": "Used to repair things.",
+   "zh": "用于修理物品。"
+  },
+  "REVEAL": {
+   "en": "Reveals something that is obscured.",
+   "zh": "揭示被遮蔽的事物。"
+  },
+  "IGNITE": {
+   "en": "LET IT BURN!",
+   "zh": "烧吧，烧吧！"
+  },
+  "FEED": {
+   "en": "Everyone has to eat at some point.",
+   "zh": "总有要吃东西的时候。"
+  },
+  "UNLOCK_ENV_PROMPT": {
+   "en": "Looks unlockable.",
+   "zh": "看起来可以被解锁。"
+  },
+  "DIG_ENV_PROMPT": {
+   "en": "Something is hidden here.\\nLooks diggable.",
+   "zh": "这里藏了什么东西。\\n可以挖一挖试试。"
+  },
+  "BREAK_ENV_PROMPT": {
+   "en": "Looks breakable.",
+   "zh": "看起来可以被击破。"
+  },
+  "FIX_ENV_PROMPT": {
+   "en": "Looks fixable.",
+   "zh": "看起来可以被修理。"
+  },
+  "REVEAL_ENV_PROMPT": {
+   "en": "Can be revealed.",
+   "zh": "可以被揭示。"
+  },
+  "IGNITE_ENV_PROMPT": {
+   "en": "Looks flammable.\\nCould it be ignited?",
+   "zh": "看起来易燃。\\n也许可以点燃它？"
+  },
+  "FEED_ENV_PROMPT": {
+   "en": "Seems hungry.\\nCould it be fed?",
+   "zh": "看起来很饿。\\n也许可以喂食？"
+  },
+  "UNDISCOVERED_ENV_PROMPT": {
+   "en": "There is more to be discovered here...",
+   "zh": "这里还有更多有待发现……"
+  },
+  "APPLY_MARKED": {
+   "en": "Random effects will hit a marked enemy first.",
+   "zh": "随机效果会优先命中有标记的敌人。"
+  },
+  "APPLY_DECAY": {
+   "en": "Increase enemy damage taken\\n by decay amount",
+   "zh": "令敌人受到的伤害\\n增加等于腐朽的值"
+  },
+  "APPLY_DECAY_MULTIPLY": {
+   "en": "Increase enemy damage taken\\n by decay amount\\nMultiplies decay on enemies",
+   "zh": "令敌人受到的伤害\\n增加等于腐朽的值\\n使敌人的腐朽翻倍"
+  },
+  "INCREASE_APPLIED_DECAY": {
+   "en": "Permanently add decay to cards\\nDecay increases enemy damage received",
+   "zh": "为卡牌永久添加腐朽\\n腐朽会提升敌人受到的伤害"
+  },
+  "INCREASE_APPLIED_DECAY_MULTIPLY": {
+   "en": "Permanently multiply decay on cards\\nDecay increases enemy damage received",
+   "zh": "为卡牌永久翻倍腐朽\\n腐朽会提升敌人受到的伤害"
+  },
+  "CREATE_LODGED_CARD": {
+   "en": "Card lodged in enemy, until it dies",
+   "zh": "卡牌贴附于敌人身上，直到它死亡"
+  },
+  "CREATE_LODGED_CARD_WITH_DECAY": {
+   "en": "Card lodged in enemy, until it dies",
+   "zh": "卡牌贴附于敌人身上，直到它死亡"
+  },
+  "INCREASE_SPELL_WEAKNESS": {
+   "en": "Permanently add spell weakness",
+   "zh": "永久施加咒语虚弱"
+  },
+  "PACIFY_RAGE": {
+   "en": "Lose all rage",
+   "zh": "失去所有暴怒"
+  },
+  "APPLY_POISONED": {
+   "en": "Bad for living",
+   "zh": "活物不宜"
+  },
+  "APPLY_PLUMP": {
+   "en": "Plump up",
+   "zh": "膨胀"
+  },
+  "BUNCH_OF_KEYS": {
+   "en": "Choose a key",
+   "zh": "选择一把钥匙"
+  },
+  "TRIGGER_ENEMY_DEATH": {
+   "en": "Triggers all \"if enemy dies\" triggers",
+   "zh": "触发所有“如果敌人死亡”效果"
+  },
+  "TOOLTIP_ENERGY_COST": {
+   "en": "Energy cost",
+   "zh": "花费精力"
+  },
+  "MECHANIZE": {
+   "en": "Become a machine",
+   "zh": ""
+  },
+  "GEN_NAME_ADOPTED": {
+   "en": "ADOPTED",
+   "zh": "已收养"
+  },
+  "GEN_NAME_TITLE_0": {
+   "en": "MR",
+   "zh": "“叛乱者”"
+  },
+  "GEN_NAME_TITLE_1": {
+   "en": "MS",
+   "zh": "狡猾的"
+  },
+  "GEN_NAME_TITLE_2": {
+   "en": "DR",
+   "zh": "博学的"
+  },
+  "GEN_NAME_TITLE_3": {
+   "en": "SIR",
+   "zh": "古老的"
+  },
+  "GEN_NAME_TITLE_4": {
+   "en": "RAD",
+   "zh": "美味的"
+  },
+  "GEN_NAME_TITLE_5": {
+   "en": "PROF",
+   "zh": "尖牙的"
+  },
+  "GEN_NAME_TITLE_6": {
+   "en": "DEAR",
+   "zh": "毛绒绒的"
+  },
+  "GEN_NAME_TITLE_7": {
+   "en": "LORD",
+   "zh": "“强壮者”"
+  },
+  "GEN_NAME_TITLE_8": {
+   "en": "SWEET",
+   "zh": "“饥饿者”"
+  },
+  "GEN_NAME_TITLE_9": {
+   "en": "BITEY",
+   "zh": "“狂怒者”"
+  },
+  "GEN_NAME_TITLE_10": {
+   "en": "GRUMPY",
+   "zh": "“不朽者”"
+  },
+  "GEN_NAME_0": {
+   "en": "BENNIE",
+   "zh": "本尼"
+  },
+  "GEN_NAME_1": {
+   "en": "STEVE",
+   "zh": "史蒂夫"
+  },
+  "GEN_NAME_2": {
+   "en": "KELLOGS",
+   "zh": "凯洛格"
+  },
+  "GEN_NAME_3": {
+   "en": "CRYSTAL",
+   "zh": "水晶"
+  },
+  "GEN_NAME_4": {
+   "en": "POTATO",
+   "zh": "土豆"
+  },
+  "GEN_NAME_5": {
+   "en": "KEEK",
+   "zh": "基克"
+  },
+  "GEN_NAME_6": {
+   "en": "FLOSS",
+   "zh": "弗洛斯"
+  },
+  "GEN_NAME_7": {
+   "en": "POPPY",
+   "zh": "波比"
+  },
+  "GEN_NAME_8": {
+   "en": "WENDY",
+   "zh": "温迪"
+  },
+  "GEN_NAME_9": {
+   "en": "UPPA",
+   "zh": "乌帕"
+  },
+  "GEN_NAME_10": {
+   "en": "JEFF",
+   "zh": "杰夫"
+  },
+  "GEN_NAME_11": {
+   "en": "MUGGLE",
+   "zh": "马格"
+  },
+  "GEN_NAME_12": {
+   "en": "DAVID",
+   "zh": "戴维"
+  },
+  "GEN_NAME_13": {
+   "en": "KEVIN",
+   "zh": "凯文"
+  },
+  "GEN_NAME_14": {
+   "en": "JANA",
+   "zh": "亚纳"
+  },
+  "GEN_NAME_15": {
+   "en": "EMMA",
+   "zh": "艾玛"
+  },
+  "GEN_NAME_16": {
+   "en": "JAMES",
+   "zh": "詹姆斯"
+  },
+  "GEN_NAME_17": {
+   "en": "MABEL",
+   "zh": "玛贝尔"
+  },
+  "GEN_NAME_18": {
+   "en": "ARABELLA",
+   "zh": "阿拉贝拉"
+  },
+  "GEN_NAME_19": {
+   "en": "SQUEEK",
+   "zh": "斯奇克"
+  },
+  "GEN_NAME_20": {
+   "en": "SLITHER",
+   "zh": "斯利瑟"
+  },
+  "GEN_NAME_21": {
+   "en": "MEOW",
+   "zh": "喵儿"
+  },
+  "GEN_NAME_22": {
+   "en": "BITEY",
+   "zh": "咬咬"
+  },
+  "GEN_NAME_23": {
+   "en": "BUNS",
+   "zh": "包包"
+  },
+  "GEN_NAME_24": {
+   "en": "SCREECH",
+   "zh": "叫叫"
+  },
+  "GEN_NAME_25": {
+   "en": "JAYBOOTY",
+   "zh": "乐乐"
+  },
+  "GEN_NAME_26": {
+   "en": "SCRATCH",
+   "zh": "挠挠"
+  },
+  "GEN_NAME_27": {
+   "en": "MOOKIE",
+   "zh": "穆奇"
+  },
+  "GEN_NAME_EPITHET_0": {
+   "en": "OF ANARCHY",
+   "zh": "先生"
+  },
+  "GEN_NAME_EPITHET_1": {
+   "en": "OF AGONY",
+   "zh": "女士"
+  },
+  "GEN_NAME_EPITHET_2": {
+   "en": "THE DEVIOUS",
+   "zh": "博士"
+  },
+  "GEN_NAME_EPITHET_3": {
+   "en": "PhD",
+   "zh": "大人"
+  },
+  "GEN_NAME_EPITHET_4": {
+   "en": "JONES",
+   "zh": "小子"
+  },
+  "GEN_NAME_EPITHET_5": {
+   "en": "BACON",
+   "zh": "教授"
+  },
+  "GEN_NAME_EPITHET_6": {
+   "en": "MCBITEY",
+   "zh": "宝贝"
+  },
+  "GEN_NAME_EPITHET_7": {
+   "en": "MANDELA",
+   "zh": "大王"
+  },
+  "GEN_NAME_EPITHET_8": {
+   "en": "MCFLUFFY",
+   "zh": "领主"
+  },
+  "GEN_NAME_EPITHET_9": {
+   "en": "THE STRONG",
+   "zh": "爵士"
+  },
+  "GEN_NAME_EPITHET_10": {
+   "en": "THE HUNGRY",
+   "zh": "骑士"
+  },
+  "GEN_NAME_EPITHET_11": {
+   "en": "THE FURIOUS",
+   "zh": "小姐"
+  },
+  "GEN_NAME_EPITHET_12": {
+   "en": "THE IMORTAL",
+   "zh": "王子"
+  },
+  "GEN_NAME_EPITHET_13": {
+   "en": "OF GLORY",
+   "zh": "公主"
+  }
+ },
+ "tipsByNorm": {
+  "unlock": {
+   "en": "Can be used on locks.",
+   "zh": "可以用于开锁。"
+  },
+  "dig": {
+   "en": "Can be used on dig sites.",
+   "zh": "可以用于挖掘点。"
+  },
+  "break": {
+   "en": "Used to break things.",
+   "zh": "用于击破物品。"
+  },
+  "fix": {
+   "en": "Used to repair things.",
+   "zh": "用于修理物品。"
+  },
+  "reveal": {
+   "en": "Reveals something that is obscured.",
+   "zh": "揭示被遮蔽的事物。"
+  },
+  "ignite": {
+   "en": "LET IT BURN!",
+   "zh": "烧吧，烧吧！"
+  },
+  "feed": {
+   "en": "Everyone has to eat at some point.",
+   "zh": "总有要吃东西的时候。"
+  },
+  "unlockenvprompt": {
+   "en": "Looks unlockable.",
+   "zh": "看起来可以被解锁。"
+  },
+  "digenvprompt": {
+   "en": "Something is hidden here.\\nLooks diggable.",
+   "zh": "这里藏了什么东西。\\n可以挖一挖试试。"
+  },
+  "breakenvprompt": {
+   "en": "Looks breakable.",
+   "zh": "看起来可以被击破。"
+  },
+  "fixenvprompt": {
+   "en": "Looks fixable.",
+   "zh": "看起来可以被修理。"
+  },
+  "revealenvprompt": {
+   "en": "Can be revealed.",
+   "zh": "可以被揭示。"
+  },
+  "igniteenvprompt": {
+   "en": "Looks flammable.\\nCould it be ignited?",
+   "zh": "看起来易燃。\\n也许可以点燃它？"
+  },
+  "feedenvprompt": {
+   "en": "Seems hungry.\\nCould it be fed?",
+   "zh": "看起来很饿。\\n也许可以喂食？"
+  },
+  "undiscoveredenvprompt": {
+   "en": "There is more to be discovered here...",
+   "zh": "这里还有更多有待发现……"
+  },
+  "applymarked": {
+   "en": "Random effects will hit a marked enemy first.",
+   "zh": "随机效果会优先命中有标记的敌人。"
+  },
+  "applydecay": {
+   "en": "Increase enemy damage taken\\n by decay amount",
+   "zh": "令敌人受到的伤害\\n增加等于腐朽的值"
+  },
+  "applydecaymultiply": {
+   "en": "Increase enemy damage taken\\n by decay amount\\nMultiplies decay on enemies",
+   "zh": "令敌人受到的伤害\\n增加等于腐朽的值\\n使敌人的腐朽翻倍"
+  },
+  "increaseapplieddecay": {
+   "en": "Permanently add decay to cards\\nDecay increases enemy damage received",
+   "zh": "为卡牌永久添加腐朽\\n腐朽会提升敌人受到的伤害"
+  },
+  "increaseapplieddecaymultiply": {
+   "en": "Permanently multiply decay on cards\\nDecay increases enemy damage received",
+   "zh": "为卡牌永久翻倍腐朽\\n腐朽会提升敌人受到的伤害"
+  },
+  "createlodgedcard": {
+   "en": "Card lodged in enemy, until it dies",
+   "zh": "卡牌贴附于敌人身上，直到它死亡"
+  },
+  "createlodgedcardwithdecay": {
+   "en": "Card lodged in enemy, until it dies",
+   "zh": "卡牌贴附于敌人身上，直到它死亡"
+  },
+  "increasespellweakness": {
+   "en": "Permanently add spell weakness",
+   "zh": "永久施加咒语虚弱"
+  },
+  "pacifyrage": {
+   "en": "Lose all rage",
+   "zh": "失去所有暴怒"
+  },
+  "applypoisoned": {
+   "en": "Bad for living",
+   "zh": "活物不宜"
+  },
+  "applyplump": {
+   "en": "Plump up",
+   "zh": "膨胀"
+  },
+  "bunchofkeys": {
+   "en": "Choose a key",
+   "zh": "选择一把钥匙"
+  },
+  "triggerenemydeath": {
+   "en": "Triggers all \"if enemy dies\" triggers",
+   "zh": "触发所有“如果敌人死亡”效果"
+  },
+  "tooltipenergycost": {
+   "en": "Energy cost",
+   "zh": "花费精力"
+  },
+  "mechanize": {
+   "en": "Become a machine",
+   "zh": ""
+  },
+  "gennameadopted": {
+   "en": "ADOPTED",
+   "zh": "已收养"
+  },
+  "gennametitle0": {
+   "en": "MR",
+   "zh": "“叛乱者”"
+  },
+  "gennametitle1": {
+   "en": "MS",
+   "zh": "狡猾的"
+  },
+  "gennametitle2": {
+   "en": "DR",
+   "zh": "博学的"
+  },
+  "gennametitle3": {
+   "en": "SIR",
+   "zh": "古老的"
+  },
+  "gennametitle4": {
+   "en": "RAD",
+   "zh": "美味的"
+  },
+  "gennametitle5": {
+   "en": "PROF",
+   "zh": "尖牙的"
+  },
+  "gennametitle6": {
+   "en": "DEAR",
+   "zh": "毛绒绒的"
+  },
+  "gennametitle7": {
+   "en": "LORD",
+   "zh": "“强壮者”"
+  },
+  "gennametitle8": {
+   "en": "SWEET",
+   "zh": "“饥饿者”"
+  },
+  "gennametitle9": {
+   "en": "BITEY",
+   "zh": "“狂怒者”"
+  },
+  "gennametitle10": {
+   "en": "GRUMPY",
+   "zh": "“不朽者”"
+  },
+  "genname0": {
+   "en": "BENNIE",
+   "zh": "本尼"
+  },
+  "genname1": {
+   "en": "STEVE",
+   "zh": "史蒂夫"
+  },
+  "genname2": {
+   "en": "KELLOGS",
+   "zh": "凯洛格"
+  },
+  "genname3": {
+   "en": "CRYSTAL",
+   "zh": "水晶"
+  },
+  "genname4": {
+   "en": "POTATO",
+   "zh": "土豆"
+  },
+  "genname5": {
+   "en": "KEEK",
+   "zh": "基克"
+  },
+  "genname6": {
+   "en": "FLOSS",
+   "zh": "弗洛斯"
+  },
+  "genname7": {
+   "en": "POPPY",
+   "zh": "波比"
+  },
+  "genname8": {
+   "en": "WENDY",
+   "zh": "温迪"
+  },
+  "genname9": {
+   "en": "UPPA",
+   "zh": "乌帕"
+  },
+  "genname10": {
+   "en": "JEFF",
+   "zh": "杰夫"
+  },
+  "genname11": {
+   "en": "MUGGLE",
+   "zh": "马格"
+  },
+  "genname12": {
+   "en": "DAVID",
+   "zh": "戴维"
+  },
+  "genname13": {
+   "en": "KEVIN",
+   "zh": "凯文"
+  },
+  "genname14": {
+   "en": "JANA",
+   "zh": "亚纳"
+  },
+  "genname15": {
+   "en": "EMMA",
+   "zh": "艾玛"
+  },
+  "genname16": {
+   "en": "JAMES",
+   "zh": "詹姆斯"
+  },
+  "genname17": {
+   "en": "MABEL",
+   "zh": "玛贝尔"
+  },
+  "genname18": {
+   "en": "ARABELLA",
+   "zh": "阿拉贝拉"
+  },
+  "genname19": {
+   "en": "SQUEEK",
+   "zh": "斯奇克"
+  },
+  "genname20": {
+   "en": "SLITHER",
+   "zh": "斯利瑟"
+  },
+  "genname21": {
+   "en": "MEOW",
+   "zh": "喵儿"
+  },
+  "genname22": {
+   "en": "BITEY",
+   "zh": "咬咬"
+  },
+  "genname23": {
+   "en": "BUNS",
+   "zh": "包包"
+  },
+  "genname24": {
+   "en": "SCREECH",
+   "zh": "叫叫"
+  },
+  "genname25": {
+   "en": "JAYBOOTY",
+   "zh": "乐乐"
+  },
+  "genname26": {
+   "en": "SCRATCH",
+   "zh": "挠挠"
+  },
+  "genname27": {
+   "en": "MOOKIE",
+   "zh": "穆奇"
+  },
+  "gennameepithet0": {
+   "en": "OF ANARCHY",
+   "zh": "先生"
+  },
+  "gennameepithet1": {
+   "en": "OF AGONY",
+   "zh": "女士"
+  },
+  "gennameepithet2": {
+   "en": "THE DEVIOUS",
+   "zh": "博士"
+  },
+  "gennameepithet3": {
+   "en": "PhD",
+   "zh": "大人"
+  },
+  "gennameepithet4": {
+   "en": "JONES",
+   "zh": "小子"
+  },
+  "gennameepithet5": {
+   "en": "BACON",
+   "zh": "教授"
+  },
+  "gennameepithet6": {
+   "en": "MCBITEY",
+   "zh": "宝贝"
+  },
+  "gennameepithet7": {
+   "en": "MANDELA",
+   "zh": "大王"
+  },
+  "gennameepithet8": {
+   "en": "MCFLUFFY",
+   "zh": "领主"
+  },
+  "gennameepithet9": {
+   "en": "THE STRONG",
+   "zh": "爵士"
+  },
+  "gennameepithet10": {
+   "en": "THE HUNGRY",
+   "zh": "骑士"
+  },
+  "gennameepithet11": {
+   "en": "THE FURIOUS",
+   "zh": "小姐"
+  },
+  "gennameepithet12": {
+   "en": "THE IMORTAL",
+   "zh": "王子"
+  },
+  "gennameepithet13": {
+   "en": "OF GLORY",
+   "zh": "公主"
+  }
+ }
+}

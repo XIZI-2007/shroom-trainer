@@ -1,0 +1,416 @@
+{
+ "_comment": "状态名 → 中英名 + 本地化键。成员表来自 status_meta.py（元数据），名字来自游戏 Enemy 串表的 STATUS_* 键。",
+ "source": "D:\\SteamLibrary\\steamapps\\common\\Shroom and Gloom\\Shroom and Gloom_Data\\StreamingAssets\\aa\\StandaloneWindows64",
+ "count": 68,
+ "missing": [],
+ "by_name": {
+  "Airborne": {
+   "zh": "空中",
+   "en": "Airborne",
+   "key": "STATUS_AIRBORNE",
+   "hasZh": true
+  },
+  "Armoured": {
+   "zh": "着甲",
+   "en": "Armoured",
+   "key": "STATUS_ARMOURED",
+   "hasZh": true
+  },
+  "Blessed": {
+   "zh": "祝福",
+   "en": "Bless",
+   "key": "STATUS_BLESSED",
+   "hasZh": true
+  },
+  "Brainless": {
+   "zh": "无脑",
+   "en": "Brainless",
+   "key": "STATUS_BRAINLESS",
+   "hasZh": true
+  },
+  "Buzzkill": {
+   "zh": "扫兴",
+   "en": "Buzzkill",
+   "key": "STATUS_BUZZKILL",
+   "hasZh": true
+  },
+  "CardLodged": {
+   "zh": "贴附",
+   "en": "Lodged",
+   "key": "STATUS_CARD_LODGED",
+   "hasZh": true
+  },
+  "Charged": {
+   "zh": "已充能",
+   "en": "Charged",
+   "key": "STATUS_CHARGED",
+   "hasZh": true
+  },
+  "Conductive": {
+   "zh": "导电",
+   "en": "Conductive",
+   "key": "STATUS_CONDUCTIVE",
+   "hasZh": true
+  },
+  "Confused": {
+   "zh": "困惑",
+   "en": "Confused",
+   "key": "STATUS_CONFUSED",
+   "hasZh": true
+  },
+  "Corrupt": {
+   "zh": "污秽",
+   "en": "Corrupt",
+   "key": "STATUS_CORRUPT",
+   "hasZh": true
+  },
+  "CountDown": {
+   "zh": "倒计时",
+   "en": "Countdown",
+   "key": "STATUS_COUNTDOWN",
+   "hasZh": true
+  },
+  "Crippled": {
+   "zh": "致残",
+   "en": "Crippled",
+   "key": "STATUS_CRIPPLED",
+   "hasZh": true
+  },
+  "Decay": {
+   "zh": "腐朽",
+   "en": "DECAY",
+   "key": "STATUS_DECAY",
+   "hasZh": true
+  },
+  "Dividing": {
+   "zh": "分裂",
+   "en": "Dividing",
+   "key": "STATUS_DIVIDING",
+   "hasZh": true
+  },
+  "Enraged": {
+   "zh": "激怒",
+   "en": "Enrage",
+   "key": "STATUS_ENRAGED",
+   "hasZh": true
+  },
+  "Ethereal": {
+   "zh": "灵体",
+   "en": "Ethereal",
+   "key": "STATUS_ETHEREAL",
+   "hasZh": true
+  },
+  "Evolving": {
+   "zh": "进化",
+   "en": "Evolving",
+   "key": "STATUS_EVOLVING",
+   "hasZh": true
+  },
+  "Fruiting": {
+   "zh": "结果",
+   "en": "Fruiting",
+   "key": "STATUS_FRUITING",
+   "hasZh": true
+  },
+  "Gestating": {
+   "zh": "孕育",
+   "en": "Gestating",
+   "key": "STATUS_GESTATING",
+   "hasZh": true
+  },
+  "GloomCreatureCosmicHorror": {
+   "zh": "幽暗生物",
+   "en": "Gloom Creature",
+   "key": "STATUS_GLOOMCREATURECOSIMICHORROR",
+   "hasZh": true
+  },
+  "GloomCreatureCreepingHorror": {
+   "zh": "黏糊生物",
+   "en": "Gunk Creature",
+   "key": "STATUS_GLOOMCREATURECREEPINGHORROR",
+   "hasZh": true
+  },
+  "GloomCreatureShiveringHorror": {
+   "zh": "黏糊生物",
+   "en": "Gunk Creature",
+   "key": "STATUS_GLOOMCREATURESHIVERINGHORROR",
+   "hasZh": true
+  },
+  "Gutsy": {
+   "zh": "脏腑",
+   "en": "Gutsy",
+   "key": "STATUS_GUTSY",
+   "hasZh": true
+  },
+  "HotSauce": {
+   "zh": "辣酱",
+   "en": "Hot Sauce",
+   "key": "STATUS_HOT_SAUCE",
+   "hasZh": true
+  },
+  "Infested": {
+   "zh": "感染",
+   "en": "Infested",
+   "key": "STATUS_INFESTED",
+   "hasZh": true
+  },
+  "Insight": {
+   "zh": "洞察",
+   "en": "Insight",
+   "key": "STATUS_INSIGHT",
+   "hasZh": true
+  },
+  "Inspired": {
+   "zh": "激励",
+   "en": "Inspired",
+   "key": "STATUS_INSPIRED",
+   "hasZh": true
+  },
+  "Irritable": {
+   "zh": "易怒",
+   "en": "Irritable",
+   "key": "STATUS_IRRITABLE",
+   "hasZh": true
+  },
+  "Leech": {
+   "zh": "吸血",
+   "en": "LEECH",
+   "key": "STATUS_LEECH",
+   "hasZh": true
+  },
+  "Limb": {
+   "zh": "断肢",
+   "en": "Limb",
+   "key": "STATUS_LIMB",
+   "hasZh": true
+  },
+  "Loot": {
+   "zh": "战利品",
+   "en": "Loot",
+   "key": "STATUS_LOOT",
+   "hasZh": true
+  },
+  "Loving": {
+   "zh": "喜爱",
+   "en": "Loving",
+   "key": "STATUS_LOVING",
+   "hasZh": true
+  },
+  "Marked": {
+   "zh": "标记",
+   "en": "Marked",
+   "key": "STATUS_MARKED",
+   "hasZh": true
+  },
+  "Melting": {
+   "zh": "融化",
+   "en": "MELTING",
+   "key": "STATUS_MELTING",
+   "hasZh": true
+  },
+  "Moody": {
+   "zh": "情绪化",
+   "en": "Moody",
+   "key": "STATUS_MOODY",
+   "hasZh": true
+  },
+  "Mossy": {
+   "zh": "生苔",
+   "en": "Mossy",
+   "key": "STATUS_MOSSY",
+   "hasZh": true
+  },
+  "Mutant": {
+   "zh": "变异",
+   "en": "Mutant",
+   "key": "STATUS_MUTANT",
+   "hasZh": true
+  },
+  "NanoLaced": {
+   "zh": "纳米材料",
+   "en": "Nano Laced",
+   "key": "STATUS_NANO_LACED",
+   "hasZh": true
+  },
+  "Necrobloom": {
+   "zh": "死冥之花",
+   "en": "Necrobloom",
+   "key": "STATUS_NECROBLOOM",
+   "hasZh": true
+  },
+  "Plump": {
+   "zh": "膨胀",
+   "en": "Plump",
+   "key": "STATUS_PLUMP",
+   "hasZh": true
+  },
+  "Poisoned": {
+   "zh": "中毒",
+   "en": "Poisoned",
+   "key": "STATUS_POISONED",
+   "hasZh": true
+  },
+  "Protective": {
+   "zh": "防护",
+   "en": "Protective",
+   "key": "STATUS_PROTECTIVE",
+   "hasZh": true
+  },
+  "Regrowth": {
+   "zh": "再生",
+   "en": "Regrowth",
+   "key": "STATUS_REGROWTH",
+   "hasZh": true
+  },
+  "Resurgence": {
+   "zh": "复兴",
+   "en": "Resurgence",
+   "key": "STATUS_RESURGENCE",
+   "hasZh": true
+  },
+  "Rotten": {
+   "zh": "腐烂",
+   "en": "Rotten",
+   "key": "STATUS_ROTTEN",
+   "hasZh": true
+  },
+  "Scaredy": {
+   "zh": "易受惊吓",
+   "en": "Scaredy",
+   "key": "STATUS_SCAREDY",
+   "hasZh": true
+  },
+  "Seasoned": {
+   "zh": "调味",
+   "en": "SEASONING",
+   "key": "STATUS_SEASONED",
+   "hasZh": true
+  },
+  "SlimeMom": {
+   "zh": "软泥母亲",
+   "en": "Slime Mom",
+   "key": "STATUS_SLIMEMOM",
+   "hasZh": true
+  },
+  "Slimey": {
+   "zh": "软泥",
+   "en": "Slimey",
+   "key": "STATUS_SLIMEY",
+   "hasZh": true
+  },
+  "Sludgy": {
+   "zh": "泥泞",
+   "en": "Sludgy",
+   "key": "STATUS_SLUDGY",
+   "hasZh": true
+  },
+  "SpellWeakness": {
+   "zh": "咒语虚弱",
+   "en": "Spell Weakness",
+   "key": "STATUS_SPELL_WEAKNESS",
+   "hasZh": true
+  },
+  "Spellshield": {
+   "zh": "咒语护盾",
+   "en": "Spellshield",
+   "key": "STATUS_SPELLSHIELD",
+   "hasZh": true
+  },
+  "Sporey": {
+   "zh": "孢子",
+   "en": "Sporey",
+   "key": "STATUS_SPOREY",
+   "hasZh": true
+  },
+  "Starving": {
+   "zh": "极饿",
+   "en": "Starving",
+   "key": "STATUS_STARVING",
+   "hasZh": true
+  },
+  "Sticky": {
+   "zh": "粘合",
+   "en": "STICKY",
+   "key": "STATUS_STICKY",
+   "hasZh": true
+  },
+  "StrangeExit": {
+   "zh": "奇怪出口",
+   "en": "Strange Exit",
+   "key": "STATUS_STRANGE_EXIT",
+   "hasZh": true
+  },
+  "Studied": {
+   "zh": "研学",
+   "en": "STUDIED",
+   "key": "STATUS_STUDIED",
+   "hasZh": true
+  },
+  "Stunned": {
+   "zh": "震慑",
+   "en": "Stun",
+   "key": "STATUS_STUNNED",
+   "hasZh": true
+  },
+  "Swift": {
+   "zh": "迅捷",
+   "en": "Swift",
+   "key": "STATUS_SWIFT",
+   "hasZh": true
+  },
+  "TeamPlayer": {
+   "zh": "团队精神",
+   "en": "Team Player",
+   "key": "STATUS_TEAM_PLAYER",
+   "hasZh": true
+  },
+  "Thorned": {
+   "zh": "荆棘",
+   "en": "Thorned",
+   "key": "STATUS_THORNED",
+   "hasZh": true
+  },
+  "Thorns": {
+   "zh": "荆棘",
+   "en": "Thorns",
+   "key": "STATUS_THORNS",
+   "hasZh": true
+  },
+  "Timid": {
+   "zh": "胆小",
+   "en": "Timid",
+   "key": "STATUS_TIMID",
+   "hasZh": true
+  },
+  "Undying": {
+   "zh": "不死",
+   "en": "Undying",
+   "key": "STATUS_UNDYING",
+   "hasZh": true
+  },
+  "Unnerving": {
+   "zh": "令人不安",
+   "en": "Unnerving",
+   "key": "STATUS_UNNERVING",
+   "hasZh": true
+  },
+  "Vibrating": {
+   "zh": "振动",
+   "en": "Vibrating",
+   "key": "STATUS_VIBRATING",
+   "hasZh": true
+  },
+  "Vile": {
+   "zh": "邪恶",
+   "en": "Vile",
+   "key": "STATUS_VILE",
+   "hasZh": true
+  },
+  "Vulnerable": {
+   "zh": "易伤",
+   "en": "VULNERABLE",
+   "key": "STATUS_VULNERABLE",
+   "hasZh": true
+  }
+ }
+}

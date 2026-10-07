@@ -214,6 +214,46 @@ class GameTrainer:
         """牌库快照（只读）：抽牌堆按抽牌顺序返回牌名。"""
         return self.script.exports_sync.deck()
 
+    # ---------- 卡牌效果（意图）----------
+    def deck_intents(self, ptr_hex=None):
+        """**读懂牌的效果**：返回 (意图, 数值, 目标数) 的结构化列表。
+
+        不传 ptr 就整库扫；传 ptr 只读那一张（省时间）。
+
+        返回：
+          { ok, deckTypeName, warning,
+            cards:[{ name, cost, intents:[{intent, number, mult, targetOverride,
+                                          adv, negateArmour, skipArmour, guid, ...}] }] }
+
+        ⚠️ `intent` 是**意图名**（如 `ApplyVulnerable`），来自 agent.js 的静态字段名表；
+        做成"人话"要再过 src/intent_reader.py。
+        """
+        if ptr_hex:
+            return self.script.exports_sync.deckIntents(str(ptr_hex))
+        return self.script.exports_sync.deckIntents()
+
+    def intent_map(self):
+        """意图名表自检：{ok, count, err, names:[…]}。用来确认静态字段名解析可用。"""
+        return self.script.exports_sync.intentMap()
+
+    # ---------- 战况（打法推演的输入）----------
+    def battle(self, with_intents=False):
+        """读当前战况（只读）：敌人血量/护甲 + 精力 + 手牌。
+
+        返回：
+          { ok, warning,
+            enemies:[{name, hp, maxHp, armour, alive, boss, retreated, ptr}],
+            enemyCount, aliveEnemyCount, enemyHpTotal,
+            hp, maxHp, energy, softCap,
+            hand:[{name, cost, ptr, intents?}], handCount, handSize,
+            deckType, deckTypeName }
+
+        ⚠️ with_intents=True 会顺带读每张手牌的意图（慢一些）；只要牌名/费用就别开。
+        ⚠️ 敌人/手牌字段是**动态取偏移**的（泛型基类字段 dump 里全是 0x0），
+           若游戏更新后字段改名会读到 -1，此时 warning 里会有提示。
+        """
+        return self.script.exports_sync.battle(bool(with_intents))
+
     # ---------- 遗忘手牌 ----------
     def forget_list(self):
         """列出可遗忘的牌：抽牌堆 + 弃牌堆 + 已消耗，按堆分组、逐张列出。

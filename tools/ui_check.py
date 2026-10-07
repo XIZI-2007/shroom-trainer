@@ -129,7 +129,7 @@ check("启动没有透明效果(没在播淡入)", not any(eff), str(eff))
 check("视口内卡片标记为已就位",
       all(c._popped for c in (p.cap_top, p.cap_god, p.cap_free)), str(pop))
 check("视口外卡片待弹(popped=False)",
-      not p.deck_card._popped and not p.forget_card._popped, str(pop))
+      not p.deck_card._popped and not p.plan_card._popped, str(pop))
 check("★ 状态卡已不在滚动区（搬进独立状态页了）", p.status_card not in p.scroll_items)
 check("_pop_armed 已开", p._pop_armed)
 
@@ -180,12 +180,19 @@ check("启动就在视口最上方(_ly=0 且完全可见)", _t._ly == 0 and _t._
       f"ly={_t._ly} popped={_t._popped}")
 check("两张功能卡紧随其后、状态卡仍在最后",
       p.scroll_items[1:3] == [p.cap_god, p.cap_free]
-      and p.scroll_items[-1] is p.forget_card,
+      and p.scroll_items[-1] is p.plan_card,
       str([type(c).__name__ for c in p.scroll_items]))
-check("牌库卡与遗忘卡相邻、遗忘卡是滚动区最后一张",
-      p.scroll_items.index(p.forget_card) == p.scroll_items.index(p.deck_card) + 1
-      and p.scroll_items.index(p.forget_card) == len(p.scroll_items) - 1,
+check("★ 牌库卡与打法卡相邻、打法卡是滚动区最后一张（2026-10-06 用户指定放牌库下方）",
+      p.scroll_items.index(p.plan_card) == p.scroll_items.index(p.deck_card) + 1
+      and p.scroll_items.index(p.plan_card) == len(p.scroll_items) - 1,
       str([type(c).__name__ for c in p.scroll_items]))
+check("★ 遗忘卡**不在**滚动区（已搬进状态页）",
+      p.forget_card not in p.scroll_items and p.forget_card.parent() is p.sheet,
+      f"in_scroll={p.forget_card in p.scroll_items} "
+      f"parent={type(p.forget_card.parent()).__name__}")
+check("★ 打法卡与牌库卡一样，启动默认关闭（整卡开关）",
+      not p.plan_card.isOn() and not p.deck_card.isOn(),
+      f"plan={p.plan_card.isOn()} deck={p.deck_card.isOn()}")
 check("没有附加控件(纯开关)", not hasattr(_t, "extra"))
 check("F4 已绑定置顶", any(s.key() == QKeySequence("F4") for s in p.findChildren(QShortcut)),
       "F1/F2/F3 已有，此处只验 F4")
@@ -231,7 +238,7 @@ check("两格滚轮被夹在上界内", p._scroll <= mx + 0.5, f"{p._scroll:.0f}
 print("=== 6. 滚到才弹（需求 4）===")
 p._scroll_to(0, smooth=False)
 QTest.qWait(80)
-sc = p.forget_card            # 滚动区最后一张（状态卡已移出）
+sc = p.plan_card             # 滚动区最后一张（状态卡已移出，遗忘卡搬进状态页了）
 sc._popped = False
 sc.move(0, sc._ly)
 p._check_pop()
@@ -658,8 +665,8 @@ try:
 except TypeError:
     pass
 _dc = p.deck_card
-check("牌库卡之后只剩遗忘卡",
-      p.scroll_items[-2] is _dc and p.scroll_items[-1] is p.forget_card,
+check("牌库卡之后只剩打法卡（遗忘卡已搬进状态页）",
+      p.scroll_items[-2] is _dc and p.scroll_items[-1] is p.plan_card,
       str([type(x).__name__ for x in p.scroll_items]))
 check("牌库卡默认关闭", not _dc.isOn())
 check("关闭时不显示任何牌名", not any(c.isVisible() for c in _dc.cells))
@@ -941,6 +948,12 @@ try:
     p.worker.status.disconnect(p.on_status)
 except TypeError:
     pass
+# ⚠️⚠️ 遗忘卡 2026-10-06 搬进了状态页 ⇒ 它现在是**隐藏 sheet 的子控件**，而 Qt 里
+#    "祖先是隐藏的"会让 `isVisible()` 恒为 False ⇒ 本节所有形态断言会集体假 FAIL。
+#    ⇒ 本节先**把状态页打开**（卡片真的可见），跑完再关掉还原。
+if not p.isSheetOpen():
+    p.toggle_status_sheet()
+    QTest.qWait(p.SHEET_MS + 240)
 _fc = p.forget_card
 # ☠️ 13d 全程与 worker 脱钩：把 on_open 摘掉，列表数据一律手动 update_list 喂。
 # 不摘的话，每次 open_pick() 都会经 on_open → _fetch_forget_list() → worker.post()
@@ -956,8 +969,8 @@ _fc_open_cb = _fc.on_open
 _fc.on_open = None
 _fetch_cb = p._fetch_forget_list
 p._fetch_forget_list = lambda: None
-check("遗忘卡排在牌库卡之后、是滚动区最后一张",
-      p.scroll_items[-2] is _dc and p.scroll_items[-1] is _fc,
+check("★ 遗忘卡住在状态页里（2026-10-06 从滚动区搬进来）",
+      _fc not in p.scroll_items and _fc.parent() is p.sheet,
       str([type(x).__name__ for x in p.scroll_items]))
 
 # --- 入口按钮：这次 bug 的回归断言 ---
@@ -1318,6 +1331,15 @@ check("★ find_pid 走 Win32 快照（Frida 枚举只作最后兜底）",
       _w32_at >= 0 and (_fr_at < 0 or _w32_at < _fr_at),
       f"list_processes@{_w32_at} frida枚举@{_fr_at}")
 
+# ⚠️ 战况读取（敌人血量/手牌/精力）是**内存侧**的改动，与 UI 无关 —— 断言放在
+#    tools/battle_probe_test.py，别往 ui_check 里塞（ui_check 只跑 UI/渲染/材质）。
+#    这里只保留一条：trainer_core 的 battle RPC 必须存在（它是面板调用内存侧的入口）。
+
+_core_rpc_at = _core_src.find("def battle(")
+check("★ trainer_core 暴露 battle(with_intents) RPC（内存→推演的入口）",
+      _core_rpc_at >= 0 and "exports_sync.battle(" in _core_src,
+      "def battle@%d" % _core_rpc_at)
+
 
 def _feed_native(win_msg):
     """造一块真的 MSG 内存喂给 nativeEvent，走完整个解析路径。
@@ -1354,6 +1376,11 @@ check("★ 非 windows_generic_MSG 的事件类型也不崩、不放行",
 _ok, _r = p.nativeEvent("windows_generic_MSG", 0)
 check("★ 传 str（错误用法）也不会抛异常（bytes() 要兜住）",
       _ok is False and _r == 0, f"{_ok} {_r}")
+
+# 13d 开始时为了"卡片真的可见"把状态页打开了 ⇒ 这里关掉还原（下面 13e 会自己开）
+if p.isSheetOpen():
+    p.toggle_status_sheet()
+    QTest.qWait(p.SHEET_MS + 320)
 
 # ---------- 13e. 运行状态页（仪表盘按钮 + 从左往右滑入）----------
 print("=== 13e. 运行状态页（仪表盘按钮 + 从左往右滑入）===")
@@ -1598,10 +1625,11 @@ check("★ 材质：外层玻璃面（牌库卡 / 遗忘卡 / 状态页）用 R_
       and abs(p.scroll_items[-1]._radius() - G.R_SURFACE) < 0.01
       and abs(p.sheet.RADIUS - G.R_SURFACE) < 0.01,
       f"{p.scroll_items[-2]._radius()} / {p.scroll_items[-1]._radius()} / {p.sheet.RADIUS}")
-check("★ 材质：内层卡（状态卡 / 控制台卡，住在状态页里）用 R_INNER = 14",
+check("★ 材质：内层卡（状态卡 / 遗忘手牌 / 控制台，住在状态页里）用 R_INNER = 14",
       abs(p.status_card._radius() - G.R_INNER) < 0.01
+      and abs(p.forget_card._radius() - G.R_INNER) < 0.01
       and abs(p.console_card._radius() - G.R_INNER) < 0.01,
-      f"{p.status_card._radius()} / {p.console_card._radius()}")
+      f"{p.status_card._radius()} / {p.forget_card._radius()} / {p.console_card._radius()}")
 check("★ 材质：胶囊用 pill 圆角（高:2 = 规格的 999px 那一级）",
       abs(p.cap_top._radius() - p.cap_top.height() / 2.0) < 0.01,
       f"{p.cap_top._radius()} vs 高/2 = {p.cap_top.height() / 2.0}")
@@ -1672,6 +1700,9 @@ check("★ 底层滚动不影响状态页位置", p.sheet.pos() == _pp, str(p.sh
 #   `mapTo` 带上页面偏移，直接读会拿到页面高度（643）而不是卡片高度（157/83）。
 #   按 `sizeHint` 累加 + `p.sheet.y()` 才是**面板坐标**下那张卡的底边。
 _q_band = p.veil_bot.height() or 18
+# 帘子取样的 x：**页面最左那条 8px 窄边**（页内卡片一律从 x=8 起，够不到这儿）。
+# 这样"帘子到底有没有盖住状态页"就和卡片高度无关了 —— 见 _veil_band_clear_y。
+_Q_VX = 3
 # 实际要滚的那一下是**半格**（-60 → `SCROLL_STEP/2` = 55），不是整格。
 # ⚠️ 门槛不能只写 `半格 + 5`：滚完的断言是 `scroll < max_scroll - 5`，也就是要求
 #    `半格 < max_scroll - 5`，反推 `max_scroll > 半格 + 5`。写成 `>=` 就会挑到
@@ -1680,34 +1711,28 @@ _q_band = p.veil_bot.height() or 18
 _q_need_scroll = p.SCROLL_STEP / 2.0 + 10
 
 
-def _pick_h():
-    """挑一个同时满足两条夹逼的窗口高度；没有就返回 None。
+def _pick_h(avoid=None):
+    """挑一个「滚动余量够滚那半格、滚完还留余量」的窗口高度；没有就返回 None。
 
-    · 帘子带（`veil_bot` 的实际几何，**面板坐标**）必须整条落在页内卡底之下
-      —— 否则取样点落在卡面上，量到的根本不是帘子；
-    · `_max_scroll()` 必须**够滚那半格、且滚完还留余量**，否则一滚到底、
-      底帘自动隐藏、或者刚好差 1px 让下面的区间断言假 FAIL。
+    ⚠️ 以前这里还要求「帘子带整条落在页内卡底之下」。状态页加进第三张卡（打法建议）
+       之后，页内卡片几乎铺满整页 ⇒ 那个条件**任何高度都不成立**（实测卡底 422 vs
+       帘带上沿 417）。取样点已改到页面最左 8px 窄边（见 `_veil_band_clear_y`），
+       与卡片位置无关 ⇒ 这里只挑滚动余量，并在候选里挑**余量最大**的那个。
 
-    在候选里挑"帘子带上沿离卡底最远"的那个（不是第一个满足的）：勉强过几 px 的解
-    在抗锯齿下会把取样点压到卡边，量出来的是卡的色，等于没测。
+    `avoid`：要绕开的高度（路径 B 要换一档几何，跟路径 A 同高就等于没测"拉伸"）。
     """
-    _y = 8
-    for c in p.sheet_cards:
-        _y += c.sizeHint().height() + p.SHEET_CARD_GAP
-    _cb_sheet = _y - p.SHEET_CARD_GAP          # 页内卡底（**sheet 局部**坐标）
+    avoid = avoid or ()
     best = None
     for _h in range(360, 700, 10):
+        if _h in avoid:
+            continue
         p.resize(576, _h)
         p._do_layout()
-        # sheet 铺满面板（上到标题栏下方、下到面板底沿），所以
-        # 卡底(面板系) = sheet.top() + 卡底(sheet系)
-        _cb = p.sheet.y() + _cb_sheet
-        _band_top = p.veil_bot.geometry().bottom() - _q_band     # 帘子带**上沿**
-        if p._max_scroll() <= _q_need_scroll:
+        _ms = p._max_scroll()
+        if _ms <= _q_need_scroll:
             continue
-        _margin = _band_top - _cb                                # 带子上沿离卡底的距离
-        if _margin >= 6 and (best is None or _margin > best[1]):
-            best = (_h, _margin)
+        if best is None or _ms > best[1]:
+            best = (_h, _ms)
     if best is not None:
         p.resize(576, best[0])
         p._do_layout()
@@ -1715,32 +1740,25 @@ def _pick_h():
 
 
 _Q_H_A = _pick_h()
-check("前置：能找到一个「帘子带整条在卡下方 + 有滚动余量」的窗口高度",
+check("前置：能找到一个「有滚动余量」的窗口高度",
       _Q_H_A is not None,
       f"取 {_Q_H_A}｜max_scroll={p._max_scroll():.0f}（需要 {_q_need_scroll:.0f}）"
-      f" content={p.content.height()}"
-      f" 帘子带上沿={p.veil_bot.geometry().bottom() - _q_band}"
-      f" 卡底(面板系)={p.sheet.y() + sum(c.sizeHint().height() + p.SHEET_CARD_GAP for c in p.sheet_cards) - p.SHEET_CARD_GAP}")
+      f" content={p.content.height()}")
 QTest.qWait(240)
 
 
 def _veil_band_clear_y():
-    """在「底部帘子那一条带」里找一个**没被任何页内卡片盖住**的 y（面板绝对坐标）。
+    """在「底部帘子那一条带」里取一个 y（面板绝对坐标）。
 
-    ⚠️ 卡片区间取 `[y, y+h-1]` —— 用 `y+h` 当闭区间上界的话，紧贴卡底那一行会被误判成
-    "在卡上"，于是本该有的空位被吞掉、返回 None（本仓库踩过）。
-    ⚠️ 还要求离卡面**至少 3px**：卡底那一条有抗锯齿，贴着取色会混进卡的颜色。
-    找不到空位就返回 None，由前置断言明确报出来，绝不静默拿卡面当帘子。
+    ⚠️⚠️ **取样 x 固定在 3**（页面最左那条 8px 窄边）—— 页内卡片一律从 x=8 起，
+       够不到 x=3。所以"卡片盖没盖住帘子带"这件事与取样点**无关**了。
+       第 63 轮之前这里要求"整条帘子带落在卡底之下"，状态页加进第三张卡
+       （打法建议）之后页内卡片几乎铺满整页，那个条件**任何高度都不成立**
+       （实测：卡底 422 vs 帘带上沿 417）⇒ 换成"从窄边上取样"。
+       exe_smoke 判断状态页开合用 x≈3 同一个理由。
     """
     _vp = p.viewport.geometry()
-    _cards = [(c.mapTo(p, QPoint(0, 0)).y(), c.mapTo(p, QPoint(0, 0)).y() + c.height() - 1)
-              for c in p.sheet_cards]
-    for _y in range(_vp.bottom() - 3, max(_vp.bottom() - 24, 0), -1):
-        if _y <= p.sheet.geometry().top():
-            break
-        if all(not (a - 3 <= _y <= b + 3) for a, b in _cards):
-            return _y
-    return None
+    return _vp.bottom() - 4          # 落在 18px 高的帘子带里，且不贴底边
 
 
 # 路径 A：滚轮（用户就是"在状态页上滚滚轮"）。
@@ -1763,11 +1781,12 @@ check("前置：在状态页上滚滚轮真的把底层滚走了、底部帘子�
       p._scroll > 5 and p._scroll < p._max_scroll() - 5
       and "bottom" in p._veils_drawn,
       f"scroll={p._scroll:.0f}/{p._max_scroll():.0f} veils={p._veils_drawn}")
-check("前置：取样点落在帘子那一条带里、且**没被页内卡片盖住**",
-      _vb_y is not None,
-      f"y={_vb_y} cards_bottom={max(c.mapTo(p, QPoint(0, 0)).y() + c.height() for c in p.sheet_cards)}"
-      f" vp_bottom={p.viewport.geometry().bottom()}")
-_px_wheel = _panel_px(p.width() // 2, _vb_y)      # ⚠️ 绝对坐标（见 _panel_px 说明）
+check("前置：取样点落在帘子那一条带里，且在**页面最左窄边**上（卡片够不到）",
+      _vb_y > p.viewport.geometry().bottom() - _q_band
+      and _Q_VX < min(c.x() for c in p.sheet_cards),
+      f"y={_vb_y} vp_bottom={p.viewport.geometry().bottom()} "
+      f"横幅={_q_band} x={_Q_VX} 卡片左缘={min(c.x() for c in p.sheet_cards)}")
+_px_wheel = _panel_px(_Q_VX, _vb_y)      # ⚠️ 绝对坐标（见 _panel_px 说明）
 check("★ 滚轮滚动后帘子没有盖住状态页（该处仍是液体色）",
       QColor(_px_wheel).red() < 215,
       f"{_px_wheel} @y={_vb_y}（被帘子压住会发白 r≈245）")
@@ -1779,7 +1798,7 @@ QTest.qWait(600)                       # 等平滑滚动动画彻底停（否则
 p.veil_bot.raise_()
 # ⚠️ 抬完**立刻**取像素，中间不能 qWait —— 滚动动画的 tick 会走
 # `_apply_scroll → _update_veils` 把状态页再抬回去，那就白抬了（踩过）。
-_px_forced = _panel_px(p.width() // 2, _vb_y)
+_px_forced = _panel_px(_Q_VX, _vb_y)
 check("★ 灵敏度：把帘子强抬到最上后该处确实会变白（说明上一条测到了东西）",
       QColor(_px_forced).red() > QColor(_px_wheel).red() + 12,
       f"{_px_wheel} -> {_px_forced} | veil={p.veil_bot.geometry()} "
@@ -1787,22 +1806,23 @@ check("★ 灵敏度：把帘子强抬到最上后该处确实会变白（说明
       f"{p._max_scroll():.0f}")
 p._apply_scroll()          # 走一次正常流程 → 状态页被抬回来
 check("★ 恢复正常：再走一次滚动流程后帘子又回到状态页下面",
-      QColor(_panel_px(p.width() // 2, _vb_y)).red() < 215,
-      _panel_px(p.width() // 2, _vb_y))
+      QColor(_panel_px(_Q_VX, _vb_y)).red() < 215,
+      _panel_px(_Q_VX, _vb_y))
 # 路径 B：拉伸窗口（另一条会走到 _update_veils 的路）
-# 高度同样**现算**：拉高一档（换一个不同的几何，照样满足两条夹逼）。
-_Q_H_B = _pick_h()
+# 高度同样**现算**，但刻意**换一档**：跟路径 A 同高就等于根本没"拉伸"。
+_Q_H_B = _pick_h(avoid={_Q_H_A})
 QTest.qWait(240)
 _by = _veil_band_clear_y()
-check("前置：拉高后帘子仍在、且取样点确实落在卡面之下的空白页面上",
-      _by is not None and "bottom" in p._veils_drawn and p._max_scroll() > 5,
+check("前置：拉高后帘子仍在、且取样点仍落在页面最左窄边上",
+      "bottom" in p._veils_drawn and p._max_scroll() > 5
+      and _by > p.viewport.geometry().bottom() - _q_band,
       f"高={_Q_H_B} y={_by} veils={p._veils_drawn} max_scroll={p._max_scroll():.0f} "
-      f"cards_bottom={max(c.mapTo(p, QPoint(0, 0)).y() + c.height() for c in p.sheet_cards)}")
-_px_drag = _panel_px(p.width() // 2, _by)
+      f"vp_bottom={p.viewport.geometry().bottom()}")
+_px_drag = _panel_px(_Q_VX, _by)
 check("★ 拉伸窗口后帘子也没盖住状态页", QColor(_px_drag).red() < 215,
       f"{_px_drag}（面板已缩到 {p.height()} 逻辑高、状态页随之重算）")
 p.veil_bot.raise_()                        # 灵敏度对照（同路径 A 的理由）
-_px_drag_forced = _panel_px(p.width() // 2, _by)
+_px_drag_forced = _panel_px(_Q_VX, _by)
 check("★ 灵敏度：抬帘子后该点确实变白（说明上一条真的测到了帘子）",
       QColor(_px_drag_forced).red() > QColor(_px_drag).red() + 12,
       f"{_px_drag} -> {_px_drag_forced} veil={p.veil_bot.geometry()} y={_by}")
@@ -2242,7 +2262,8 @@ _bd.click()                                # 收回页面
 QTest.qWait(30)
 check("★ 反向：收回时指针**倒着**转一圈（转出去 / 转回来，对应开合两个动作）",
       abs(_bd._spin_anim.endValue() + 1.0) < 1e-9 and _bd._spin < 0.0,
-      f"endValue={_bd._spin_anim.endValue()} _spin={_bd._spin:.3f}")
+      f"endValue={_bd._spin_anim.endValue()} _spin={_bd._spin:.3f} "
+      f"state={_bd._spin_anim.state()} cur={_bd._spin_anim.currentTime()}")
 QTest.qWait(p.SHEET_MS + 240)
 check("收尾：关页后指针同样归零、且两处动画引用都已清干净",
       _bd._spin == 0.0
@@ -2351,7 +2372,7 @@ QTest.qWait(120)
 # GAP —— 零重叠是**算出来的**，不是调参调出来的。所以下面逐帧验的就是「间距不变」。
 print("=== 16. 让位（卡片变高时下位卡片自动让开、全程不重叠）===")
 _dc = p.deck_card
-_fc = p.forget_card
+_fc = p.plan_card            # 牌库卡的正下方现在是「打法建议」（遗忘卡搬进状态页了）
 _GAP = p.CARD_GAP
 
 
@@ -2559,16 +2580,23 @@ try:
           not _seen2, str(_seen2))
     # 灵敏度对照：必须让**内容**真变（`_h_need` 比的是逻辑高度，光改 self.height()
     # 不算"变了" —— 那正是让位动画的插值，不该反过来触发一次排布）。
-    if _fc.isOpen():
-        _fc.close_pick()
-        _settle()
-    _fc.open_pick()                     # 选卡区展开 → sizeHint 真变
+    # ⚠️ 这里原来用遗忘卡的 `open_pick()` 来改内容；遗忘卡搬进状态页后，
+    #    滚动区里**会变高**的是打法卡 ⇒ 改用它的 `update_data` 造内容变化。
+    _fc.setOn(True)
+    _fc.set_connected(True)
+    QTest.qWait(200)
+    _seen2.clear()                      # 先把"开卡本身"那次回调排掉，只量数据变化这次
+    # ⚠️ 灌的内容必须让**高度真的变**（收起态 70 → 有牌格 ~105）。
+    #    灌一条 `ok:False` 的短原因只有一行，高度不变 ⇒ 断言会假 FAIL（踩过）。
+    _fc.update_data({"ok": True, "kind": "战斗",
+                     "sequence": [{"name": "闪光", "cost": 0}, {"name": "戳刺", "cost": 1}],
+                     "damage": 18, "leftEnergy": 1, "lethal": False, "enemiesLeft": 2,
+                     "enemyHpAfter": 5, "method": "exact",
+                     "statusLine": "敌人状态：② 易伤×3", "warn": ""})
     check("★ 灵敏度对照：内容真变了、高度真变了，notify=True 必须回调（上一条才有鉴别力）",
           _seen2 == [1], str(_seen2))
 finally:
     _fc.on_height = _orig_cb
-    if _fc.isOpen():
-        _fc.close_pick()
 QTest.qWait(300)
 
 # ---- 反向断言：源码级，防止机制被改回「没人补排布」的样子 ----
@@ -2664,25 +2692,33 @@ _sr = p._sheet_rect()
 check("★ 控制台卡住在状态页里（不是滚动区）",
       _cc.parent() is p.sheet and _cc not in p.scroll_items,
       f"parent={type(_cc.parent()).__name__}")
-check("★ 排在「运行状态」卡**正下方**，间距正好是 SHEET_CARD_GAP",
-      _cc.y() == p.status_card.geometry().bottom() + 1 + p.SHEET_CARD_GAP,
-      f"console.y={_cc.y()} status.bottom={p.status_card.geometry().bottom()}"
+check("★ 遗忘手牌卡住在状态页里（2026-10-06 从滚动区搬进来）",
+      p.forget_card.parent() is p.sheet and p.forget_card not in p.scroll_items,
+      f"parent={type(p.forget_card.parent()).__name__}")
+check("★ 页内顺序：运行状态 → 遗忘手牌 → 控制台（依次紧挨，间距都是 SHEET_CARD_GAP）",
+      p.forget_card.y() == p.status_card.geometry().bottom() + 1 + p.SHEET_CARD_GAP
+      and _cc.y() == p.forget_card.geometry().bottom() + 1 + p.SHEET_CARD_GAP,
+      f"forget.y={p.forget_card.y()} status.bottom={p.status_card.geometry().bottom()}"
+      f" console.y={_cc.y()} forget.bottom={p.forget_card.geometry().bottom()}"
       f" gap={p.SHEET_CARD_GAP}")
-check("两张卡同左缘、同宽（都是 8px 窄边）",
-      _cc.x() == _pad and p.status_card.x() == _pad
-      and _cc.width() == _sr.width() - 2 * _pad,
-      f"x={_cc.x()}/{p.status_card.x()} w={_cc.width()} vs {_sr.width() - 2 * _pad}")
+check("三张卡同左缘、同宽（都是 8px 窄边）",
+      all(c.x() == _pad and c.width() == _sr.width() - 2 * _pad for c in p.sheet_cards),
+      f"{[(type(c).__name__, c.x(), c.width()) for c in p.sheet_cards]}"
+      f" vs 宽 {_sr.width() - 2 * _pad}")
 check("控制台卡高度按内容定死（= sizeHint，且不低于 MIN_H）",
       _cc.height() == max(_cc.MIN_H, _cc._lay.sizeHint().height()),
       f"{_cc.height()} vs {_cc._lay.sizeHint().height()} (MIN_H={_cc.MIN_H})")
 _cc_sz = (_cc.width(), _cc.height())
 _st_sz = (p.status_card.width(), p.status_card.height())
+_fg_sz = (p.forget_card.width(), p.forget_card.height())
 p.resize(576, 780)
 QTest.qWait(p.SHEET_MS + 220)
-check("★ 两张卡都不随窗口拉伸（用户要求「卡片大小不随拖拽窗口变大」）",
+check("★ 三张卡都不随窗口拉伸（用户要求「卡片大小不随拖拽窗口变大」）",
       (_cc.width(), _cc.height()) == _cc_sz
-      and (p.status_card.width(), p.status_card.height()) == _st_sz,
-      f"console {_cc_sz} -> {(_cc.width(), _cc.height())}")
+      and (p.status_card.width(), p.status_card.height()) == _st_sz
+      and (p.forget_card.width(), p.forget_card.height()) == _fg_sz,
+      f"console {_cc_sz} -> {(_cc.width(), _cc.height())}；"
+      f"forget {_fg_sz} -> {(p.forget_card.width(), p.forget_card.height())}")
 check("★ 拉高窗口后状态页仍然铺满（下沿到窗口底，不留缝）",
       p.sheet.geometry() == p._sheet_rect(), str(p.sheet.geometry().getRect()))
 # 开页途中两张卡都要跟着展开（只展开一张的话另一张会被页边界切掉）
@@ -2695,14 +2731,179 @@ _mid_info = []
 for _c in p.sheet_cards:
     _mid_ok = _mid_ok and 0 < _c.width() < _sr.width() - 2 * _pad
     _mid_info.append((type(_c).__name__, _c.width(), _c.mapTo(p, QPoint(0, 0)).x()))
-check("★ 开页动画中途，两张卡都在**同时**展开（不是只展开上面那张）",
+check("★ 开页动画中途，三张卡都在**同时**展开（不是只展开上面那张）",
       _mid_ok, str(_mid_info))
 QTest.qWait(p.SHEET_MS + 240)
-check("开页收尾后两张卡都回到正式几何",
+check("开页收尾后三张卡都回到正式几何",
       all(c.x() == _pad and c.width() == _sr.width() - 2 * _pad for c in p.sheet_cards),
       str([(type(c).__name__, c.x(), c.width()) for c in p.sheet_cards]))
+
+# ---- 17a2 打法建议卡（滚动区，牌库卡正下方）----
+print("=== 17a2. 打法建议卡（滚动区）===")
+# ☠️ 本节必须**彻底与真 worker 脱钩**（同 13b / 13d 的规矩：自检里不许 UI 走真 worker）。
+#    两条通路都要掐：
+#      ① `worker.status` → `on_status`：卡片开着时轮询是 **250ms**（用户要「出牌后血量实时刷新」），
+#         每拍都推 `_attached=False`（自检环境本就没连游戏）⇒ `plan_card.set_connected(False)`
+#         会清空 `_data` 并重渲染成「未连接游戏」。
+#      ② `_fetch_plan_now()`：`setOn(True)` 时若 `p.attached` 为真（前序 13b 钉成真的）就会
+#         `worker.post()` 一个任务；worker 正卡在 250ms 的 sleep 里，**回包会迟到**，
+#         正好落进下面的 `qWait(260)` ⇒ 迟到的 `{"ok":False,"reason":"未连接游戏"}`
+#         经 `on_plan` → `update_data` 覆盖掉刚灌进去的好数据并把牌格整批藏掉。
+#    ⚠️ 症状极具迷惑性：文案还是对的，**只有 `isVisible()` 是 False**。
+#    ⚠️ 这两条以前能过纯粹是运气（旧轮询 450ms，tick 恰好落在等待窗口外）；
+#       轮询改快后成必现 —— 属于测试没隔离，**不改产品行为**。
+try:
+    p.worker.status.disconnect(p.on_status)
+except TypeError:
+    pass
+_orig_fetch_plan = p._fetch_plan_now
+p._fetch_plan_now = lambda: None        # 掐掉"插队立刻算一版"这条会迟到回包的路径
+_pl = p.plan_card
+
+# ⚠️ 不能直接断言"默认关闭" —— 前面「让位」那一节会把它打开来测高度回调。
+#    这里显式关一次再验收起态文案/高度（这才是要测的东西）。
+_pl.setOn(False)
+QTest.qWait(200)
+check("关闭态：一句话说明 + 不显示任何牌格",
+      _pl.lb_info.text() != "" and not any(c.isVisible() for c in _pl.cells)
+      and _pl.lb_hint.text() == "已关闭",
+      f"hint={_pl.lb_hint.text()!r} info={_pl.lb_info.text()!r}")
+check("关闭态高度收在下限（与牌库卡同高才整齐）",
+      _pl.height() == _pl.MIN_H == _dc.MIN_H,
+      f"{_pl.height()} vs MIN_H {_pl.MIN_H} / deck {_dc.MIN_H}")
+_pl.setOn(True)
+_pl.set_connected(True)
+QTest.qWait(200)
+check("★ setOn 会把推演开关同步给 worker（plan_want，关掉就不读内存了）",
+      p.worker.plan_want is True, f"plan_want={p.worker.plan_want}")
+_pl.update_data({"ok": True, "kind": "战斗",
+                 "sequence": [{"name": "闪光", "cost": 0,
+                               "target": {"label": "①", "hp": 1, "maxHp": 5,
+                                          "block": 3, "aoe": False}},
+                              {"name": "戳刺", "cost": 1,
+                               "target": {"label": "②", "hp": 6, "maxHp": 10,
+                                          "block": 0, "aoe": False}}],
+                 "damage": 24, "leftEnergy": 1, "lethal": False, "enemiesLeft": 2,
+                 "enemyHpAfter": 40, "method": "exact",
+                 "statusLine": "敌人状态：③ 易伤×3", "warn": "⚠️ 每打一张牌自伤 2 点"})
+QTest.qWait(260)
+check("灌入数据后：牌格按建议顺序显示（序号/牌名/费用）",
+      _pl.cells[0].isVisible() and _pl.cells[1].isVisible()
+      and not _pl.cells[2].isVisible()
+      and _pl.cells[0].lb_name.text() == "闪光"
+      and _pl.cells[0].lb_cost.text() == "[0]",
+      f"vis={[c.isVisible() for c in _pl.cells[:3]]} "
+      f"name={_pl.cells[0].lb_name.text()!r} cost={_pl.cells[0].lb_cost.text()!r}")
+check("★ 每格第二行显示「→ 使用对象 + 它的血量」（用户靠血量判断打谁）",
+      _pl.cells[0].lb_tgt.isVisible() and _pl.cells[0].lb_tgt.text() == "→ ① 1/5"
+      and _pl.cells[1].lb_tgt.text() == "→ ② 6/10",
+      f"{_pl.cells[0].lb_tgt.text()!r} / {_pl.cells[1].lb_tgt.text()!r}")
+_pl.update_data({"ok": True, "kind": "战斗",
+                 "sequence": [{"name": "S", "cost": 1,
+                               "target": {"label": "③", "hp": 9, "maxHp": 9,
+                                          "block": 0, "aoe": True}}],
+                 "damage": 5, "leftEnergy": 0, "lethal": False, "enemiesLeft": 1,
+                 "enemyHpAfter": 9, "method": "exact", "statusLine": "", "warn": ""})
+QTest.qWait(200)
+check("★ 全体牌显示「→ 全体」（不硬塞某个敌人的血量）",
+      _pl.cells[0].lb_tgt.text() == "→ 全体", repr(_pl.cells[0].lb_tgt.text()))
+_pl.update_data({"ok": True, "kind": "战斗",
+                 "sequence": [{"name": "闪光", "cost": 0,
+                               "target": {"label": "①", "hp": 1, "maxHp": 5,
+                                          "block": 3, "aoe": False}},
+                              {"name": "戳刺", "cost": 1,
+                               "target": {"label": "②", "hp": 6, "maxHp": 10,
+                                          "block": 0, "aoe": False}}],
+                 "damage": 24, "leftEnergy": 1, "lethal": False, "enemiesLeft": 2,
+                 "enemyHpAfter": 40, "method": "exact",
+                 "statusLine": "敌人状态：③ 易伤×3", "warn": "⚠️ 每打一张牌自伤 2 点"})
+QTest.qWait(220)
+check("摘要行含削血/余力；敌人状态与警告各占一行",
+      "24" in _pl.lb_info.text() and "余力" in _pl.lb_info.text()
+      and _pl.lb_note.isVisible() and _pl.lb_warn.isVisible(),
+      f"{_pl.lb_info.text()!r} / note={_pl.lb_note.text()!r} / warn={_pl.lb_warn.text()!r}")
+check("★ 牌格是**复用** DeckCard 的构造（同一套 objectName，两张卡读数一致）",
+      _pl.cells[0].lb_idx.objectName() == p.deck_card.cells[0].lb_idx.objectName() == "deckIdx"
+      and _pl.cells[0].lb_name.objectName() == "deckName",
+      f"{_pl.cells[0].lb_idx.objectName()}/{_pl.cells[0].lb_name.objectName()}")
+check("★ 有内容后长高（收起 70 → 展开态更高）", _pl.height() > _pl.MIN_H,
+      f"h={_pl.height()}")
+check("★ 它是滚动区最后一张、且序位紧跟牌库卡",
+      p.scroll_items[-1] is _pl and p.scroll_items[-2] is p.deck_card,
+      str([type(x).__name__ for x in p.scroll_items]))
+_pl.setOn(False)
+QTest.qWait(220)
+check("关掉后 plan_want 归 False（不再常驻读手牌意图）",
+      p.worker.plan_want is False, f"plan_want={p.worker.plan_want}")
+# 装回真 worker 通路 + 那条插队路径（后面几节默认它们是接着的，别让本节的开小差漏出去）
+p._fetch_plan_now = _orig_fetch_plan
+p.worker.status.connect(p.on_status)
+
+# ---- 17a2b 遗忘卡搬进状态页后：展开时窗口要跟着长高 ----
+print("=== 17a2b. 遗忘卡在状态页里展开 → 窗口自动长高 ===")
+while p.isSheetOpen():
+    p.toggle_status_sheet()
+    QTest.qWait(p.SHEET_MS + 200)
+p.resize(576, 350)
+QTest.qWait(140)
+check("前置：窗口压回 350", p.height() == 350, f"h={p.height()}")
+p.toggle_status_sheet()
+QTest.qWait(p.SHEET_MS + 240)
+check("★ 展开状态页时窗口自动长高到装得下三张卡（默认 350 装不下）",
+      p.height() > 350, f"h={p.height()} need={p._sheet_need_h()}")
+_h_before = p.height()
+p.forget_card.open_pick()
+p.forget_card.update_list({"ok": True, "deckTypeName": "战斗", "warning": "", "cards": [
+    {"idx": i, "stack": "draw", "stackLabel": "抽牌堆", "index": i,
+     "name": "牌%d" % i, "cost": 1, "ptr": "0x%x" % (0x2000 + i)} for i in range(6)]})
+QTest.qWait(320)
+check("★ 遗忘卡展开后窗口再次长高（页内卡片高度变了要重算）",
+      p.height() >= _h_before and
+      p.sheet_cards[-1].y() + p.sheet_cards[-1].height() <= p._sheet_rect().height() + 1,
+      f"h={p.height()}（展开前 {_h_before}）"
+      f" 卡底={p.sheet_cards[-1].y() + p.sheet_cards[-1].height()}"
+      f" 页高={p._sheet_rect().height()}")
+check("★ 展开的确实是状态页里那张遗忘卡（不是滚动区那张）",
+      p.forget_card.parent() is p.sheet and p.forget_card.isOpen(),
+      f"parent={type(p.forget_card.parent()).__name__} open={p.forget_card.isOpen()}")
+p.forget_card.close_pick()
+QTest.qWait(260)
+p.toggle_status_sheet()
+QTest.qWait(p.SHEET_MS + 240)
+check("★ 关页后窗口还原到 350", p.height() == 350, f"h={p.height()}")
+p.resize(576, 620)
+QTest.qWait(140)
+# ⚠️ 开回来 —— 17a 结束时状态页是**开着**的，后面几节沿用这个状态
+p.toggle_status_sheet()
+QTest.qWait(p.SHEET_MS + 240)
 p.resize(576, 620)
 QTest.qWait(p.SHEET_MS + 200)
+
+# ---- 17a3 打法建议的取数链路（源码契约）----
+print("=== 17a3. 打法建议取数链路（源码契约）===")
+_gui_src = open(os.path.join(os.path.dirname(HERE), "src", "trainer_gui.py"),
+                encoding="utf-8").read()
+check("★ worker 有 plan_want 开关（推演只在开页时算，不常驻读内存）",
+      "self.plan_want" in _gui_src, "")
+check("★ 取数走 trainer.battle(True)（手牌必须带意图，否则推演恒为空）",
+      "trainer.battle(True)" in _gui_src, "")
+check("★ 推演走 battle_planner.plan_from_snapshot（不自己重写一套模型）",
+      "plan_from_snapshot" in _gui_src, "")
+check("★ 关页时停掉推演（plan_want = opening）",
+      "self.worker.plan_want = bool(on)" in _gui_src
+      and "self.worker.plan_want = opening" not in _gui_src,
+      "推演开关已从「跟状态页绑定」改成「跟卡片开关绑定」")
+check("★ 页内卡片排布前先 activate() 再读 sizeHint（否则量到的是旧高度）",
+      "_lay.activate()" in _gui_src, "")
+check("★ 牌格复用 DeckCard 的构造与填充（不另抄一份）",
+      "DeckCard._make_chip()" in _gui_src and "DeckCard._fill_chip(" in _gui_src, "")
+check("★ 打法卡的格子＝「复用上半行 + 自己加一行目标」，不是另画一套",
+      "_make_step_chip" in _gui_src and "lb_tgt" in _gui_src, "")
+check("★ 推演结果里每步都带 target（界面靠它显示对象血量）",
+      "s.get(\"target\")" in _gui_src, "")
+check("★ 页内卡片（遗忘卡）的高度回调走页内重排，不是滚动区的让位",
+      "self.forget_card.on_height = self._sheet_cards_changed" in _gui_src
+      and "_sheet_cards_changed" in _gui_src, "")
 
 # ---- 17b 三态分段控件：端到端（真点击）----
 check("三态的名字与顺序（彩色 / 单色 / 关闭）",
@@ -2851,24 +3052,27 @@ check("★ 关掉牌库卡 = 从右往左抽空（不是瞬间跳回 0）",
 
 # 遗忘卡：展开 / 收起也算一次开合。⚠️ 掐掉 on_open，**并且**掐掉二次重拉 ——
 # 让真 worker 进来会在 qWait 期间异步洗掉被测状态（13d 踩过，这里第二次踩）。
-_orig_fc_open = _fc.on_open
+# ⚠️ 遗忘卡搬进状态页后 `_fc` 这个名字在本节已被改成打法卡 ⇒ 这里必须**显式**
+#    取 `p.forget_card`，不能再复用 `_fc`（踩过：AttributeError on_open）。
+_ff = p.forget_card
+_orig_fc_open = _ff.on_open
 _orig_fetch = p._fetch_forget_list
-_fc.on_open = None
+_ff.on_open = None
 p._fetch_forget_list = lambda: None
 try:
-    if _fc.isOpen():
-        _fc.close_pick()
-        QTest.qWait(_fc.LIQ_TRAVEL + 140)
-    check("遗忘卡收起时没有液面（复位干净）", not _fc.hasLiquid(), str(_fc._liq_p))
-    _fc.open_pick()
-    QTest.qWait(_fc.LIQ_TRAVEL + _fc.LIQ_SETTLE + 160)
+    if _ff.isOpen():
+        _ff.close_pick()
+        QTest.qWait(_ff.LIQ_TRAVEL + 140)
+    check("遗忘卡收起时没有液面（复位干净）", not _ff.hasLiquid(), str(_ff._liq_p))
+    _ff.open_pick()
+    QTest.qWait(_ff.LIQ_TRAVEL + _ff.LIQ_SETTLE + 160)
     check("★ 展开遗忘卡 = 整卡充满液体（展开/收起本身就是一次开合）",
-          _fc.isLiquidFilled(), str(_fc._liq_p))
-    _fc.close_pick()
-    QTest.qWait(_fc.LIQ_TRAVEL + 160)
-    check("★ 收起遗忘卡 = 抽空", not _fc.hasLiquid(), str(_fc._liq_p))
+          _ff.isLiquidFilled(), str(_ff._liq_p))
+    _ff.close_pick()
+    QTest.qWait(_ff.LIQ_TRAVEL + 160)
+    check("★ 收起遗忘卡 = 抽空", not _ff.hasLiquid(), str(_ff._liq_p))
 finally:
-    _fc.on_open = _orig_fc_open
+    _ff.on_open = _orig_fc_open
     p._fetch_forget_list = _orig_fetch
 _settle()
 

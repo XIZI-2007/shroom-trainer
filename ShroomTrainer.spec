@@ -13,9 +13,37 @@
 import os
 from PyInstaller.utils.hooks import collect_all
 
-datas = [('src/agent.js', '.'), ('src/i18n_cards.json', '.')]
+datas = [
+    ('src/agent.js', '.'),
+    ('src/i18n_cards.json', '.'),
+    # ---- 卡牌效果理解层（第 61 轮）----
+    # ⚠️ 这四个是**离线生成的静态数据**，intent_reader.py 直接读，不改功能代码。
+    #    游戏更新后要重跑 tools/{intent_meta,intent_build,intent_dict_build,
+    #    term_glossary_build,intent_semantics_build}.py **按此顺序**并重新打包。
+    #    ⚠️ intent_meta 必须第一个跑（enum 是 dict/semantics 的输入）。
+    ('src/card_intent_dict.json', '.'),    # 意图 → 中英文案模板
+    ('src/card_intent_enum.json', '.'),    # 173 个权威成员（含 2 个运行时独有，校验用）
+    ('src/intent_semantics.json', '.'),    # 意图 → 类别/口径/目标/得失/场景
+    ('src/term_glossary.json', '.'),       # 术语词表 + 意图一句话释义
+    # ---- 敌人状态（第 63 轮）----
+    # ⚠️ battle_planner.py 直接读这五张表算状态倍率；**漏打任何一张都会静默降级**
+    #    （STATUS_MODEL 为空 ⇒ 所有状态都判 flavor ⇒ 易伤倍率恒 1.0，不报错）。
+    #    游戏更新后按此顺序重跑：
+    #      status_meta → status_loc_build → status_tip_build
+    #      → status_model_build → status_intent_map_build
+    #    ⚠️ status_meta 必须第一个（成员表是后四张的输入）。
+    ('src/status_effect_enum.json', '.'),  # 68 个权威成员（含 Vulnerable/Poisoned）
+    ('src/status_i18n.json', '.'),         # 状态 → 中英名
+    ('src/status_tips.json', '.'),         # 状态 → 官方 tooltip（权威效果口径）
+    ('src/status_model.json', '.'),        # 状态 → 可计算模型（**人工判读**，见生成器）
+    ('src/status_intent_map.json', '.'),   # 意图 op → 状态名（apply/self/note 三分类）
+]
 binaries = []
-hiddenimports = []
+hiddenimports = [
+    # 数据驱动的纯计算模块，显式声明防被静态分析漏掉
+    'intent_reader',
+    'battle_planner',
+]
 
 _ret = collect_all('frida')
 

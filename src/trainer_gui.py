@@ -524,6 +524,11 @@ QLabel#deckIdx {{ font-size: 10.5px; color: {C_SUB}; }}
 QLabel#deckName {{ font-size: 11.5px; color: {C_TEXT}; }}
 QLabel#deckCost {{ font-size: 11.5px; color: {C_COST}; }}
 QLabel#deckMore {{ font-size: 10.5px; color: {C_SUB}; }}
+/* 打法建议 · 每步的目标：「→ ① 1/5」。
+   ⚠️ 必须**亮色正文**（C_TEXT），不能用 deckMore 那种小灰字 —— 用户实测反馈
+   「箭头和血量标识显示为灰色，我需要白色更显眼」。字号也抬半档 + 加粗，
+   横排五格时这一行仍然读得清。 */
+QLabel#planTgt {{ font-size: 11.5px; font-weight: 600; color: {C_TEXT}; }}
 /* 遗忘卡：滚轮选卡区。高亮行的牌名放大半档 + 深色，靠字号+颜色双重分层，
    不靠背景块 —— 背后是毛玻璃，一块实底色反而显得廉价。 */
 QLabel#forgetIdle {{ font-size: 11.5px; color: {C_SUB}; }}
@@ -2557,21 +2562,30 @@ class ForgetCard(GlassBase):
             w.style().unpolish(w)
             w.style().polish(w)
 
+    def _radius(self):
+        """**内层卡**：住在状态页里面，取 R_INNER(14)，描边也走内层那一档。
+        （原来它在滚动区、是外层卡；用户 2026-10-06 要求把「遗忘手牌」挪进状态页。）
+        """
+        return R_INNER
+
     def paintEvent(self, e):
         p = QPainter(self)
         p.setRenderHint(QPainter.RenderHint.Antialiasing)
         rect = QRectF(self.rect())
-        radius = R_SURFACE
+        radius = R_INNER
         path = QPainterPath()
         path.addRoundedRect(rect, radius, radius)
         # 展开态稍微提一点白度：选卡是"正在操作"，卡面该比只读卡更实
+        # ⚠️ 住在状态页里 ⇒ 要铺 SHEET_CARD_FILL（暗色下是半透明 tint），
+        #    否则它不会比它所在的那张液面页更亮、层级就看不出来（见 ConsoleCard）。
         self._paint_glass(p, path, rect, radius,
-                          veil_base=(VEIL_CARD_OPEN if self._open else VEIL_CARD))
+                          veil_base=(VEIL_CARD_OPEN if self._open else VEIL_CARD),
+                          solid=SHEET_CARD_FILL)
         # 液面在玻璃之上、荧光之下（液面不透明，画在荧光后面会把光整片盖掉）
         if self.hasLiquid():
             self._paint_liquid(p, path, rect, radius)
         self._paint_glow(p, path, rect, radius)
-        self._paint_edge(p, rect, radius)
+        self._paint_edge(p, rect, radius, inner=True)
         p.end()
 
 
@@ -2884,6 +2898,286 @@ class DeckCard(GlassBase):
         p.end()
 
 
+class PlanCard(GlassBase):
+    """打法建议卡：把「这一手怎么打最划算」摆在**主页面**（滚动区，牌库顺序下方）。
+
+    数据链路：`agent.js battle(withIntents=True)` 读战况 → `battle_planner
+    .plan_from_snapshot()` 搜最优出牌序 → worker 回传 `{"_plan": {...}}` → 这里渲染。
+
+    ⚠️ 它是**滚动区卡片**（外层玻璃面）：圆角走默认 R_SURFACE、整卡点击开关、
+    高度按内容自适应并回调 `on_height` 让 Panel 补让位 —— 与牌库卡同一套。
+    （2026-10-06 用户要求从状态页搬回主页面、放在「牌库顺序」下方。）
+    ⚠️ 版式刻意沿用牌库顺序卡那套「序号 牌名 [费用]」小格（直接复用
+    `DeckCard._make_chip`）—— 用户对"一张牌长什么样"的读法该只有一种。
+    """
+
+    MAX_SHOW = 5          # 建议里最多横着摆几步
+    MIN_H = 70            # 收起态高度（与 DeckCard.MIN_H 对齐，两张卡同高才整齐）
+
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        self.setAttribute(Qt.WidgetAttribute.WA_Hover, True)
+        self.setFixedHeight(self.MIN_H)
+        self._h_need = self.MIN_H
+        self.setCursor(Qt.CursorShape.PointingHandCursor)
+
+        self._on = False
+        self._data = {}
+        self._connected = False
+        self._kind = ""            # 「探索」/「战斗」
+        self.on_change = None      # 开关变化回调：Panel 用它决定要不要让 worker 去推演
+        self.on_height = None      # 高度变化回调（同 DeckCard，见其 sync_height 注释）
+
+        lay = QVBoxLayout(self)
+        lay.setContentsMargins(20, 15, 20, 15)
+        lay.setSpacing(9)
+        self._lay = lay
+
+        head = QHBoxLayout()
+        head.setContentsMargins(0, 0, 0, 0)
+        self.lb_head = QLabel("打法建议")
+        self.lb_head.setObjectName("cardTitle")
+        head.addWidget(self.lb_head, 1)
+        self.lb_hint = QLabel("")
+        self.lb_hint.setObjectName("rowDesc")
+        head.addWidget(self.lb_hint, 0, Qt.AlignmentFlag.AlignVCenter)
+        lay.addLayout(head)
+
+        self.lb_info = QLabel("")
+        self.lb_info.setObjectName("rowDesc")
+        lay.addWidget(self.lb_info)
+
+        row = QHBoxLayout()
+        row.setContentsMargins(0, 0, 0, 0)
+        row.setSpacing(14)
+        self.cells = []
+        for _ in range(self.MAX_SHOW):
+            chip = self._make_step_chip()
+            chip.setVisible(False)
+            row.addWidget(chip, 0, Qt.AlignmentFlag.AlignTop)
+            self.cells.append(chip)
+        row.addStretch(1)
+        lay.addLayout(row)
+
+        self.lb_note = QLabel("")      # 敌人状态一行（有状态才显示）
+        self.lb_note.setObjectName("deckMore")
+        self.lb_note.setVisible(False)
+        lay.addWidget(self.lb_note)
+
+        self.lb_warn = QLabel("")
+        self.lb_warn.setObjectName("deckWarn")
+        self.lb_warn.setVisible(False)
+        lay.addWidget(self.lb_warn)
+
+        lay.addStretch(1)
+        self._render()
+
+    @staticmethod
+    def _make_step_chip():
+        """一步的格子：**两行** —— 上面「序号 牌名 [费用]」，下面「→ 目标 6/10」。
+
+        ⚠️ 上半行直接**复用** `DeckCard._make_chip()`（同一套 objectName / 字号 / 对齐），
+           只在外面套一层竖排 + 加一行目标标签 —— "一张牌长什么样"仍然只有一种读法。
+        ⚠️ 两行是为了让"打谁"和"牌名"对齐着看：竖排后每格约 90px 宽，
+           5 步也放得下（横排单行再挂一条尾巴会挤爆）。
+        """
+        chip = QWidget()
+        v = QVBoxLayout(chip)
+        v.setContentsMargins(0, 0, 0, 0)
+        v.setSpacing(2)
+        top = DeckCard._make_chip()
+        chip.lb_idx, chip.lb_name, chip.lb_cost = top.lb_idx, top.lb_name, top.lb_cost
+        v.addWidget(top)
+        lb_tgt = QLabel("")
+        # ⚠️ 亮色正文那一档（用户要求"白色更显眼"），不是小灰字
+        lb_tgt.setObjectName("planTgt")
+        lb_tgt.setVisible(False)
+        chip.lb_tgt = lb_tgt
+        v.addWidget(lb_tgt)
+        return chip
+
+    @staticmethod
+    def _target_text(t):
+        """目标 → 「→ ② 6/10」。全体 → 「→ 全体」；没有目标（自身增益）→ 空串。"""
+        if not t:
+            return ""
+        if t.get("aoe"):
+            return "→ 全体"
+        lab = str(t.get("label") or "").strip()
+        hp = t.get("hp")
+        mx = t.get("maxHp")
+        if hp is None:
+            return ("→ " + lab).strip()
+        try:
+            hp_txt = "%.0f" % float(hp)
+        except (TypeError, ValueError):
+            return ("→ " + lab).strip()
+        try:
+            if mx:
+                hp_txt += "/%.0f" % float(mx)
+        except (TypeError, ValueError):
+            pass
+        return ("→ %s %s" % (lab, hp_txt)).strip()
+
+    @staticmethod
+    def _fill_step_chip(chip, idx, step):
+        """填一格：序号/牌名/费用（复用牌库卡的填法）+ 目标血量。"""
+        DeckCard._fill_chip(chip, idx, step)
+        txt = PlanCard._target_text(step.get("target"))
+        chip.lb_tgt.setText(txt)
+        chip.lb_tgt.setVisible(bool(txt))
+
+    def sync_height(self, notify=True):
+        """按内容算高度。与 `DeckCard.sync_height` 同一套语义（含"比较逻辑高度"那条坑）。"""
+        need = max(self.MIN_H, self._lay.sizeHint().height())
+        if notify and need == self._h_need:
+            return False
+        self._h_need = need
+        if notify and self.on_height is not None:
+            # ⚠️ 这里**绝不能**自己 setFixedHeight：让位动画要拿旧高度当起点，
+            #    先落地会露一帧"上面长高了、下面还没让开"（详见 DeckCard.sync_height）。
+            self.on_height()
+            return True
+        self.setFixedHeight(need)
+        return True
+
+    # ---------- 开关 ----------
+    def isOn(self):
+        return self._on
+
+    def toggle(self):
+        self.setOn(not self._on)
+
+    def setOn(self, on):
+        on = bool(on)
+        if on == self._on:
+            return
+        self._on = on
+        # 整卡从左往右充满液体（关闭从右往左抽空）—— 与胶囊、牌库卡同源
+        self._liq_to(on)
+        self._render()
+        if self.on_change:
+            self.on_change(on)
+
+    def mouseReleaseEvent(self, e):
+        if e.button() != Qt.MouseButton.LeftButton:
+            super().mouseReleaseEvent(e)
+            return
+        if self.rect().contains(e.position().toPoint()):
+            self.toggle()
+        super().mouseReleaseEvent(e)
+
+    # ---------- 数据 ----------
+    def set_connected(self, ok):
+        if ok == self._connected:
+            return
+        self._connected = bool(ok)
+        if not self._connected:
+            self._data = {}        # 断了就别拿上一局的结论骗人
+        if self._on:
+            self._render()
+
+    def update_data(self, d):
+        """worker 回传的推演结果 → 渲染。`d` 见 `build_plan()` 的返回。"""
+        d = d or {}
+        self._data = d
+        self._kind = str(d.get("kind") or "")
+        if self._on:
+            self._render()
+
+    # ---------- 渲染 ----------
+    def _render(self):
+        def _hide_all():
+            for chip in self.cells:
+                chip.setVisible(False)
+            self.lb_note.setVisible(False)
+            self.sync_height()
+
+        kind = self._kind if (self._on and self._connected and self._kind) else ""
+        self.lb_head.setText("打法建议 · " + kind if kind else "打法建议")
+
+        if not self._on:
+            self.lb_hint.setText("已关闭")
+            self.lb_info.setText("点击卡片开启，按当前手牌算出最优出牌顺序")
+            _hide_all()
+            self.lb_warn.setVisible(False)
+            return
+
+        self.lb_hint.setText("已开启")
+
+        if not self._connected:
+            self.lb_info.setText("未连接游戏，连上后自动推演")
+            _hide_all()
+            self.lb_warn.setVisible(False)
+            return
+
+        d = self._data
+        if not d:
+            self.lb_info.setText("等待第一轮推演…")
+            _hide_all()
+            self.lb_warn.setVisible(False)
+            return
+
+        if not d.get("ok"):
+            self.lb_info.setText(d.get("reason") or "这一手算不出建议")
+            _hide_all()
+            self.lb_warn.setVisible(False)
+            return
+
+        seq = d.get("sequence") or []
+        if not seq:
+            self.lb_info.setText("这一手没有值得打出的牌（当前精力下无正收益）")
+            _hide_all()
+            note = d.get("statusLine") or ""
+            self.lb_note.setVisible(bool(note))
+            self.lb_note.setText(note)
+            self.lb_warn.setVisible(bool(d.get("warn")))
+            self.lb_warn.setText(d.get("warn") or "")
+            self.sync_height()
+            return
+
+        if d.get("lethal"):
+            info = "预计削减 %.0f 血 · 可斩杀！ · 余力 %d" % (d.get("damage") or 0,
+                                                              d.get("leftEnergy") or 0)
+        else:
+            info = ("预计削减 %.0f 血 · 余力 %d · 剩敌 %d 只 / 共 %.0f 血"
+                    % (d.get("damage") or 0, d.get("leftEnergy") or 0,
+                       d.get("enemiesLeft") or 0, d.get("enemyHpAfter") or 0))
+        if d.get("method") == "greedy":
+            info += " · 贪心近似"
+        self.lb_info.setText(info)
+
+        shown = min(len(seq), self.MAX_SHOW)
+        for i in range(self.MAX_SHOW):
+            if i < shown:
+                self._fill_step_chip(self.cells[i], i, seq[i])
+                self.cells[i].setVisible(True)
+            else:
+                self.cells[i].setVisible(False)
+
+        note = d.get("statusLine") or ""
+        self.lb_note.setVisible(bool(note))
+        self.lb_note.setText(note)
+        self.lb_warn.setVisible(bool(d.get("warn")))
+        self.lb_warn.setText(d.get("warn") or "")
+        self.sync_height()
+
+    def paintEvent(self, e):
+        p = QPainter(self)
+        p.setRenderHint(QPainter.RenderHint.Antialiasing)
+        rect = QRectF(self.rect())
+        radius = R_SURFACE
+        path = QPainterPath()
+        path.addRoundedRect(rect, radius, radius)
+        self._paint_glass(p, path, rect, radius, veil_base=VEIL_CARD)
+        # 液面夹在玻璃与荧光之间（顺序铁律见 GlassBase）
+        if self.hasLiquid():
+            self._paint_liquid(p, path, rect, radius)
+        self._paint_glow(p, path, rect, radius)
+        self._paint_edge(p, rect, radius)
+        p.end()
+
+
 class EdgeVeil(QWidget):
     """贴在滚动视口上/下边缘的渐变帘。
 
@@ -2912,6 +3206,76 @@ class EdgeVeil(QWidget):
 
 # ============================ Worker ============================
 
+def build_plan(trainer):
+    """读战况 → 推演 → 给界面的紧凑结构。**在 worker 线程里跑**（会读内存 + 搜出牌序）。
+
+    返回（喂给 `PlanCard.update_data`）：
+      {ok, reason, kind, sequence:[{name,cost}], damage, leftEnergy, lethal,
+       enemiesLeft, enemyHpAfter, method, statusLine, warn}
+
+    ⚠️ `battle(True)` 要读每张手牌的意图，比 `deck()` 重一些 —— 所以只在
+       **状态页展开时**才跑（见 `Panel.toggle_status_sheet` 里的 `plan_want`）。
+    ⚠️ 这里**不碰任何 Qt 控件**：worker 是独立线程，跨线程改控件必崩。
+    """
+    snap = trainer.battle(True)
+    if not snap or not snap.get("ok"):
+        return {"ok": False, "reason": "读不到战况（可能不在游戏中）"}
+    if not any(e.get("alive", True) and not e.get("retreated")
+               for e in (snap.get("enemies") or [])):
+        return {"ok": False, "reason": "不在战斗中 —— 推演只在战斗里有意义"}
+
+    # 延迟导入：这两张表在 import 时读 JSON，放在 worker 线程里不挡界面启动
+    from battle_planner import (plan_from_snapshot, status_short,
+                                status_kind, STATUS_MODEL)
+
+    res, br = plan_from_snapshot(snap)
+    out = {
+        "ok": bool(res.get("ok")),
+        "reason": res.get("reason") or "",
+        "kind": snap.get("deckTypeName") or "",
+        "sequence": [{"name": s.get("name"), "cost": s.get("cost"),
+                      "target": s.get("target")}
+                     for s in (res.get("sequence") or [])],
+        "damage": res.get("damageDealt") or 0,
+        "leftEnergy": res.get("leftEnergy") or 0,
+        "lethal": bool(res.get("lethal")),
+        "enemiesLeft": res.get("enemiesLeft") or 0,
+        "enemyHpAfter": res.get("enemyHpAfter") or 0,
+        "method": res.get("method") or "",
+        "statusLine": "",
+        "warn": "",
+    }
+
+    # 敌人状态一行（只列非 flavor 的，免得"掉落/风味"把一行塞满）
+    rows, punish = [], 0
+    for e in br.get("enemies") or []:
+        st = getattr(e, "statuses", None) or {}
+        if not st:
+            continue
+        parts = []
+        for nm, n in sorted(st.items()):
+            if status_kind(nm) == "flavor":
+                continue
+            parts.append(status_short(nm, n))
+            if status_kind(nm) == "player_punish":
+                punish += int(n)
+        if parts:
+            rows.append("%s %s" % (e.name, " · ".join(parts)))
+    out["statusLine"] = "敌人状态：" + "；".join(rows) if rows else ""
+
+    # 警告：只挑"会让结论失真"的两条说（其余 assumptions 太技术，界面不展示）
+    warns = []
+    for a in res.get("assumptions") or []:
+        if "没带效果" in a:
+            warns.append("有手牌没带效果，本次推演会低估它们")
+        elif "状态没读出来" in a:
+            warns.append("有敌人状态没读出来，本次推演可能偏乐观")
+    if punish > 0:
+        warns.append("敌人在场时每打一张牌自伤 %d 点（咒语虚弱）" % punish)
+    out["warn"] = "⚠️ " + "；".join(warns) if warns else ""
+    return out
+
+
 class Worker(QThread):
     status = pyqtSignal(dict)
 
@@ -2923,6 +3287,8 @@ class Worker(QThread):
         self.alive = True
         # 牌库预览只在用户开启时才去读，避免无谓的内存遍历（GUI 线程写、worker 线程读）
         self.deck_want = False
+        # 打法推演只在**状态页展开时**才算：它要读每张手牌的意图，比 deck() 重
+        self.plan_want = False
 
     def post(self, fn):
         self.cmds.put(fn)
@@ -2969,8 +3335,15 @@ class Worker(QThread):
                     st["_deck"] = self.trainer.deck()
                 except Exception as ex:
                     st["_deck"] = {"ok": False, "warning": f"读取失败: {str(ex)[:50]}"}
+            if self.attached and self.plan_want:
+                try:
+                    st["_plan"] = build_plan(self.trainer)
+                except Exception:
+                    st["_plan"] = {"ok": False, "reason": "推演失败（读取战况出错）"}
             self.status.emit(st)
-            self.msleep(450)
+            # 打法建议开着时刷快一点（用户实测报「出牌后血量没法实时刷新」）；
+            # 只开牌库/什么都不开时沿用 450ms，省点无谓的内存遍历。
+            self.msleep(250 if self.plan_want else 450)
 
 
 # ============================ 主面板 ============================
@@ -2981,6 +3354,8 @@ class Panel(QWidget):
     # 挂在 450ms 的常驻轮询上会让"点完立刻刷新"慢半拍。
     _sig_forget_list = pyqtSignal(dict)
     _sig_forget_res = pyqtSignal(dict)
+    # 打法推演的另一条来回：展开状态页时**立刻**要一版，不等 450ms 轮询
+    _sig_plan = pyqtSignal(dict)
 
     # ---- 面板尺寸与滚动区参数 ----
     PANEL_W = 576            # 宽度锁死
@@ -3118,15 +3493,17 @@ class Panel(QWidget):
         self.forget_card = ForgetCard()
         self.status_card = GlassPanel()
         self.val = self.status_card.val
+        self.plan_card = PlanCard()
         self.console_card = ConsoleCard()
 
         # 滚动区手动布局：卡片位置由 _relayout 计算，便于做「从左弹出」动画
         # 「窗口置顶」排第一：它是最好用的开关，放最上面一屏就能点到
-        # 牌库卡 / 遗忘卡挨着放 —— 两张都是"看牌/动牌"，用户扫一眼就知道谁是谁。
+        # 牌库卡 / 打法卡挨着放 —— 都是"看牌"，用户扫一眼就知道谁是谁（2026-10-06 用户指定：
+        # 打法建议放「牌库顺序」**下方**）。「遗忘手牌」搬进状态页了，不在这一列。
         # ⚠️ 状态卡**不在**这里：它已经挪进独立的状态页（见 StatusSheet）。
         #    因此滚动区不再有"吃剩余高度"的卡，`_relayout` 也不再有 last 特例。
         self.scroll_items = [self.cap_top, self.cap_god, self.cap_free,
-                             self.deck_card, self.forget_card]
+                             self.deck_card, self.plan_card]
         for c in self.scroll_items:
             c.setParent(self.content)
             c._ly = 0            # 在 content 内的逻辑 y
@@ -3147,16 +3524,24 @@ class Panel(QWidget):
         # ---------- 运行状态页（从右向左滑出的一整页） ----------
         self.sheet = StatusSheet(self)
         self.sheet.hide()
-        # 页内两张卡：运行状态（上） + 控制台（下）。都手动 move，不进 layout。
-        self.sheet_cards = [self.status_card, self.console_card]
+        # 页内三张卡（从上到下）：运行状态 / **遗忘手牌** / 控制台。都手动 move，不进 layout。
+        # ⚠️ 遗忘卡是**可展开**的（选卡区），高度会变 ⇒ 它的 on_height 要接到
+        #    `_sheet_cards_changed`（重排页内卡 + 窗口按需长高），不是滚动区那套让位。
+        self.sheet_cards = [self.status_card, self.forget_card, self.console_card]
         self._sheet_card_y = {}                  # 卡 → 落定的 y（展开动画要按它钉住）
         for c in self.sheet_cards:
             c.setParent(self.sheet)
             c.setMinimumHeight(0)                # 不再靠"最小 200"吃窗口高度
+        # ⚠️ 遗忘卡是页内唯一**会自己变高**的卡（展开选卡区）。它的高度回调不能挂
+        #    `_reflow_soon`（那是滚动区的让位），必须挂页内专用的重排 + 窗口长高。
+        self.forget_card.on_height = self._sheet_cards_changed
         # ⚠️ 不用 layout 摆它们，改手动 move（见 _place_sheet_cards）：
         #    widget 一旦进 layout，自己的 move() 会被 layout 覆盖掉，白设。
         self._sheet_open = False
         self._sheet_anim = None
+        # 打开状态页时的窗口高度账本（装不下就自动长高，关上还原；见 _fit_sheet_window）
+        self._h_restore = None
+        self._h_grown = None
         # 控制台当前那一项就是荧光模式；面板负责把选择广播给所有玻璃控件
         self.console_card.seg.changed.connect(self.set_glow_mode)
         # 注意：**不给 sheet 装 eventFilter**。装上就会走 Panel 的"拖拽滚动"分支，
@@ -3210,11 +3595,13 @@ class Panel(QWidget):
         self.worker.start()
         self._sig_forget_list.connect(self.forget_card.update_list)
         self._sig_forget_res.connect(self.on_forget_result)
+        self._sig_plan.connect(self.on_plan)
 
         self.cap_god.toggled.connect(lambda v: self.on_toggle("god", v))
         self.cap_free.toggled.connect(lambda v: self.on_toggle("freeCards", v))
         self.cap_top.toggled.connect(self.on_top_toggle)
         self.deck_card.on_change = self._on_deck_toggle
+        self.plan_card.on_change = self._on_plan_toggle
         self.forget_card.on_open = self._on_forget_open
         self.forget_card.on_forget = self._on_forget_do
 
@@ -3616,9 +4003,83 @@ class Panel(QWidget):
         # 的它，和正在扩散的新主题同时对不上。转场只有 360ms，落地一下就好。
         if self._theme_anim is not None or self.reveal.isVisible():
             self._finish_reveal()
-        self._sheet_open = not self._sheet_open
+        opening = not self._sheet_open
+        # ⚠️ **窗口高低的调整必须排在 `_slide_sheet` 之前**。两个原因：
+        #    ① 页面几何是按窗口高算的，先调窗口才不会用旧高度摆一遍；
+        #    ② 更关键：`resize()` 会让 Qt 的统一动画时钟重启，**同一 tick 里刚 start()
+        #       的指针旋转会被这次重启带走** —— 实测 `state=Running` 但 30ms 后
+        #       `currentTime` 仍是 0（指针该转不转）。放到前面就没这回事。
+        if opening:
+            self._h_restore = self.height()
+            self._h_grown = None
+            self._fit_sheet_window()
+        else:
+            # ⚠️ **关页时缩窗口要等滑出动画跑完**，不能和它同 tick：`resize()` 会让 Qt 的
+            #    统一动画时钟重启，同一轮里刚 `start()` 的指针旋转会被这次重启带走
+            #    —— 实测 `state=Running` 但 `currentTime` 一直停在 0（指针该转不转）。
+            #    顺带一个好处：页面滑走了窗口再收，观感比"边滑边缩"稳。
+            QTimer.singleShot(self.SHEET_MS + 20, self._restore_sheet_window)
+        self._sheet_open = opening
         self.b_dash.setOn(self._sheet_open)
         self._slide_sheet(self._sheet_open)
+        # 打法推演**不再跟状态页绑定**：它已经搬回主页面（滚动区），由卡片自己的
+        # 开关驱动（见 `_on_plan_toggle`）。
+
+    # ------------- 状态页：窗口自动长高 -------------
+    # 为什么不用"页内滚动"：滚轮在状态页上是**穿透给底层滚动区**的（ui_check 钉着这条
+    # 既有行为），改成页内滚动会动到它。把窗口撑到装得下，对其余行为零影响。
+    SHEET_PAD = 8            # 页内卡片的窄边（与 _place_sheet_cards 的 pad 同值）
+
+    def _sheet_card_h(self, c):
+        """一张页内卡该有多高。⚠️ 读 sizeHint 前先 activate（同 `_place_sheet_cards`）。"""
+        try:
+            c._lay.activate()
+        except Exception:
+            pass
+        return max(getattr(c, "MIN_H", 60), c._lay.sizeHint().height())
+
+    def _sheet_need_h(self):
+        """页内三张卡全部装下所需的面板高度。"""
+        need = self.SHEET_PAD * 2 + sum(self._sheet_card_h(c) for c in self.sheet_cards)
+        need += self.SHEET_CARD_GAP * (len(self.sheet_cards) - 1)
+        return self._sheet_rect().top() + need
+
+    def _fit_sheet_window(self, force=False):
+        """把窗口调到「三张卡都装得下」。**只在我们管得着的高度上动手**：
+        用户自己拖过窗口（当前高 != 我们记的那两个值）就一律不抢。"""
+        if self._h_restore is None:
+            return
+        cur = self.height()
+        grown = self._h_grown
+        if not force and ((grown is not None and cur != grown)
+                          or (grown is None and cur != self._h_restore)):
+            return                       # 用户已经自己拖过了 → 别抢
+        base = max(self.PANEL_MIN_H, self._h_restore or self.PANEL_MIN_H)
+        # ⚠️ 目标高度是 `max(原始高度, 实际需要)`，**不是**"装得下就退回原始高度"：
+        #    内容缩小但仍在原始高度里装不下时，退回去就又裁了（踩过：
+        #    切到"不在战斗中"后窗口退回 350，卡底 333 > sheet 293）。
+        target = max(base, self._sheet_need_h())
+        try:
+            avail = self.screen().availableGeometry().height() - 60   # 给边框/任务栏留余量
+            target = min(target, max(self.PANEL_MIN_H, avail))
+        except Exception:
+            pass
+        if target != cur:
+            self.resize(self.width(), target)
+        self._h_grown = target if target > base else None
+
+    def _restore_sheet_window(self):
+        """关页 → 还原到打开前的高度（只有当窗口还停在我们撑开的高度时才还原）。
+
+        ⚠️ 它是被 `QTimer.singleShot` 延后调的（见 `toggle_status_sheet`），所以这里
+        必须自己确认"此刻页面真的还是关着的"——用户可能在这几十毫秒里又点开了。
+        """
+        if self._sheet_open:
+            return                       # 又开回来了，别缩
+        if self._h_grown is not None and self.height() == self._h_grown:
+            self.resize(self.width(), max(self.PANEL_MIN_H, self._h_restore or self.PANEL_MIN_H))
+        self._h_grown = None
+        self._h_restore = None
 
     def _slide_sheet(self, show):
         """`show`：从左侧外面往右推进到位；否则反向收回左边。
@@ -3703,9 +4164,9 @@ class Panel(QWidget):
             self.sheet.hide()
 
     def _place_sheet_cards(self):
-        """把页内两张卡（运行状态 / 控制台）从左上角依次码下来，各留 8px 窄边。
+        """把页内三张卡（运行状态 / **遗忘手牌** / 控制台）从左上角依次码下来，各留 8px 窄边。
 
-        两张都是**尺寸按内容定死**：宽度 = 页宽 - 16（面板宽锁死 576，实际是恒定值），
+        三张都是**尺寸按内容定死**：宽度 = 页宽 - 16（面板宽锁死 576，实际是恒定值），
         高度 = 各自的 sizeHint，**永远不跟着窗口纵向拉伸**。
         高度走过两版：最早按内容 → 后来"撑满整页"（用户要"背景占满"）→ 现在回到按内容，
         因为用户拖窗口时嫌卡片跟着长高，明确要求「卡片大小不随拖拽窗口变大」。
@@ -3718,6 +4179,14 @@ class Panel(QWidget):
         y = pad
         for c in self.sheet_cards:
             c.setFixedWidth(max(80, self.sheet.width() - pad * 2))
+            # ⚠️ **必须先 activate() 再读 sizeHint**：`setFixedWidth` 刚把布局标脏，
+            #    这时 `sizeHint()` 返回的是**上一个宽度下的缓存值**。推演卡的内容会
+            #    随数据变（chips 显隐），不 activate 的话量到的是旧高度 ——
+            #    实测表现是"卡片按 65 摆、内容 128 高"，底下那张直接被裁掉一截。
+            try:
+                c._lay.activate()
+            except Exception:
+                pass
             c.setFixedHeight(max(getattr(c, "MIN_H", 60), c._lay.sizeHint().height()))
             c.move(pad, y)
             self._sheet_card_y[c] = y
@@ -4363,7 +4832,53 @@ class Panel(QWidget):
         else:
             self.flash("已关闭牌库预览")
 
+    def _on_plan_toggle(self, on):
+        """打法推演同样是只读的（`battle(True)` 读手牌意图），只告诉 worker 要不要去算。"""
+        self.worker.plan_want = bool(on)
+        if on:
+            self.plan_card.set_connected(self.attached)
+            if self.attached:
+                self._fetch_plan_now()      # 立刻给一版，不等 450ms 轮询
+                self.flash("已开启打法建议")
+            else:
+                self.flash("已开启打法建议，连上游戏后自动推演")
+        else:
+            self.flash("已关闭打法建议")
+
+    def _sheet_cards_changed(self):
+        """页内卡片（遗忘卡）高度变了 → 重排页内卡并**按需长高窗口**。
+
+        ⚠️ 不能复用滚动区那套 `_reflow_soon`：页内卡不进滚动内容，走的是
+        `_place_sheet_cards` + `_fit_sheet_window` 这条完全不同的排布路径。
+        """
+        if not (self._sheet_open and self.sheet.isVisible()):
+            return
+        self._place_sheet_cards()
+        self._fit_sheet_window()
+
     # ---------- 遗忘手牌 ----------
+    # ---------- 打法建议 ----------
+    def _fetch_plan_now(self):
+        """展开状态页时插一次队，立刻算一版（不进 worker 的 450ms 常驻节奏）。"""
+        def job(w):
+            # ⚠️ 判 **worker 的** attached，不是 Panel 的 —— 只有 worker 真把
+            #    frida session 挂上了，`trainer.battle()` 才调得动。拿 Panel 的状态
+            #    去试会在未挂载时抛 `'NoneType' object has no attribute 'exports_sync'`，
+            #    而那句话会原样显示到卡片上（自检里踩过）。
+            if not w.attached:
+                self._sig_plan.emit({"ok": False, "reason": "未连接游戏"})
+                return
+            try:
+                data = build_plan(w.trainer)
+            except Exception:
+                data = {"ok": False, "reason": "推演失败（读取战况出错）"}
+            self._sig_plan.emit(data)
+        self.worker.post(job)
+
+    def on_plan(self, d):
+        """推演结果 → 卡片（卡片在滚动区，高度自适应由它自己 + 让位处理）。"""
+        self.plan_card.update_data(d or {})
+
     def _on_forget_open(self):
         """展开选卡区 → 立刻拉一手列表（不进 worker 的常驻循环，用完就完）。"""
         if not self.attached:
@@ -4480,6 +4995,7 @@ class Panel(QWidget):
             self.conn.setText("连接中断")
             self.deck_card.set_connected(False)
             self.forget_card.set_connected(False)
+            self.plan_card.set_connected(False)
             self.flash(f"连接异常：{st['_error'][:60]}")
             return
         self.attached = bool(st.get("_attached"))
@@ -4500,16 +5016,18 @@ class Panel(QWidget):
             # 挂钩健康度：地址校验失败说明游戏已更新、RVA 漂移，功能不会生效
             hooks = st.get("hooks") or {}
             errs = s.get("hookErrors") or []
+            # ⚠️ 必须**把失败的那一条点名**：只报"失败 1 项"没法排查
+            #    （用户实测就是这个：状态页常年显示"失败 1 项"，看不出是谁）。
             if errs:
-                self.set_val("hook", f"异常 {len(errs)} 项")
+                self.set_val("hook", f"异常 {len(errs)} 项：{errs[0][:24]}")
                 self.val["hook"].setStyleSheet(f"color: {C_WARN};")
-                self.flash("游戏已更新，部分功能地址失效，请更新辅助。")
+                self.flash("游戏已更新，部分功能地址失效，请更新辅助：%s" % errs[0][:48])
             elif hooks:
                 bad = [k for k, v in hooks.items() if str(v).startswith("FAILED")]
                 if bad:
-                    self.set_val("hook", f"失败 {len(bad)} 项")
+                    self.set_val("hook", f"失败 {len(bad)} 项：{'/'.join(bad)}")
                     self.val["hook"].setStyleSheet(f"color: {C_WARN};")
-                    self.flash("游戏已更新，部分功能地址失效，请更新辅助。")
+                    self.flash("挂钩失败：%s（游戏已更新？地址校验没过）" % "/".join(bad))
                 else:
                     self.set_val("hook", f"正常 {len(hooks)} / {len(hooks)}")
                     self.val["hook"].setStyleSheet("")
@@ -4527,6 +5045,11 @@ class Panel(QWidget):
         # 牌库预览（纯只读）：数据由 worker 顺带取回，这里只负责渲染
         self.deck_card.set_connected(self.attached)
         self.forget_card.set_connected(self.attached)
+        self.plan_card.set_connected(self.attached)
+        # 打法建议：worker 只在卡片开着时才带回 `_plan`。卡片在滚动区，
+        # 高度变化由它自己的 `sync_height` → `on_height` → 让位 处理，这里不用管排布。
+        if "_plan" in st:
+            self.plan_card.update_data(st.get("_plan") or {})
         if "_deck" in st:
             d = st.get("_deck") or {}
             self.deck_card.update_data(d)

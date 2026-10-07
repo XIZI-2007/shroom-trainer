@@ -135,6 +135,12 @@ function bind() {
     fn.class_from_name = new NativeFunction(ex('il2cpp_class_from_name'), 'pointer', ['pointer', 'pointer', 'pointer']);
     fn.class_get_name = new NativeFunction(ex('il2cpp_class_get_name'), 'pointer', ['pointer']);
     fn.class_get_field_from_name = new NativeFunction(ex('il2cpp_class_get_field_from_name'), 'pointer', ['pointer', 'pointer']);
+    /* 迭代字段（静态字段名表用）：class_get_fields(klass, &iter) 逐个返回 FieldInfo* */
+    fn.class_get_fields = new NativeFunction(ex('il2cpp_class_get_fields'), 'pointer', ['pointer', 'pointer']);
+    /* 父类链：class_get_fields **不遍历父类**，要 dump 继承来的字段得自己往上走 */
+    fn.class_get_parent = new NativeFunction(ex('il2cpp_class_get_parent'), 'pointer', ['pointer']);
+    fn.field_get_name = new NativeFunction(ex('il2cpp_field_get_name'), 'pointer', ['pointer']);
+    fn.field_get_flags = new NativeFunction(ex('il2cpp_field_get_flags'), 'uint', ['pointer']);
     /* 泛型基类的字段偏移在 dump.cs 里一律是 0x0，只能运行时动态取（详见 §牌库） */
     fn.field_get_offset = new NativeFunction(ex('il2cpp_field_get_offset'), 'int', ['pointer']);
     fn.class_get_method_from_name = new NativeFunction(ex('il2cpp_class_get_method_from_name'), 'pointer', ['pointer', 'pointer', 'int']);
@@ -155,12 +161,31 @@ function readStr(p) {
     try { return p.readUtf8String(); } catch (e) { return ''; }
 }
 
-/* 是否落在 GameAssembly.dll 的地址范围内 */
+/* 是否落在 GameAssembly.dll 的地址范围内。
+ * ⚠️⚠️ **只适用于代码地址 / 模块内静态数据**。
+ *    绝不能拿来判**托管对象引用**（GameplayCardData / List / string / ScriptableEnum…）：
+ *    它们在 Unity **托管堆**上（实测 0x2844… 段），inModule 对它们**恒 false**
+ *    ⇒ 会把有效数据当垃圾全丢掉。这正是"手牌名读空 / 效果 0 条"的根因。
+ *    判托管引用请用 looksLikeObj()。 */
 function inModule(p) {
     if (p === null || p.isNull()) return false;
     try {
         const d = p.sub(ga);
         return d.compare(ptr(0)) > 0 && d.compare(ptr(gaSize)) < 0;
+    } catch (e) { return false; }
+}
+
+/* 该地址看起来是不是一个**已映射内存里的托管对象**。
+ * 判据：本身已映射 且 它指向的 klass 指针也已映射（IL2CPP 对象 0x00 是 klass*）。
+ * 比 inModule 宽松（托管堆也算），但能挡掉小整数/野指针 —— 结构化字段按 8 字节读
+ * 时，`int` 字段会被读成 0x1/0x101 这类值，必须挡掉，否则后面读 klass 会崩。 */
+function looksLikeObj(p) {
+    if (p === null || p.isNull()) return false;
+    try {
+        if (p.compare(ptr(0x10000)) < 0) return false;      /* 显然不是指针 */
+        if (p.and(ptr(7)).compare(ptr(0)) !== 0) return false;  /* 未 8 字节对齐 */
+        if (Process.findRangeByAddress(p) === null) return false;
+        return Process.findRangeByAddress(p.readPointer()) !== null;
     } catch (e) { return false; }
 }
 
@@ -506,7 +531,144 @@ function cardText(dataPtr) {
     return '';
 }
 
-/* 一条牌的完整信息：名字 + 费用 + 效果 */
+/* ---------------- 卡牌效果 = CardIntent 列表（第 60 轮） ----------------
+ *
+ * 一张 GameplayCardData 的「效果」= `List<CardIntentPair>` @ +0x148（dump.cs 8239 行）。
+ * 每条 pair = (意图, 数值, 目标数, 高级修饰)。这是**结构化**的，不是文本 ⇒
+ * 面板可据此推演，而不必解析卡面文案。
+ *
+ * ⚠️⚠️ `CardIntent` 是 ScriptableEnum（每个意图一个资产），实例上**只有** `_guid`/`_assetIndex`，
+ *     **没有名字**。但类上有 176 个 `protected static CardIntent __xxx` 静态字段，
+ *     字段名 = 意图名（去 `__`、首字母大写）。
+ *     ⇒ 用 il2cpp_class_get_fields 迭代静态字段建 `指针 → 名字` 表：
+ *        零硬编码偏移、不依赖字段顺序、不依赖外部 JSON，游戏更新也不用改代码。
+ *     ⚠️ 顺序方案不可靠：dump 有 176 个而 metadata 的 get_XXX 只有 171 个
+ *        （少 Explode/GroupUp/DealDamage/Enrage/Nothing —— 那 5 个正好在 metadata 字符串区缺口里）。
+ *     ⚠️ 两个非意图静态字段：`__allCardIntents`（CardIntent[]）与 `__all`，必须排除。
+ *     ⚠️ `__shieldDONTUSE` → 去掉 `DONTUSE` 才是真名 `Shield`。
+ */
+const OFF_INTENT = {
+    cardIntents: 0x148,        /* GameplayCardData.<Intents>k__BackingField */
+    pairIntent: 0x20,
+    pairNumber: 0x28,
+    pairAdvanced: 0x38,
+    pairMultiplicity: 0x7C,
+    pairTargetOverride: 0x80,
+    pairNegateArmour: 0xC0,
+    pairSkipArmour: 0xC1,
+    seAssetIndex: 0x18,
+    seGuid: 0x20,
+    intentAllowedTargets: 0x28,
+    intentPrimaryTarget: 0x2C,
+    intentHidden: 0x50,
+    intentProxy: 0x80,
+};
+const FIELD_STATIC = 0x10;   /* IL2CPP FieldInfo 类型标志位（il2cpp-api.h） */
+const EXCLUDE_INTENT_FIELDS = { '__allCardIntents': 1, '__all': 1 };
+/* StatusEffect 是**同构的 ScriptableEnum**（见 tools/status_meta.py），排除项同理 */
+const EXCLUDE_STATUS_FIELDS = { '__allStatusEffects': 1 };
+const MULTIPLICITY_NAME = ['None', 'Single', 'AllButSelf', 'All', 'Random', 'ToTheLeft', 'ToTheRight', 'Self'];
+const INTENT_TARGET_NAME = { 0: 'None', 1: 'Player', 2: 'Card', 4: 'EnemyWorld' };
+
+let _intentMap = null;       /* Map<指针字符串, 意图名> */
+let _intentMapErr = '';
+let _intentMapCount = 0;
+
+function buildIntentMap() {
+    if (_intentMap !== null) return _intentMap;
+    _intentMap = new Map();
+    try {
+        const k = findClass('CardIntent', '');
+        if (k === null || k.isNull()) { _intentMapErr = 'CardIntent 类未找到'; return _intentMap; }
+        try { fn.thread_attach(fn.domain_get()); } catch (e) { /* 已 attach 则忽略 */ }
+        const iter = Memory.alloc(Process.pointerSize);
+        iter.writePointer(NULL);
+        const buf = Memory.alloc(Process.pointerSize);
+        let guard = 0;
+        while (guard++ < 4096) {
+            const f = fn.class_get_fields(k, iter);
+            if (f.isNull()) break;
+            if ((fn.field_get_flags(f) & FIELD_STATIC) === 0) continue;
+            const nm = readStr(fn.field_get_name(f));
+            if (nm.indexOf('__') !== 0 || EXCLUDE_INTENT_FIELDS[nm]) continue;
+            buf.writePointer(NULL);
+            try { fn.field_static_get_value(f, buf); } catch (e) { continue; }
+            const v = buf.readPointer();
+            /* ⚠️ CardIntent 是 ScriptableEnum 资产 ⇒ 托管堆，**不能**用 inModule 判
+               （inModule 只认模块内地址，对它恒 false ⇒ 名表会整个建空）。 */
+            if (!looksLikeObj(v)) continue;
+            let pretty = nm.slice(2);
+            const dont = pretty.indexOf('DONTUSE');
+            if (dont > 0) pretty = pretty.slice(0, dont);
+            pretty = pretty.charAt(0).toUpperCase() + pretty.slice(1);
+            const key = v.toString();
+            if (!_intentMap.has(key)) { _intentMap.set(key, pretty); _intentMapCount++; }
+        }
+    } catch (e) {
+        _intentMapErr = String(e);
+    }
+    return _intentMap;
+}
+
+function intentNameOf(p) {
+    if (p === null || p.isNull()) return '';
+    return buildIntentMap().get(p.toString()) || '';
+}
+
+/* 一条 CardIntentPair → 结构化效果（pair 是托管对象 ⇒ 用 looksLikeObj） */
+function readIntentPair(p) {
+    if (!looksLikeObj(p)) return null;
+    let mult = 0, tgt = 0;
+    try { mult = p.add(OFF_INTENT.pairMultiplicity).readS32(); } catch (e) { }
+    try { tgt = p.add(OFF_INTENT.pairTargetOverride).readS32(); } catch (e) { }
+    const it = {
+        number: 0, adv: 0, negateArmour: 0, skipArmour: 0,
+        mult: MULTIPLICITY_NAME[mult] || ('?' + mult),
+        targetOverride: INTENT_TARGET_NAME[tgt] || ('?' + tgt),
+        intent: '', guid: '', assetIndex: -1,
+        allowedTargets: '', primaryTarget: '', hidden: 0, hasProxy: 0,
+    };
+    try { it.number = p.add(OFF_INTENT.pairNumber).readS32(); } catch (e) { }
+    try { it.adv = p.add(OFF_INTENT.pairAdvanced).readU8() ? 1 : 0; } catch (e) { }
+    try { it.negateArmour = p.add(OFF_INTENT.pairNegateArmour).readU8() ? 1 : 0; } catch (e) { }
+    try { it.skipArmour = p.add(OFF_INTENT.pairSkipArmour).readU8() ? 1 : 0; } catch (e) { }
+    let ip = NULL;
+    try { ip = p.add(OFF_INTENT.pairIntent).readPointer(); } catch (e) { }
+    if (looksLikeObj(ip)) {
+        it.intent = intentNameOf(ip);
+        try { it.guid = readCsString(ip.add(OFF_INTENT.seGuid).readPointer()); } catch (e) { }
+        try { it.assetIndex = ip.add(OFF_INTENT.seAssetIndex).readS32(); } catch (e) { }
+        try {
+            const a = ip.add(OFF_INTENT.intentAllowedTargets).readS32();
+            it.allowedTargets = INTENT_TARGET_NAME[a] || ('?' + a);
+        } catch (e) { }
+        try {
+            const q = ip.add(OFF_INTENT.intentPrimaryTarget).readS32();
+            it.primaryTarget = INTENT_TARGET_NAME[q] || ('?' + q);
+        } catch (e) { }
+        try { it.hidden = ip.add(OFF_INTENT.intentHidden).readU8() ? 1 : 0; } catch (e) { }
+        try { it.hasProxy = ip.add(OFF_INTENT.intentProxy).readPointer().isNull() ? 0 : 1; } catch (e) { }
+    }
+    return it;
+}
+
+/* 一条牌的意图列表（效果）。
+ * ⚠️ dataPtr 是 GameplayCardData（托管对象）⇒ 判据用 looksLikeObj 而非 inModule。 */
+function cardIntents(dataPtr) {
+    const out = [];
+    if (!looksLikeObj(dataPtr)) return out;
+    let lst = NULL;
+    try { lst = dataPtr.add(OFF_INTENT.cardIntents).readPointer(); } catch (e) { return out; }
+    for (const pair of readListPtrs(lst)) {
+        const r = readIntentPair(pair);
+        if (r) out.push(r);
+    }
+    return out;
+}
+
+/* 一条牌的完整信息：名字 + 费用 + 效果文本。
+ * ⚠️ 默认**不读**意图列表（牌库顺序卡只需要名字，别拖慢它）；
+ *    要效果就走 cardIntents() / deckIntents() 显式请求。 */
 function cardInfo(dataPtr) {
     const info = { name: cardDataName(dataPtr), cost: -1, text: '' };
     try {
@@ -516,6 +678,313 @@ function cardInfo(dataPtr) {
     } catch (e) { }
     try { info.text = cardText(dataPtr); } catch (e) { }
     return info;
+}
+
+/* ---------------- 敌人状态（StatusEffect） ----------------
+ *
+ * 游戏的状态是一套 `StatusEffect` ScriptableEnum（**和 CardIntent 完全同构**）：
+ *   类上有 `get_XXX` 属性访问器 + `__xxx` 静态后备字段，**字段名就是状态名**。
+ *   成员表由 tools/status_meta.py 从元数据抽（66 个；其中 Thorns / Spellshield /
+ *   Regrowth 三个**只有后备字段、没有访问器**，只按 get_XXX 抽会漏）。
+ *
+ * ⚠️ 敌人持有状态集合的字段名是 **`_statusEffects`**（M_Enemy 上，`get__statusEffects`
+ *    的后备字段；2026-10-06 元数据确认）。
+ * ⚠️ **不要**去读 `LocalizedEnemyName` 那套来猜状态；也不要以为有"易伤/虚弱/中毒"三件套
+ *    —— 那是别的游戏的模型。本游戏 66 个状态里**没有** Weakness/Poison 成员
+ *    （Vulnerable 虽不在枚举里、但本地化表有 STATUS_VULNERABLE 与 tooltip，见下）。
+ * ⚠️ 状态**效果**别硬编码倍率：游戏自带 TOOLTIP_STATUS_* 官方文案
+ *    （已抽成 src/status_tips.json），推演必须照它来。
+ *
+ * 元素形状**运行时自适应**：先按"托管对象"探（0x00 是 klass*，且 klass 名含 StatusEffect），
+ * 不成立再把元素当**内嵌结构体**、按 8 字节槽找指向 StatusEffect 资产的指针。
+ * 形状未知时把原始字节 dump 进 `diag`，供一次性标定（避免瞎猜偏移）。
+ */
+
+let _statusMap = null;       /* Map<指针字符串, 状态名> */
+let _statusMapErr = '';
+let _statusMapCount = 0;
+
+/* StatusEffect 静态字段 → 指针表（与 buildIntentMap 同构，零硬编码偏移） */
+function buildStatusMap() {
+    if (_statusMap !== null) return _statusMap;
+    _statusMap = new Map();
+    try {
+        const k = findClass('StatusEffect', '');
+        if (k === null || k.isNull()) { _statusMapErr = 'StatusEffect 类未找到'; return _statusMap; }
+        try { fn.thread_attach(fn.domain_get()); } catch (e) { /* 已 attach */ }
+        const iter = Memory.alloc(Process.pointerSize);
+        iter.writePointer(NULL);
+        const buf = Memory.alloc(Process.pointerSize);
+        let guard = 0;
+        while (guard++ < 4096) {
+            const f = fn.class_get_fields(k, iter);
+            if (f.isNull()) break;
+            if ((fn.field_get_flags(f) & FIELD_STATIC) === 0) continue;
+            const nm = readStr(fn.field_get_name(f));
+            if (nm.indexOf('__') !== 0 || EXCLUDE_STATUS_FIELDS[nm]) continue;
+            buf.writePointer(NULL);
+            try { fn.field_static_get_value(f, buf); } catch (e) { continue; }
+            const v = buf.readPointer();
+            /* ScriptableEnum 资产在托管堆 ⇒ 只能用 looksLikeObj 判（inModule 恒 false） */
+            if (!looksLikeObj(v)) continue;
+            let pretty = nm.slice(2);
+            const dont = pretty.indexOf('DONTUSE');
+            if (dont > 0) pretty = pretty.slice(0, dont);
+            pretty = pretty.charAt(0).toUpperCase() + pretty.slice(1);
+            const key = v.toString();
+            if (!_statusMap.has(key)) { _statusMap.set(key, pretty); _statusMapCount++; }
+        }
+    } catch (e) {
+        _statusMapErr = String(e);
+    }
+    return _statusMap;
+}
+
+function statusNameOf(p) {
+    if (p === null || p.isNull()) return '';
+    return buildStatusMap().get(p.toString()) || '';
+}
+
+/* 一个元素的原始 8 字节槽 dump（形状未知时用于一次性标定） */
+function _slotDump(p, n) {
+    const out = [];
+    const cnt = n || 8;
+    for (let i = 0; i < cnt; i++) {
+        try {
+            const v = p.add(i * Process.pointerSize).readPointer();
+            let s = v.isNull() ? '0' : (v.toString() + (looksLikeObj(v) ? '*' : ''));
+            /* 同时给低 32 位（结构体里常是 int 计数混排） */
+            try { const lo = p.add(i * 8).readS32(); s += '/' + lo; } catch (e) { }
+            out.push(s);
+        } catch (e) { out.push('?'); }
+    }
+    return out;
+}
+
+/* 敌人 → 状态列表 [{name, number, raw}]。
+ * 自适应两种元素形状；都不成立时返回带 diag 的空表（**不抛**，别把整个 battle 带崩）。 */
+function readEnemyStatuses(enemy, diagOut) {
+    const out = [];
+    if (enemy === null || enemy.isNull()) return out;
+    /* ⚠️⚠️ 真机实证（2026-10-06 第 63 轮）：IL2CPP 里带 `set_` 的属性后备字段，
+     *    实际字段名是 **`<_statusEffects>k__BackingField`**（带尖括号与后缀），
+     *    `class_get_field_from_name('_statusEffects')` **返回 null ⇒ off=-1**。
+     *    表现：statusFieldOff=-1、状态恒空、**不报错**。
+     *    ⇒ 必须把带尖括号的形式也当候选。 */
+    let off = -1;
+    for (const cand of ['<_statusEffects>k__BackingField', '_statusEffects',
+                        '<StatusEffects>k__BackingField', 'StatusEffects']) {
+        off = fieldOffOf(enemy, cand);
+        if (off >= 0) {
+            if (diagOut) diagOut.statusFieldName = cand;
+            break;
+        }
+    }
+    if (off < 0) {
+        if (diagOut) diagOut.statusFieldOff = -1;
+        return out;
+    }
+    if (diagOut) diagOut.statusFieldOff = off;
+    const lst = atOff(enemy, off);
+    if (lst === null || lst.isNull()) return out;
+
+    /* 先按 List<T> 读（最常见） */
+    let elems = readListPtrs(lst);
+    if (diagOut) diagOut.statusElemCount = elems.length;
+
+    /* ⚠️ 元素可能不是"指针列表"而是**内嵌结构体数组**（List<struct>）。
+     *    这时 readListPtrs 拿到的"指针"其实是结构体头 8 字节，looksLikeObj 会 false。
+     *    → 退回：拿 _items 数组基址，按 stride 走（stride 先按 16 探，取值域内能对上的）。 */
+    if (elems.length === 0) {
+        try {
+            const items = lst.add(OFF.listItems).readPointer();
+            const size = lst.add(OFF.listSize).readS32();
+            if (!items.isNull() && size > 0 && size < 64) {
+                const base = items.add(OFF.arrayData);
+                const cands = [8, 16, 24, 32];
+                for (const stride of cands) {
+                    let ok = 0;
+                    const probe = [];
+                    for (let i = 0; i < size; i++) {
+                        const e = base.add(i * stride);
+                        let found = NULL;
+                        for (let s = 0; s < Math.min(4, stride / 8); s++) {
+                            const v = e.add(s * 8).readPointer();
+                            if (looksLikeObj(v) && statusNameOf(v)) { found = v; break; }
+                        }
+                        if (!found.isNull()) { ok++; probe.push({ stride: stride, obj: found, off: i }); }
+                    }
+                    if (ok > 0) {
+                        if (diagOut) diagOut.statusStructStride = stride;
+                        for (const pr of probe) {
+                            const nm = statusNameOf(pr.obj);
+                            const num = base.add(pr.off * stride).readS32();
+                            out.push({ name: nm, number: num, raw: pr.obj.toString() });
+                        }
+                        return out;
+                    }
+                }
+            }
+        } catch (e) {
+            if (diagOut) diagOut.statusStructErr = String(e);
+        }
+    }
+
+    /* ---- 元素解析 ----
+     * ⚠️⚠️ 真机实证（2026-10-06 第 63 轮，`fieldsOf('StatusEffectPair')` dump）：
+     *     `_statusEffects` 是 `List<StatusEffectPair>`，每个元素是 **StatusEffectPair**：
+     *        `_statusEffect` @0x18  → StatusEffect 资产指针
+     *        `Number`       @0x20  → 层数（int32）
+     *        `HiddenFromDisplay` @0x24 / `_cardData` @0x28 / `_enemyData` @0x30
+     *     ⚠️ 早先按"槽位扫描 + 数值取 `s*8+4`"读，**取样点在指针高 4 字节上**
+     *        ⇒ 层数读成 `0x2A6`=678 这种垃圾数（且 678<9999 不会被 sanity 拦下）。
+     *        **症状：状态名对、层数全错**，比读不出来更危险。
+     *     ⇒ 改成**按字段名动态取偏移**（零硬编码偏移，游戏更新也不怕），
+     *        槽位扫描只作为兜底（兜底时数值取 `s*8+8`，即指针后一个对齐槽）。 */
+    for (const el of elems) {
+        if (!looksLikeObj(el)) continue;
+        let nm = statusNameOf(el);          /* 少数情况下元素直接是 StatusEffect 资产 */
+        let amt = 0;
+        let host = el;
+        if (!nm) {
+            /* ① 首选：按字段名解析 StatusEffectPair */
+            const seOff = fieldOffOf(el, '_statusEffect');
+            const numOff = fieldOffOf(el, 'Number');
+            if (seOff >= 0) {
+                const se = atOff(el, seOff);
+                if (se !== null && !se.isNull()) nm = statusNameOf(se);
+                if (nm && numOff >= 0) {
+                    try { amt = el.add(numOff).readS32(); } catch (e) { }
+                    if (diagOut) diagOut.statusElemShape = 'StatusEffectPair(字段名)';
+                }
+            }
+            /* ② 兜底：槽位扫描。⚠️ 数值必须取 **指针后一个对齐槽**（+8），
+                  不是 +4（那是指针自己高 4 字节，会读出天文数字/垃圾）。 */
+            if (!nm) {
+                for (let s = 0; s < 6; s++) {
+                    let v = NULL;
+                    try { v = el.add(s * 8).readPointer(); } catch (e) { continue; }
+                    if (!looksLikeObj(v)) continue;
+                    const cand = statusNameOf(v);
+                    if (cand) {
+                        nm = cand;
+                        try {
+                            const n8 = el.add(s * 8 + 8).readS32();
+                            amt = (n8 >= 0 && n8 <= 9999) ? n8 : 0;
+                        } catch (e) { amt = 0; }
+                        host = el;
+                        if (diagOut) diagOut.statusElemShape = '槽位扫描(slot=' + s + ')';
+                        break;
+                    }
+                }
+            }
+        }
+        if (!nm) {
+            if (diagOut) {
+                diagOut.statusUnknown = (diagOut.statusUnknown || []);
+                if (diagOut.statusUnknown.length < 4) {
+                    diagOut.statusUnknown.push({ ptr: el.toString(), slots: _slotDump(el) });
+                }
+            }
+            continue;
+        }
+        out.push({ name: nm, number: amt, raw: host.toString() });
+    }
+    return out;
+}
+
+/* ⚠️ 临时标定用：dump 某个 klass 及其父类的全部字段（name/offset/type）。只读。 */
+function _dumpFieldChain(k) {
+    const chain = [];
+    let depth = 0;
+    while (k !== null && !k.isNull() && depth++ < 8) {
+        const kn = readStr(fn.class_get_name(k)) || '?';
+        const fields = [];
+        const iter = Memory.alloc(Process.pointerSize);
+        iter.writePointer(NULL);
+        let guard = 0;
+        while (guard++ < 512) {
+            const f = fn.class_get_fields(k, iter);
+            if (f.isNull()) break;
+            let ty = '';
+            try { ty = readStr(fn.type_get_name(fn.field_get_type(f))) || ''; } catch (e) { ty = ''; }
+            fields.push({
+                name: readStr(fn.field_get_name(f)) || '?',
+                off: fn.field_get_offset(f),
+                type: ty,
+            });
+        }
+        chain.push({ klass: kn, fields: fields });
+        try { k = fn.class_get_parent(k); } catch (e) { break; }
+    }
+    return chain;
+}
+
+/* 玩家侧状态。
+ * ⚠️⚠️ 真机实证（2026-10-06 第 63 轮，dump 了 `M_Player` 及其父类 `Model`1` 的**全部**
+ *    字段链）：**M_Player 上没有任何状态字段**（`_statusEffects` / `_statuses` /
+ *    `statusEffects` 一个都没有；`_saveState` 是存档聚合，不是状态列表）。
+ *    元数据侧也一致：`_playerStatusEffects` / `PlayerStatus` 全库 0 命中；
+ *    `get_StatusEffects`/`_statusEffects` 只挂在 **M_Enemy** 上。
+ *
+ * ⇒ **玩家状态恒为空是预期行为，不是 bug**。且这不影响推演正确性：
+ *    · 推演真正需要的 `SpellWeakness`（打牌自伤）**挂在敌人身上**
+ *      —— 真机实测敌人3 就带 `SpellWeakness=<n>`，我们的敌人状态读取已覆盖它；
+ *    · 其余 self 侧状态（Blessed/Charged/Thorns）都不改变"本回合出牌"的数值。
+ *
+ * 本函数保留为**尽力读取**：万一以后版本加了玩家状态字段，这里能自动接上。
+ * 读不到就返回空表（**不抛**，也不能因此让 battle 失败）。 */
+function readPlayerStatuses(diagOut) {
+    const out = [];
+    try {
+        if (player === null) player = findPlayer();
+        if (!playerOk()) { if (diagOut) diagOut.playerNoObj = 1; return out; }
+        /* 候选字段名：按"可能就是它"的推测顺序试，命中即可（不硬编偏移）。
+           ⚠️ 带 set_ 的属性后备字段真名是 `<xxx>k__BackingField`，两种写法都要试。 */
+        const cands = [];
+        for (const f of ['statusEffects', 'statuses', 'playerStatuses', 'activeStatuses']) {
+            cands.push('<' + f + '>k__BackingField', '_' + f, f);
+        }
+        for (const f of cands) {
+            let off = -1;
+            try { off = fieldOffOf(player, f); } catch (e) { off = -1; }
+            if (off < 0) continue;
+            const lst = atOff(player, off);
+            if (lst === null || lst.isNull()) continue;
+            /* 元素形状不确定 ⇒ 先按指针列表读；形如"条目对象"的再在前几槽找资产指针 */
+            const els = readListPtrs(lst);
+            for (const el of els) {
+                if (!looksLikeObj(el)) continue;
+                let nm = statusNameOf(el);
+                let amt = 0;
+                if (!nm) {
+                    for (let s = 0; s < 6; s++) {
+                        let v = NULL;
+                        try { v = el.add(s * 8).readPointer(); } catch (e) { continue; }
+                        if (!looksLikeObj(v)) continue;
+                        const c = statusNameOf(v);
+                        if (c) {
+                            nm = c;
+                            try { amt = el.add(s * 8 + 4).readS32(); } catch (e) { }
+                            if (amt <= 0 || amt > 9999) {
+                                try { amt = el.add(s * 8 + 8).readS32(); } catch (e) { }
+                            }
+                            break;
+                        }
+                    }
+                }
+                if (nm) out.push({ name: nm, number: amt, raw: el.toString() });
+            }
+            if (out.length) {
+                if (diagOut) diagOut.playerStatusField = f;
+                return out;
+            }
+        }
+        if (diagOut) diagOut.playerStatusUnknown = 1;
+    } catch (e) {
+        if (diagOut) diagOut.playerStatusErr = String(e);
+    }
+    return out;
 }
 
 /* 牌库里存的是 GameplayCardData（数据资产），不是 M_CardInstance —— 所以直接取 Name */
@@ -533,6 +1002,246 @@ function listOfInfos(deck, fieldName) {
     for (const e of readListPtrs(atOff(deck, fieldOffOf(deck, fieldName)))) {
         out.push(cardInfo(e));
     }
+    return out;
+}
+
+/* ================= 战况读取（纯只读）—— 打法推演的输入 =================
+ *
+ * 三件套：敌人（血量/护甲/存活）+ 精力 + 手牌。
+ * 全部走 fieldOff() 动态取偏移（泛型基类字段在 dump 里一律 0x0，硬编码必错）。
+ *
+ * dump.cs / metadata 实证（字段名，非偏移）：
+ *   M_EnemyController : enemies(List<M_Enemy>) / _currentEnemies
+ *   M_Enemy           : _healthData / _isBoss / _hasRetreated / LocalizedEnemyName
+ *   EnemyHealthData   : _startingHealth(当前血) / _maxHealth / _armour
+ *     ⚠️ 当前血量字段叫 `_startingHealth`（不是 _currentHealth），别按语义瞎猜。
+ *   M_CardInstance<T> : **`<DataImpl>k__BackingField`** → 卡数据资产（GameplayCardData）
+ *     ⚠️ 这个字段名不是猜的：9-24 轮真机标定实证「取 `<DataImpl>` 得到的牌名正常」。
+ *        却**不在 dump 的字段名表面上**（dump 里叫 get_IData/IData），也不叫 `_cardData`
+ *        ⇒ 卡实例 → 卡数据**只能走这个字段**，见 cardDataOfInstance()。
+ */
+
+/* 卡实例(M_GameplayCardInstance / M_CardInstance<T>) → 卡数据资产(GameplayCardData)。
+ * ⚠️⚠️ **不要用 inModule() 判这个字段**：卡数据是 Unity ScriptableObject，
+ *    指针落在**托管堆**上（实测 0x28441836480），inModule 只认 GameAssembly.dll
+ *    内部地址 ⇒ 对托管引用**恒 false** ⇒ 会被整段丢掉，表现就是"手牌名读空"。
+ *    （同类教训：dump 里所有托管字段都显示 ptr(oom ...)。）
+ * 判据改为：字段存在（off>=0）+ 非空。拿到的对象 klass 是 GameplayCardData 才算数，
+ * 所以用 klass 名做一次校验，避免误取到别的指针字段。
+ * ⚠️ fieldOffOf 走 class_get_field_from_name，会沿父类链找 —— 数据字段挂在泛型基类
+ *    M_CardInstance<T> 上（实测 off=0x168），拿子类 klass 也取得到。
+ * ⚠️ 候选顺序：`<DataImpl>` 是**真机实证名**，必须排第一；其余只是跨版本兜底。 */
+const CARD_DATA_FIELDS = ['<DataImpl>k__BackingField', '_cardData', '<Data>k__BackingField', 'IData', '_data'];
+
+function cardDataOfInstance(inst) {
+    if (inst === null || inst.isNull()) return NULL;
+    let firstNonNull = NULL;
+    for (const f of CARD_DATA_FIELDS) {
+        const off = fieldOffOf(inst, f);
+        if (off < 0) continue;
+        const v = atOff(inst, off);
+        if (v.isNull()) continue;
+        /* 首选能确认 klass 是卡数据的那一个 */
+        try {
+            const kn = readStr(fn.class_get_name(v.readPointer()));
+            if (kn.indexOf('CardData') >= 0) return v;
+        } catch (e) { }
+        if (firstNonNull.isNull()) firstNonNull = v;
+    }
+    return firstNonNull;
+}
+
+/* 找 M_EnemyController 实例（世界模型里找；找不到再扫服务列表） */
+function findEnemyController() {
+    for (const wsm of getWorldManagers()) {
+        for (const worldOff of [OFF.mainWorld, OFF.futureWorld]) {
+            const world = listAt(wsm, worldOff);
+            if (world.isNull()) continue;
+            for (const off of [OFF.pureModels, OFF.runtimeModels]) {
+                const c = scanListForClass(listAt(world, off), 'M_EnemyController');
+                if (c !== null && !c.isNull()) return c;
+            }
+        }
+    }
+    try {
+        for (const wsm of getWorldManagers()) {
+            const svcs = staticRef(servicesField);
+            const c = scanListForClass(svcs, 'M_EnemyController');
+            if (c !== null && !c.isNull()) return c;
+            break;
+        }
+    } catch (e) { }
+    return NULL;
+}
+
+/* 敌人们表：M_EnemyController.enemies（拿不到就退 _currentEnemies） */
+function enemyListOf(ctrl) {
+    for (const f of ['enemies', '_currentEnemies', '_enemies']) {
+        const off = fieldOffOf(ctrl, f);
+        if (off < 0) continue;
+        const lst = atOff(ctrl, off);
+        const arr = readListPtrs(lst);
+        if (arr.length) return arr;
+    }
+    return [];
+}
+
+/* ⚠️ 敌人名字：**游戏压根没给敌人赋名字**（第 45 轮真机 + 离线双证，别再挖了）
+ *
+ *   M_Enemy.LocalizedEnemyName @0x150 的类型**不是 string**，而是
+ *   `LocalizedFallbackText` 托管类：字段表只有
+ *       FallbackText @0x10 : System.String     （实测 = 空串）
+ *       LocalizeKey  @0x18 : LocalizedString   （对象在，但 m_TableReference /
+ *                            m_TableEntryReference 逐 8 字节扫 0x00–0x78 **全是 0**）
+ *   ⇒ 这个物体根本没被填过名字。游戏自己的警告串也这么说：
+ *       `MISSING LocalizedEnemyName for [ENEMY_NAME] (NULL-ENEMY-DATA-OR-UNASSIGNED-MODEL)`
+ *   ⇒ 把 `atOff(enemy, off)` 当**托管 string** 交给 readCsString 是**读法错的**
+ *      （+0x10 处其实是 FallbackText 指针的低 32 位 ≈ 0xfa85f40），必然读空。
+ *
+ *   唯一真 string 名在 `V_Enemy.<EnemyName>k__BackingField` @0x1C8，但视图不可达：
+ *   V_Enemy 不在 world 模型列表里，M_Enemy 逐槽扫 0x08–0x288 也没有任何指向它
+ *   或其委托 `_target` 的引用。
+ *
+ *   ⇒ **放弃取名**，UI 侧按"从左到右"编号（① ② ③…）。本函数只回原始值供诊断，
+ *     绝不拿它当显示名。
+ */
+function readEnemyRawName(enemy) {
+    try {
+        const off = fieldOffOf(enemy, 'LocalizedEnemyName');
+        if (off < 0) return '';
+        const v = atOff(enemy, off);
+        if (v.isNull()) return '';
+        /* 只有 klass 名字确实是 String 才当托管 string 解
+           （LocalizedFallbackText 的话这里必不是 String） */
+        let kn = '';
+        try { kn = readStr(fn.class_get_name(v.readPointer())) || ''; } catch (e) { return ''; }
+        if (kn !== 'String' && kn.indexOf('String') !== 0) return '';
+        return readCsString(v) || '';
+    } catch (e) {
+        return '';
+    }
+}
+
+/* 一个 M_Enemy → 结构化战况。idx 是它在控制器列表里的位置（0 起，UI 显示时 +1）。 */
+function readEnemy(enemy, idx) {
+    const seq = (idx === undefined || idx < 0) ? -1 : idx + 1;
+    const out = {
+        name: seq > 0 ? ('敌人' + seq) : '敌人', seq: seq, rawName: '',
+        hp: -1, maxHp: -1, armour: 0, alive: true,
+        boss: false, retreated: false, ptr: enemy.toString(),
+        statuses: [], statusDiag: null,
+    };
+    try {
+        const hd = atOff(enemy, fieldOffOf(enemy, '_healthData'));
+        if (!hd.isNull()) {
+            const oh = fieldOffOf(hd, '_startingHealth');
+            const om = fieldOffOf(hd, '_maxHealth');
+            const oa = fieldOffOf(hd, '_armour');
+            if (oh >= 0) out.hp = i32Off(hd, oh);
+            if (om >= 0) out.maxHp = i32Off(hd, om);
+            if (oa >= 0) out.armour = i32Off(hd, oa);
+            out.alive = out.hp > 0;
+        }
+    } catch (e) { }
+    try { out.boss = boolOff(enemy, fieldOffOf(enemy, '_isBoss')); } catch (e) { }
+    try { out.retreated = boolOff(enemy, fieldOffOf(enemy, '_hasRetreated')); } catch (e) { }
+    /* ⚠️ 只读进 rawName 供诊断：游戏没给敌人名字，别拿它当显示名用。
+       也别再退回按卡数据字段取名那条路 —— 那是**结构性死代码**：卡名读法按
+       GameplayCardData 的 `<Name>k__BackingField` / `_overrideDisplayName` / `LastLocKey`
+       读，而这里手上是 M_Enemy 模型，那几个字段在它身上全是 -1。 */
+    out.rawName = readEnemyRawName(enemy);
+    /* 状态（易伤/震慑/腐朽…）—— 推演要按真实层数算伤害倍率 */
+    try {
+        const d = {};
+        out.statuses = readEnemyStatuses(enemy, d);
+        /* ⚠️ **"没有状态"和"读不出来"必须分开**：
+           · `statusElemCount === 0` ⇒ 这只敌人**本来就没有状态**，是正常结果；
+           · 只有"字段名没找到"（statusFieldOff < 0）、"元素认不出"（statusUnknown）、
+             "内嵌结构体探测过"（statusStructStride）才是**真读不出来**。
+           ⚠️ 早先把 statusFieldOff（=6 位正数偏移）当 truthy 就判失败 ⇒ 每只没状态的
+              敌人都被标成"读取失败"，推演每次都弹一条"状态没读出来"的假告警（踩过）。 */
+        const failed = (d.statusFieldOff < 0) || !!d.statusUnknown ||
+                       (d.statusStructStride !== undefined) || !!d.statusStructErr;
+        if (failed) out.statusDiag = d;
+    } catch (e) { out.statusDiag = { err: String(e) }; }
+    return out;
+}
+
+/* 战况快照：敌人 + 精力 + 手牌（一张牌 → {name, cost, intents}） */
+function battleSnapshot(withIntents) {
+    const out = {
+        ok: false, warning: '',
+        enemies: [], enemyCount: 0, aliveEnemyCount: 0, enemyHpTotal: 0,
+        hp: -1, maxHp: -1, energy: -1, softCap: -1,
+        playerStatuses: [], playerStatusDiag: null,
+        hand: [], handCount: 0, handSize: 0,
+        deckType: -1, deckTypeName: '',
+    };
+    /* ---- 玩家：血量 / 精力（已有实现，直接复用） ---- */
+    try {
+        if (player === null) player = findPlayer();
+        if (playerOk()) {
+            const h = playerHealth(), e = playerEnergy();
+            out.hp = i32Off(h, OFF.health);
+            out.maxHp = i32Off(h, OFF.maxHealth);
+            out.energy = i32Off(e, OFF.energy);
+            out.softCap = i32Off(e, OFF.energySoftCap);
+        }
+    } catch (e) { out.warning = '玩家数据读取失败: ' + e; }
+
+    /* ---- 玩家状态（自身增益/惩罚）----
+       ⚠️ 元数据无确证字段 ⇒ 尽力读，读不到就当空（见 readPlayerStatuses 注释）。 */
+    try {
+        const d = {};
+        out.playerStatuses = readPlayerStatuses(d);
+        if (!out.playerStatuses.length && Object.keys(d).length) out.playerStatusDiag = d;
+    } catch (e) { out.playerStatusDiag = { err: String(e) }; }
+
+    /* ---- 敌人 ---- */
+    try {
+        const ctrl = findEnemyController();
+        if (ctrl !== null && !ctrl.isNull()) {
+            let ei = 0;
+            for (const e of enemyListOf(ctrl)) {
+                const r = readEnemy(e, ei++);
+                out.enemies.push(r);
+                if (r.alive && !r.retreated) {
+                    out.aliveEnemyCount++;
+                    if (r.hp > 0) out.enemyHpTotal += r.hp;
+                }
+            }
+            out.enemyCount = out.enemies.length;
+        } else {
+            out.warning = (out.warning ? out.warning + '；' : '') + '未找到敌人控制器（可能不在战斗中）';
+        }
+    } catch (e) { out.warning += '；敌人读取失败: ' + e; }
+
+    /* ---- 手牌：挑对那份手（营地/战斗各一份） ---- */
+    try {
+        const cands = deckCandidates();
+        const pick = pickDeck(cands);
+        if (pick) {
+            out.deckType = pick.deckType;
+            out.deckTypeName = DECK_TYPE_NAME[pick.deckType] || '';
+            out.handSize = pick.handSize;
+            const held = readListPtrs(atOff(pick.hand, fieldOffOf(pick.hand, '_heldCards')));
+            for (const c of held) {
+                /* 手牌元素是 M_GameplayCardInstance（运行时实例），不是数据资产。
+                   顺卡数据字段拿到 GameplayCardData 再读名字/费用/意图。 */
+                const data = cardDataOfInstance(c);
+                const src = data.isNull() ? c : data;
+                const info = cardInfo(src);
+                const row = { name: info.name, cost: info.cost, ptr: src.toString() };
+                if (withIntents) row.intents = cardIntents(src);
+                out.hand.push(row);
+            }
+            out.handCount = out.hand.length;
+        } else {
+            out.warning = (out.warning ? out.warning + '；' : '') + '未找到手牌';
+        }
+    } catch (e) { out.warning += '；手牌读取失败: ' + e; }
+
+    out.ok = true;
     return out;
 }
 
@@ -1194,6 +1903,86 @@ rpc.exports = {
     },
     /* 牌库顺序（只读）：抽牌堆按抽牌顺序返回牌名 */
     deck() { return deckSnapshot(); },
+    /* 卡牌效果（只读）：牌库每张牌的 (意图, 数值, 目标数) 列表 —— 理解效果用 */
+    deckIntents(ptrHex) {
+        if (ptrHex) return { ok: true, cards: [{ ptr: ptrHex, intents: cardIntents(ptr(ptrHex)) }] };
+        const snap = deckSnapshot();
+        const out = { ok: snap.ok, deckTypeName: snap.deckTypeName, cards: [] };
+        /* 牌库存的就是 GameplayCardData ⇒ 从快照的指针再取一次意图即可，
+           不必让 listOfInfos 每次都背上意图读取的开销 */
+        const cands = deckCandidates();
+        const pick = pickDeck(cands);
+        if (!pick) { out.warning = '未找到牌库（可能不在战斗中）'; return out; }
+        for (const e of readListPtrs(atOff(pick.deck, fieldOffOf(pick.deck, '_normalShuffledDrawCards')))) {
+            out.cards.push({ name: cardDataName(e), cost: cardInfo(e).cost, intents: cardIntents(e) });
+        }
+        return out;
+    },
+    /* 意图名表自检（静态字段扫描结果） */
+    intentMap() {
+        buildIntentMap();
+        const names = [];
+        for (const kv of _intentMap) names.push(kv[1]);
+        return { ok: !_intentMapErr, count: _intentMapCount, err: _intentMapErr, names: names };
+    },
+    /* 状态名表自检（StatusEffect 静态字段扫描结果，与 intentMap 同构） */
+    statusMap() {
+        buildStatusMap();
+        const names = [];
+        for (const kv of _statusMap) names.push(kv[1]);
+        names.sort();
+        return { ok: !_statusMapErr, count: _statusMapCount, err: _statusMapErr, names: names };
+    },
+    /* ⚠️ 标定用：dump 某个类的字段链（name/offset/type）。只读。
+       ⚠️ 走 `il2cpp_class_from_name` ⇒ 需要**精确命名空间**；
+          `M_Player` 这类查不到（真机实测 'class not found'）。
+       第 63 轮用它标定了 `StatusEffectPair`（_statusEffect@0x18 / Number@0x20）与
+       `StatusEffect`（68 个 __xxx 静态字段，比离线多 Vulnerable/Poisoned）。 */
+    fieldsOf(className) {
+        const out = { ok: false, klass: className, chain: [] };
+        try {
+            const k = findClass(className, '');
+            if (k === null || k.isNull()) { out.error = 'class not found'; return out; }
+            out.chain = _dumpFieldChain(k);
+            out.ok = true;
+        } catch (e) { out.error = String(e); }
+        return out;
+    },
+    /* 只读：把每个敌人的状态 + 原始诊断 dump 出来（标定用） */
+    enemyStatus() {
+        const out = { ok: false, count: 0, enemies: [], statusMapCount: 0 };
+        try {
+            buildStatusMap();
+            out.statusMapCount = _statusMapCount;
+            out.statusMapErr = _statusMapErr;
+            const ctrl = findEnemyController();
+            if (ctrl === null || ctrl.isNull()) {
+                out.warning = '未找到敌人控制器';
+                out.ok = true;
+                return out;
+            }
+            let ei = 0;
+            for (const e of enemyListOf(ctrl)) {
+                const d = {};
+                const st = readEnemyStatuses(e, d);
+                out.enemies.push({
+                    seq: ei + 1, hp: -1, statuses: st,
+                    statusFieldOff: d.statusFieldOff, elemCount: d.statusElemCount,
+                    stride: d.statusStructStride, unknown: d.statusUnknown || [],
+                    err: d.statusStructErr || '',
+                });
+                ei++;
+            }
+            out.count = out.enemies.length;
+            out.ok = true;
+        } catch (e) {
+            out.error = String(e);
+        }
+        return out;
+    },
+    /* 战况（只读）：敌人血量/护甲 + 精力 + 手牌；withIntents=true 时连手牌效果一起给。
+       打法推演的输入就靠它，不必让调用方手工填局面。 */
+    battle(withIntents) { return battleSnapshot(!!withIntents); },
     /* 遗忘：列出可忘的牌（抽牌堆 + 弃牌堆 + 已消耗，按堆分组、逐张列出） */
     forgetList() { return forgetList(); },
     /* 遗忘：真删一张。ptrHex 来自 forgetList 的 cards[i].ptr，stackKey 是它所在的堆 */

@@ -1,0 +1,3568 @@
+{
+ "_comment": "由 tools/intent_build.py 从游戏串表生成；游戏更新后重跑并重新打包。",
+ "source": "StandaloneWindows64",
+ "sections": [
+  "Class names",
+  "Property names",
+  "Trigger names",
+  "Common words",
+  "Intents",
+  "Foresights",
+  "Evolve",
+  "ToolTips Class",
+  "ToolTips Property",
+  "ToolTips Trigger",
+  "ToolTips Common words",
+  "ToolTips Intents"
+ ],
+ "count": 235,
+ "intents": [
+  {
+   "key": "INTENT_END_TURN",
+   "op": "END_TURN",
+   "en": "Ends your turn",
+   "zh": "结束回合",
+   "slots": [],
+   "refs": [],
+   "joiners": [],
+   "targets": [],
+   "mods": [],
+   "others": []
+  },
+  {
+   "key": "INTENT_OPEN_MAP",
+   "op": "OPEN_MAP",
+   "en": "Look at Map",
+   "zh": "查看地图",
+   "slots": [],
+   "refs": [],
+   "joiners": [],
+   "targets": [],
+   "mods": [],
+   "others": []
+  },
+  {
+   "key": "INTENT_REVEAL_ALL",
+   "op": "REVEAL_ALL",
+   "en": "Reveal all",
+   "zh": "揭示全部",
+   "slots": [],
+   "refs": [],
+   "joiners": [],
+   "targets": [],
+   "mods": [],
+   "others": []
+  },
+  {
+   "key": "INTENT_CHOOSE_CARD_TO_FORGET",
+   "op": "CHOOSE_CARD_TO_FORGET",
+   "en": "[LINKKEY=WORD_FORGET] something",
+   "zh": "遗忘卡牌",
+   "slots": [],
+   "refs": [
+    "WORD_FORGET"
+   ],
+   "joiners": [],
+   "targets": [],
+   "mods": [],
+   "others": []
+  },
+  {
+   "key": "INTENT_PREPARE",
+   "op": "PREPARE",
+   "en": "Increase your maximum energy in the next combat by 1",
+   "zh": "在下一场战斗中，使你的精力上限+1",
+   "slots": [],
+   "refs": [],
+   "joiners": [],
+   "targets": [],
+   "mods": [],
+   "others": []
+  },
+  {
+   "key": "INTENT_DISCARD_CARD",
+   "op": "DISCARD_CARD",
+   "en": "Discard[MULTIPLICITY_CARD]",
+   "zh": "弃置[MULTIPLICITY_CARD]",
+   "slots": [],
+   "refs": [],
+   "joiners": [],
+   "targets": [
+    "CARD"
+   ],
+   "mods": [],
+   "others": []
+  },
+  {
+   "key": "INTENT_CONSUME_CARD",
+   "op": "CONSUME_CARD",
+   "en": "[LINKKEY=WORD_FORGET] target card",
+   "zh": "遗忘目标牌",
+   "slots": [],
+   "refs": [
+    "WORD_FORGET"
+   ],
+   "joiners": [],
+   "targets": [],
+   "mods": [],
+   "others": []
+  },
+  {
+   "key": "INTENT_LEVEL_UP_CARD",
+   "op": "LEVEL_UP_CARD",
+   "en": "transform another card into a more effective version of itself",
+   "zh": "将另一张卡牌变为更高效的版本",
+   "slots": [],
+   "refs": [],
+   "joiners": [],
+   "targets": [],
+   "mods": [],
+   "others": []
+  },
+  {
+   "key": "INTENT_CONSUME",
+   "op": "CONSUME",
+   "en": "[LINKKEY=WORD_CONSUME]",
+   "zh": "[LINKKEY=WORD_CONSUME]",
+   "slots": [],
+   "refs": [
+    "WORD_CONSUME"
+   ],
+   "joiners": [],
+   "targets": [],
+   "mods": [],
+   "others": []
+  },
+  {
+   "key": "INTENT_EXHAUST_TARGET_CARD",
+   "op": "EXHAUST_TARGET_CARD",
+   "en": "[LINKKEY=WORD_EXHAUST][MULTIPLICITY_CARD]",
+   "zh": "[LINKKEY=WORD_EXHAUST][MULTIPLICITY_CARD]",
+   "slots": [],
+   "refs": [
+    "WORD_EXHAUST"
+   ],
+   "joiners": [],
+   "targets": [
+    "CARD"
+   ],
+   "mods": [],
+   "others": []
+  },
+  {
+   "key": "INTENT_EXHAUST_TARGET_FOOD",
+   "op": "EXHAUST_TARGET_FOOD",
+   "en": "[LINKKEY=WORD_EXHAUST] target FOOD",
+   "zh": "[LINKKEY=WORD_EXHAUST]目标食物",
+   "slots": [],
+   "refs": [
+    "WORD_EXHAUST"
+   ],
+   "joiners": [],
+   "targets": [],
+   "mods": [],
+   "others": []
+  },
+  {
+   "key": "INTENT_EAT_FOOD",
+   "op": "EAT_FOOD",
+   "en": "[LINKKEY=WORD_EAT] target FOOD",
+   "zh": "[LINKKEY=WORD_EAT]目标食物",
+   "slots": [],
+   "refs": [
+    "WORD_EAT"
+   ],
+   "joiners": [],
+   "targets": [],
+   "mods": [],
+   "others": []
+  },
+  {
+   "key": "INTENT_EAT_FOOD_AND_ABSORB_DAMAGE",
+   "op": "EAT_FOOD_AND_ABSORB_DAMAGE",
+   "en": "[LINKKEY=WORD_EAT] target FOOD and [LINKKEY=WORD_SWALLOW] any damage",
+   "zh": "[LINKKEY=WORD_EAT]目标食物并[LINKKEY=WORD_SWALLOW]一切伤害",
+   "slots": [],
+   "refs": [
+    "WORD_EAT",
+    "WORD_SWALLOW"
+   ],
+   "joiners": [],
+   "targets": [],
+   "mods": [],
+   "others": []
+  },
+  {
+   "key": "INTENT_EAT_FOOD_AND_STORE_PROTEIN",
+   "op": "EAT_FOOD_AND_STORE_PROTEIN",
+   "en": "[LINKKEY=WORD_EAT] target FOOD and [LINKKEY=WORD_STORE_PROTEIN]",
+   "zh": "[LINKKEY=WORD_EAT]目标食物并[LINKKEY=WORD_STORE_PROTEIN]",
+   "slots": [],
+   "refs": [
+    "WORD_EAT",
+    "WORD_STORE_PROTEIN"
+   ],
+   "joiners": [],
+   "targets": [],
+   "mods": [],
+   "others": []
+  },
+  {
+   "key": "INTENT_USE_BATTERY",
+   "op": "USE_BATTERY",
+   "en": "Uses [PNUM] [LINKKEY=PROPERTY_BATTERY]",
+   "zh": "使用 [PNUM] [LINKKEY=PROPERTY_BATTERY]",
+   "slots": [
+    "PNUM"
+   ],
+   "refs": [
+    "PROPERTY_BATTERY"
+   ],
+   "joiners": [],
+   "targets": [],
+   "mods": [],
+   "others": []
+  },
+  {
+   "key": "INTENT_DISCHARGE_ALL_BATTERY",
+   "op": "DISCHARGE_ALL_BATTERY",
+   "en": "[LINKKEY=WORD_DISCHARGE][MULTIPLICITY_CARD] for [PNUM]",
+   "zh": "[LINKKEY=WORD_DISCHARGE][MULTIPLICITY_CARD]以获得 [PNUM]",
+   "slots": [
+    "PNUM"
+   ],
+   "refs": [
+    "WORD_DISCHARGE"
+   ],
+   "joiners": [],
+   "targets": [
+    "CARD"
+   ],
+   "mods": [],
+   "others": []
+  },
+  {
+   "key": "INTENT_CREATE_PET_SINGLE",
+   "op": "CREATE_PET_SINGLE",
+   "en": "Create a pet on[MULTIPLICITY_ENEMY]",
+   "zh": "",
+   "slots": [],
+   "refs": [],
+   "joiners": [],
+   "targets": [
+    "ENEMY"
+   ],
+   "mods": [],
+   "others": []
+  },
+  {
+   "key": "INTENT_CREATE_PET_MULTI",
+   "op": "CREATE_PET_MULTI",
+   "en": "Create [PNUM] pets on[MULTIPLICITY_ENEMY]",
+   "zh": "",
+   "slots": [
+    "PNUM"
+   ],
+   "refs": [],
+   "joiners": [],
+   "targets": [
+    "ENEMY"
+   ],
+   "mods": [],
+   "others": []
+  },
+  {
+   "key": "INTENT_KILL",
+   "op": "KILL",
+   "en": "Kill[MULTIPLICITY_ENEMY]",
+   "zh": "杀死[MULTIPLICITY_ENEMY]",
+   "slots": [],
+   "refs": [],
+   "joiners": [],
+   "targets": [
+    "ENEMY"
+   ],
+   "mods": [],
+   "others": []
+  },
+  {
+   "key": "INTENT_EATEN_DAMAGE",
+   "op": "EATEN_DAMAGE",
+   "en": "[HEXCODE]Protein [PNUM]</color>",
+   "zh": "",
+   "slots": [
+    "PNUM"
+   ],
+   "refs": [],
+   "joiners": [],
+   "targets": [],
+   "mods": [],
+   "others": [
+    "HEXCODE"
+   ]
+  },
+  {
+   "key": "INTENT_LAY_EGGS",
+   "op": "LAY_EGGS",
+   "en": "[LINKKEY=WORD_LAY_A_SPIDER_EGG] in[MULTIPLICITY_ENEMY]. WILL SPAWN A [HEXCODE][CARD_NAME]</color> UPON DEATH",
+   "zh": "[MULTIPLICITY_ENEMY]具有[LINKKEY=WORD_LAY_A_SPIDER_EGG]。死亡时将会生成一个[HEXCODE][CARD_NAME]</color>",
+   "slots": [],
+   "refs": [
+    "WORD_LAY_A_SPIDER_EGG"
+   ],
+   "joiners": [],
+   "targets": [
+    "ENEMY"
+   ],
+   "mods": [],
+   "others": [
+    "HEXCODE",
+    "CARD_NAME"
+   ]
+  },
+  {
+   "key": "INTENT_CONFUSED_BRAWL",
+   "op": "CONFUSED_BRAWL",
+   "en": "Every enemy deals [PNUM] damage to itself for every stack of their confusion",
+   "zh": "每个敌人每有一层困惑，对自身造成 [PNUM] 点伤害",
+   "slots": [
+    "PNUM"
+   ],
+   "refs": [],
+   "joiners": [],
+   "targets": [],
+   "mods": [],
+   "others": []
+  },
+  {
+   "key": "INTENT_DRAIN",
+   "op": "DRAIN",
+   "en": "Reduce all numbers in your hand by [PNUM]% (Rounded Up)",
+   "zh": "使你手牌中的所有数值降低 [PNUM]%（向上取整）",
+   "slots": [
+    "PNUM"
+   ],
+   "refs": [],
+   "joiners": [],
+   "targets": [],
+   "mods": [],
+   "others": []
+  },
+  {
+   "key": "INTENT_MAKE_SACRIFICE",
+   "op": "MAKE_SACRIFICE",
+   "en": "Trigger all [LINKKEY=TRIGGER_IF_FATAL] triggers in your hand",
+   "zh": "触发手牌中所有[LINKKEY=TRIGGER_IF_FATAL]时触发的能力",
+   "slots": [],
+   "refs": [
+    "TRIGGER_IF_FATAL"
+   ],
+   "joiners": [],
+   "targets": [],
+   "mods": [],
+   "others": []
+  },
+  {
+   "key": "INTENT_TRIGGER_ENEMY_DEATH",
+   "op": "TRIGGER_ENEMY_DEATH",
+   "en": "Trigger all [LINKKEY=PROPERTY_EAGER] creatures in your hand",
+   "zh": "触发手牌中所有的[LINKKEY=PROPERTY_EAGER]生物",
+   "slots": [],
+   "refs": [
+    "PROPERTY_EAGER"
+   ],
+   "joiners": [],
+   "targets": [],
+   "mods": [],
+   "others": []
+  },
+  {
+   "key": "INTENT_CRIPPLE",
+   "op": "CRIPPLE",
+   "en": "[LINKKEY=WORD_CRIPPLE][MULTIPLICITY_ENEMY]",
+   "zh": "[MULTIPLICITY_ENEMY][LINKKEY=WORD_CRIPPLE]",
+   "slots": [],
+   "refs": [
+    "WORD_CRIPPLE"
+   ],
+   "joiners": [],
+   "targets": [
+    "ENEMY"
+   ],
+   "mods": [],
+   "others": []
+  },
+  {
+   "key": "INTENT_BECOME_LODGED",
+   "op": "BECOME_LODGED",
+   "en": "Become [LINKKEY=WORD_LODGED][JOINER=WORD_IN][MULTIPLICITY_ENEMY]",
+   "zh": "[JOINER=WORD_IN][MULTIPLICITY_ENEMY][LINKKEY=WORD_LODGED]",
+   "slots": [],
+   "refs": [
+    "WORD_LODGED"
+   ],
+   "joiners": [
+    "WORD_IN"
+   ],
+   "targets": [
+    "ENEMY"
+   ],
+   "mods": [],
+   "others": []
+  },
+  {
+   "key": "INTENT_RETURN_RANDOM_EXHAUSTED_CARD",
+   "op": "RETURN_RANDOM_EXHAUSTED_CARD",
+   "en": "RETURN [PNUM] EXHAUSTED CARD TO HAND[WHEN_USED]",
+   "zh": "将 [PNUM] 张已消耗的牌移回手牌[WHEN_USED]",
+   "slots": [
+    "PNUM"
+   ],
+   "refs": [],
+   "joiners": [],
+   "targets": [],
+   "mods": [],
+   "others": [
+    "WHEN_USED"
+   ]
+  },
+  {
+   "key": "INTENT_RETURN_RANDOM_EXHAUSTED_FOOD",
+   "op": "RETURN_RANDOM_EXHAUSTED_FOOD",
+   "en": "RETURN [PNUM] EXHAUSTED FOOD TO HAND[WHEN_USED]",
+   "zh": "将 [PNUM] 张已消耗的食物牌移回手牌[WHEN_USED]",
+   "slots": [
+    "PNUM"
+   ],
+   "refs": [],
+   "joiners": [],
+   "targets": [],
+   "mods": [],
+   "others": [
+    "WHEN_USED"
+   ]
+  },
+  {
+   "key": "INTENT_RETURN_RANDOM_EXHAUSTED_CREATURE",
+   "op": "RETURN_RANDOM_EXHAUSTED_CREATURE",
+   "en": "RETURN [PNUM] EXHAUSTED CREATURE TO HAND[WHEN_USED]",
+   "zh": "将 [PNUM] 张已消耗的生物牌移回手牌[WHEN_USED]",
+   "slots": [
+    "PNUM"
+   ],
+   "refs": [],
+   "joiners": [],
+   "targets": [],
+   "mods": [],
+   "others": [
+    "WHEN_USED"
+   ]
+  },
+  {
+   "key": "INTENT_APPLY_BLESSED",
+   "op": "APPLY_BLESSED",
+   "en": "Apply [PNUM] [LINKKEY=STATUS_BLESSED][JOINER=WORD_TO][MULTIPLICITY_ENEMY]",
+   "zh": "[JOINER=WORD_TO][MULTIPLICITY_ENEMY]施加 [PNUM][JNUM=WORD_QUANTIFIERB][LINKKEY=STATUS_BLESSED]",
+   "slots": [
+    "PNUM"
+   ],
+   "refs": [
+    "STATUS_BLESSED"
+   ],
+   "joiners": [
+    "WORD_TO"
+   ],
+   "targets": [
+    "ENEMY"
+   ],
+   "mods": [],
+   "others": []
+  },
+  {
+   "key": "INTENT_APPLY_VULNERABLE",
+   "op": "APPLY_VULNERABLE",
+   "en": "Add [PNUM] [LINKKEY=STATUS_VULNERABLE][JOINER=WORD_TO][MULTIPLICITY_ENEMY]",
+   "zh": "[JOINER=WORD_TO][MULTIPLICITY_ENEMY]施加 [PNUM][JNUM=WORD_QUANTIFIERB][LINKKEY=STATUS_VULNERABLE]",
+   "slots": [
+    "PNUM"
+   ],
+   "refs": [
+    "STATUS_VULNERABLE"
+   ],
+   "joiners": [
+    "WORD_TO"
+   ],
+   "targets": [
+    "ENEMY"
+   ],
+   "mods": [],
+   "others": []
+  },
+  {
+   "key": "INTENT_APPLY_HOT_SAUCED",
+   "op": "APPLY_HOT_SAUCED",
+   "en": "Slather [LINKKEY=STATUS_HOT_SAUCE][JOINER=WORD_ON][MULTIPLICITY_ENEMY]",
+   "zh": "将[LINKKEY=STATUS_HOT_SAUCE]涂抹[JOINER=WORD_ON][MULTIPLICITY_ENEMY]",
+   "slots": [],
+   "refs": [
+    "STATUS_HOT_SAUCE"
+   ],
+   "joiners": [
+    "WORD_ON"
+   ],
+   "targets": [
+    "ENEMY"
+   ],
+   "mods": [],
+   "others": []
+  },
+  {
+   "key": "INTENT_APPLY_SEASONED",
+   "op": "APPLY_SEASONED",
+   "en": "Sprinkle [LINKKEY=STATUS_SEASONED][JOINER=WORD_ON][MULTIPLICITY_ENEMY]",
+   "zh": "将[LINKKEY=STATUS_SEASONED]撒[JOINER=WORD_ON][MULTIPLICITY_ENEMY]",
+   "slots": [],
+   "refs": [
+    "STATUS_SEASONED"
+   ],
+   "joiners": [
+    "WORD_ON"
+   ],
+   "targets": [
+    "ENEMY"
+   ],
+   "mods": [],
+   "others": []
+  },
+  {
+   "key": "INTENT_APPLY_SPELL_WEAKNESS",
+   "op": "APPLY_SPELL_WEAKNESS",
+   "en": "Apply [PNUM] [LINKKEY=STATUS_SPELL_WEAKNESS][JOINER=WORD_TO][MULTIPLICITY_ENEMY]",
+   "zh": "[JOINER=WORD_TO][MULTIPLICITY_ENEMY]施加 [PNUM][JNUM=WORD_QUANTIFIERB][LINKKEY=STATUS_SPELL_WEAKNESS]",
+   "slots": [
+    "PNUM"
+   ],
+   "refs": [
+    "STATUS_SPELL_WEAKNESS"
+   ],
+   "joiners": [
+    "WORD_TO"
+   ],
+   "targets": [
+    "ENEMY"
+   ],
+   "mods": [],
+   "others": []
+  },
+  {
+   "key": "INTENT_APPLY_THORNS",
+   "op": "APPLY_THORNS",
+   "en": "Apply [PNUM] [LINKKEY=STATUS_THORNS][JOINER=WORD_TO][MULTIPLICITY_ENEMY]",
+   "zh": "[JOINER=WORD_TO][MULTIPLICITY_ENEMY]施加 [PNUM][JNUM=WORD_QUANTIFIERB][LINKKEY=STATUS_THORNS]",
+   "slots": [
+    "PNUM"
+   ],
+   "refs": [
+    "STATUS_THORNS"
+   ],
+   "joiners": [
+    "WORD_TO"
+   ],
+   "targets": [
+    "ENEMY"
+   ],
+   "mods": [],
+   "others": []
+  },
+  {
+   "key": "INTENT_APPLY_DECAY",
+   "op": "APPLY_DECAY",
+   "en": "Apply [PNUM] [LINKKEY=STATUS_DECAY][JOINER=WORD_TO][MULTIPLICITY_ENEMY]",
+   "zh": "[JOINER=WORD_TO][MULTIPLICITY_ENEMY]施加 [PNUM][JNUM=WORD_QUANTIFIERB][LINKKEY=STATUS_DECAY]",
+   "slots": [
+    "PNUM"
+   ],
+   "refs": [
+    "STATUS_DECAY"
+   ],
+   "joiners": [
+    "WORD_TO"
+   ],
+   "targets": [
+    "ENEMY"
+   ],
+   "mods": [],
+   "others": []
+  },
+  {
+   "key": "INTENT_APPLY_CONFUSE",
+   "op": "APPLY_CONFUSE",
+   "en": "Apply [PNUM] [LINKKEY=STATUS_CONFUSED][JOINER=WORD_TO][MULTIPLICITY_ENEMY]",
+   "zh": "[JOINER=WORD_TO][MULTIPLICITY_ENEMY]施加 [PNUM][JNUM=WORD_QUANTIFIERB][LINKKEY=STATUS_CONFUSED]",
+   "slots": [
+    "PNUM"
+   ],
+   "refs": [
+    "STATUS_CONFUSED"
+   ],
+   "joiners": [
+    "WORD_TO"
+   ],
+   "targets": [
+    "ENEMY"
+   ],
+   "mods": [],
+   "others": []
+  },
+  {
+   "key": "INTENT_APPLY_BRAINLESS",
+   "op": "APPLY_BRAINLESS",
+   "en": "Apply [PNUM] [LINKKEY=STATUS_BRAINLESS][JOINER=WORD_TO][MULTIPLICITY_ENEMY]",
+   "zh": "[JOINER=WORD_TO][MULTIPLICITY_ENEMY]施加 [PNUM][JNUM=WORD_QUANTIFIERB][LINKKEY=STATUS_BRAINLESS]",
+   "slots": [
+    "PNUM"
+   ],
+   "refs": [
+    "STATUS_BRAINLESS"
+   ],
+   "joiners": [
+    "WORD_TO"
+   ],
+   "targets": [
+    "ENEMY"
+   ],
+   "mods": [],
+   "others": []
+  },
+  {
+   "key": "INTENT_APPLY_STUNNED",
+   "op": "APPLY_STUNNED",
+   "en": "Apply [PNUM] [LINKKEY=STATUS_STUNNED][JOINER=WORD_TO][MULTIPLICITY_ENEMY]",
+   "zh": "[JOINER=WORD_TO][MULTIPLICITY_ENEMY]施加 [PNUM][JNUM=WORD_QUANTIFIERB][LINKKEY=STATUS_STUNNED]",
+   "slots": [
+    "PNUM"
+   ],
+   "refs": [
+    "STATUS_STUNNED"
+   ],
+   "joiners": [
+    "WORD_TO"
+   ],
+   "targets": [
+    "ENEMY"
+   ],
+   "mods": [],
+   "others": []
+  },
+  {
+   "key": "INTENT_APPLY_VIBRATING",
+   "op": "APPLY_VIBRATING",
+   "en": "Add [PNUM] [LINKKEY=STATUS_VIBRATING][JOINER=WORD_TO][MULTIPLICITY_ENEMY]",
+   "zh": "[JOINER=WORD_TO][MULTIPLICITY_ENEMY]添加 [PNUM][JNUM=WORD_QUANTIFIERB][LINKKEY=STATUS_VIBRATING]",
+   "slots": [
+    "PNUM"
+   ],
+   "refs": [
+    "STATUS_VIBRATING"
+   ],
+   "joiners": [
+    "WORD_TO"
+   ],
+   "targets": [
+    "ENEMY"
+   ],
+   "mods": [],
+   "others": []
+  },
+  {
+   "key": "INTENT_APPLY_STUDIED",
+   "op": "APPLY_STUDIED",
+   "en": "Add [PNUM] [LINKKEY=STATUS_STUDIED][JOINER=WORD_TO][MULTIPLICITY_ENEMY]",
+   "zh": "[JOINER=WORD_TO][MULTIPLICITY_ENEMY]添加 [PNUM][JNUM=WORD_QUANTIFIERB][LINKKEY=STATUS_STUDIED]",
+   "slots": [
+    "PNUM"
+   ],
+   "refs": [
+    "STATUS_STUDIED"
+   ],
+   "joiners": [
+    "WORD_TO"
+   ],
+   "targets": [
+    "ENEMY"
+   ],
+   "mods": [],
+   "others": []
+  },
+  {
+   "key": "INTENT_APPLY_NANO_LACED",
+   "op": "APPLY_NANO_LACED",
+   "en": "Add [PNUM] [LINKKEY=STATUS_NANO_LACED][JOINER=WORD_TO][MULTIPLICITY_ENEMY]",
+   "zh": "[JOINER=WORD_TO][MULTIPLICITY_ENEMY]添加 [PNUM][JNUM=WORD_QUANTIFIERB][LINKKEY=STATUS_NANO_LACED]",
+   "slots": [
+    "PNUM"
+   ],
+   "refs": [
+    "STATUS_NANO_LACED"
+   ],
+   "joiners": [
+    "WORD_TO"
+   ],
+   "targets": [
+    "ENEMY"
+   ],
+   "mods": [],
+   "others": []
+  },
+  {
+   "key": "INTENT_ENRAGE",
+   "op": "ENRAGE",
+   "en": "Apply [PNUM] [LINKKEY=STATUS_ENRAGED][JOINER=WORD_TO][MULTIPLICITY_ENEMY]",
+   "zh": "[JOINER=WORD_TO][MULTIPLICITY_ENEMY]施加 [PNUM][JNUM=WORD_QUANTIFIERB][LINKKEY=STATUS_ENRAGED]",
+   "slots": [
+    "PNUM"
+   ],
+   "refs": [
+    "STATUS_ENRAGED"
+   ],
+   "joiners": [
+    "WORD_TO"
+   ],
+   "targets": [
+    "ENEMY"
+   ],
+   "mods": [],
+   "others": []
+  },
+  {
+   "key": "INTENT_GAIN_ENERGY",
+   "op": "GAIN_ENERGY",
+   "en": "Gain [PNUM] energy[JOINER=WORD_FOR][MULTIPLICITY_ENEMY][MULTIPLY_MOD_1][MULTIPLY_MOD_2]",
+   "zh": "[MULTIPLICITY_ENEMY][MULTIPLY_MOD_1][MULTIPLY_MOD_2]获得 [PNUM] 点精力",
+   "slots": [
+    "PNUM"
+   ],
+   "refs": [],
+   "joiners": [
+    "WORD_FOR"
+   ],
+   "targets": [
+    "ENEMY"
+   ],
+   "mods": [
+    "MULTIPLY_MOD_1",
+    "MULTIPLY_MOD_2"
+   ],
+   "others": []
+  },
+  {
+   "key": "INTENT_GAIN_MAX_ENERGY",
+   "op": "GAIN_MAX_ENERGY",
+   "en": "[PNUM] MAX energy",
+   "zh": "[PNUM] 精力上限",
+   "slots": [
+    "PNUM"
+   ],
+   "refs": [],
+   "joiners": [],
+   "targets": [],
+   "mods": [],
+   "others": []
+  },
+  {
+   "key": "INTENT_WARM_PLAYER",
+   "op": "WARM_PLAYER",
+   "en": "Gain [PNUM] Warmth",
+   "zh": "获得 [PNUM] 点温暖",
+   "slots": [
+    "PNUM"
+   ],
+   "refs": [],
+   "joiners": [],
+   "targets": [],
+   "mods": [],
+   "others": []
+  },
+  {
+   "key": "INTENT_INCREASE_MAX_HEALTH",
+   "op": "INCREASE_MAX_HEALTH",
+   "en": "[PNUM][EXTRA_HEAL] Max HP",
+   "zh": "[PNUM][EXTRA_HEAL] 生命值上限",
+   "slots": [
+    "PNUM",
+    "EXTRA_HEAL"
+   ],
+   "refs": [],
+   "joiners": [],
+   "targets": [],
+   "mods": [],
+   "others": []
+  },
+  {
+   "key": "INTENT_INCREASE_CONFUSION",
+   "op": "INCREASE_CONFUSION",
+   "en": "[PNUM] [LINKKEY=STATUS_CONFUSED][JOINER=WORD_TO][MULTIPLICITY_ENEMY]",
+   "zh": "[JOINER=WORD_FOR][MULTIPLICITY_ENEMY] [PNUM] [LINKKEY=STATUS_CONFUSED]",
+   "slots": [
+    "PNUM"
+   ],
+   "refs": [
+    "STATUS_CONFUSED"
+   ],
+   "joiners": [
+    "WORD_TO"
+   ],
+   "targets": [
+    "ENEMY"
+   ],
+   "mods": [],
+   "others": []
+  },
+  {
+   "key": "INTENT_MULTIPLY_DAMAGE",
+   "op": "MULTIPLY_DAMAGE",
+   "en": "Multiply damage[JOINER=WORD_ON][MULTIPLICITY_CARD] by [PNUM]",
+   "zh": "[JOINER=WORD_FOR][MULTIPLICITY_CARD]伤害x[PNUM]",
+   "slots": [
+    "PNUM"
+   ],
+   "refs": [],
+   "joiners": [
+    "WORD_ON"
+   ],
+   "targets": [
+    "CARD"
+   ],
+   "mods": [],
+   "others": []
+  },
+  {
+   "key": "INTENT_INCREASE_HEALING",
+   "op": "INCREASE_HEALING",
+   "en": "[PNUM] healing[JOINER=WORD_ON][MULTIPLICITY_CARD]",
+   "zh": "[JOINER=WORD_FOR][MULTIPLICITY_CARD]治疗 [PNUM]",
+   "slots": [
+    "PNUM"
+   ],
+   "refs": [],
+   "joiners": [
+    "WORD_ON"
+   ],
+   "targets": [
+    "CARD"
+   ],
+   "mods": [],
+   "others": []
+  },
+  {
+   "key": "INTENT_INCREASE_USES",
+   "op": "INCREASE_USES",
+   "en": "Add [PNUM] uses[JOINER=WORD_ON][MULTIPLICITY_CARD]",
+   "zh": "[JOINER=WORD_FOR][MULTIPLICITY_CARD]增加 [PNUM] 使用次数",
+   "slots": [
+    "PNUM"
+   ],
+   "refs": [],
+   "joiners": [
+    "WORD_ON"
+   ],
+   "targets": [
+    "CARD"
+   ],
+   "mods": [],
+   "others": []
+  },
+  {
+   "key": "INTENT_RESET_HEALING",
+   "op": "RESET_HEALING",
+   "en": "Reset healing[JOINER=WORD_ON][MULTIPLICITY_CARD]",
+   "zh": "重置[MULTIPLICITY_CARD]治疗",
+   "slots": [],
+   "refs": [],
+   "joiners": [
+    "WORD_ON"
+   ],
+   "targets": [
+    "CARD"
+   ],
+   "mods": [],
+   "others": []
+  },
+  {
+   "key": "INTENT_INCREASE_RAGE",
+   "op": "INCREASE_RAGE",
+   "en": "[PNUM] [LINKKEY=PROPERTY_RAGE][JOINER=WORD_ON][MULTIPLICITY_CARD]",
+   "zh": "[JOINER=WORD_FOR][MULTIPLICITY_CARD] [LINKKEY=PROPERTY_RAGE][PNUM]",
+   "slots": [
+    "PNUM"
+   ],
+   "refs": [
+    "PROPERTY_RAGE"
+   ],
+   "joiners": [
+    "WORD_ON"
+   ],
+   "targets": [
+    "CARD"
+   ],
+   "mods": [],
+   "others": []
+  },
+  {
+   "key": "INTENT_INCREASE_DAMAGE",
+   "op": "INCREASE_DAMAGE",
+   "en": "[PNUM] damage[JOINER=WORD_ON][MULTIPLICITY_CARD][MULTIPLY_MOD_1][MULTIPLY_MOD_2]",
+   "zh": "[MULTIPLY_MOD_1][MULTIPLY_MOD_2]令[MULTIPLICITY_CARD]伤害 [PNUM]",
+   "slots": [
+    "PNUM"
+   ],
+   "refs": [],
+   "joiners": [
+    "WORD_ON"
+   ],
+   "targets": [
+    "CARD"
+   ],
+   "mods": [
+    "MULTIPLY_MOD_1",
+    "MULTIPLY_MOD_2"
+   ],
+   "others": []
+  },
+  {
+   "key": "INTENT_RESET_DAMAGE",
+   "op": "RESET_DAMAGE",
+   "en": "Reset damage[JOINER=WORD_ON][MULTIPLICITY_CARD][MULTIPLY_MOD_1][MULTIPLY_MOD_2]",
+   "zh": "[MULTIPLY_MOD_1][MULTIPLY_MOD_2]重置[MULTIPLICITY_CARD]伤害",
+   "slots": [],
+   "refs": [],
+   "joiners": [
+    "WORD_ON"
+   ],
+   "targets": [
+    "CARD"
+   ],
+   "mods": [
+    "MULTIPLY_MOD_1",
+    "MULTIPLY_MOD_2"
+   ],
+   "others": []
+  },
+  {
+   "key": "INTENT_INCREASE_GLOOM_STORED",
+   "op": "INCREASE_GLOOM_STORED",
+   "en": "Store [PNUM] gloom[JOINER=WORD_ON][MULTIPLICITY_CARD][MULTIPLY_MOD_1][MULTIPLY_MOD_2]",
+   "zh": "[MULTIPLY_MOD_1][MULTIPLY_MOD_2]存储 [PNUM] 点幽暗[JOINER=WORD_ON][MULTIPLICITY_CARD]",
+   "slots": [
+    "PNUM"
+   ],
+   "refs": [],
+   "joiners": [
+    "WORD_ON"
+   ],
+   "targets": [
+    "CARD"
+   ],
+   "mods": [
+    "MULTIPLY_MOD_1",
+    "MULTIPLY_MOD_2"
+   ],
+   "others": []
+  },
+  {
+   "key": "INTENT_DEAL_DAMAGE_NEG",
+   "op": "DEAL_DAMAGE_NEG",
+   "en": "Heal [PNUM][EXTRA_DAMAGE][JOINER=WORD_TO][MULTIPLICITY_ENEMY][MULTIPLY_MOD_1][MULTIPLY_MOD_2]",
+   "zh": "[MULTIPLY_MOD_1][MULTIPLY_MOD_2][JOINER=WORD_TO][MULTIPLICITY_ENEMY]治疗 [PNUM][EXTRA_DAMAGE] 点",
+   "slots": [
+    "PNUM",
+    "EXTRA_DAMAGE"
+   ],
+   "refs": [],
+   "joiners": [
+    "WORD_TO"
+   ],
+   "targets": [
+    "ENEMY"
+   ],
+   "mods": [
+    "MULTIPLY_MOD_1",
+    "MULTIPLY_MOD_2"
+   ],
+   "others": []
+  },
+  {
+   "key": "INTENT_DEAL_DAMAGE_POS",
+   "op": "DEAL_DAMAGE_POS",
+   "en": "Deal [PNUM][EXTRA_DAMAGE]  [LINKKEY=WORD_DAMAGE][JOINER=WORD_TO][MULTIPLICITY_ENEMY][MULTIPLY_MOD_1][MULTIPLY_MOD_2]",
+   "zh": "[JOINER=WORD_TO][MULTIPLICITY_ENEMY][MULTIPLY_MOD_1][MULTIPLY_MOD_2]造成 [PNUM][EXTRA_DAMAGE] 点[LINKKEY=WORD_DAMAGE]",
+   "slots": [
+    "PNUM",
+    "EXTRA_DAMAGE"
+   ],
+   "refs": [
+    "WORD_DAMAGE"
+   ],
+   "joiners": [
+    "WORD_TO"
+   ],
+   "targets": [
+    "ENEMY"
+   ],
+   "mods": [
+    "MULTIPLY_MOD_1",
+    "MULTIPLY_MOD_2"
+   ],
+   "others": []
+  },
+  {
+   "key": "INTENT_DEAL_HALF_HEALTH_IN_DAMAGE",
+   "op": "DEAL_HALF_HEALTH_IN_DAMAGE",
+   "en": "Deal 50% of your health in damage",
+   "zh": "造成你生命值50%的伤害",
+   "slots": [],
+   "refs": [],
+   "joiners": [],
+   "targets": [],
+   "mods": [],
+   "others": []
+  },
+  {
+   "key": "INTENT_HEAL_SELF_POS",
+   "op": "HEAL_SELF_POS",
+   "en": "Heal [PNUM][EXTRA_HEAL][MULTIPLY_MOD_1][MULTIPLY_MOD_2]",
+   "zh": "[MULTIPLY_MOD_1][MULTIPLY_MOD_2]治疗 [PNUM][EXTRA_HEAL] 点",
+   "slots": [
+    "PNUM",
+    "EXTRA_HEAL"
+   ],
+   "refs": [],
+   "joiners": [],
+   "targets": [],
+   "mods": [
+    "MULTIPLY_MOD_1",
+    "MULTIPLY_MOD_2"
+   ],
+   "others": []
+  },
+  {
+   "key": "INTENT_HEAL_SELF_NEG",
+   "op": "HEAL_SELF_NEG",
+   "en": "Heal -[PNUM][EXTRA_HEAL] [MULTIPLY_MOD_1][MULTIPLY_MOD_2]",
+   "zh": "[MULTIPLY_MOD_1][MULTIPLY_MOD_2]治疗 -[PNUM][EXTRA_HEAL] 点",
+   "slots": [
+    "PNUM",
+    "EXTRA_HEAL"
+   ],
+   "refs": [],
+   "joiners": [],
+   "targets": [],
+   "mods": [
+    "MULTIPLY_MOD_1",
+    "MULTIPLY_MOD_2"
+   ],
+   "others": []
+  },
+  {
+   "key": "INTENT_DAMAGE_SELF",
+   "op": "DAMAGE_SELF",
+   "en": "Take [PNUM] damage[MULTIPLY_MOD_1][MULTIPLY_MOD_2]",
+   "zh": "[MULTIPLY_MOD_1][MULTIPLY_MOD_2]受到 [PNUM] 点伤害",
+   "slots": [
+    "PNUM"
+   ],
+   "refs": [],
+   "joiners": [],
+   "targets": [],
+   "mods": [
+    "MULTIPLY_MOD_1",
+    "MULTIPLY_MOD_2"
+   ],
+   "others": []
+  },
+  {
+   "key": "INTENT_DRAW_CARDS_EFFECT_SINGLE",
+   "op": "DRAW_CARDS_EFFECT_SINGLE",
+   "en": "Draw [PNUM] card",
+   "zh": "抽 [PNUM] 张牌",
+   "slots": [
+    "PNUM"
+   ],
+   "refs": [],
+   "joiners": [],
+   "targets": [],
+   "mods": [],
+   "others": []
+  },
+  {
+   "key": "INTENT_DRAW_CARDS_EFFECT_MULTI",
+   "op": "DRAW_CARDS_EFFECT_MULTI",
+   "en": "Draw [PNUM] cards",
+   "zh": "抽 [PNUM] 张牌",
+   "slots": [
+    "PNUM"
+   ],
+   "refs": [],
+   "joiners": [],
+   "targets": [],
+   "mods": [],
+   "others": []
+  },
+  {
+   "key": "INTENT_INCREASE_GUNK",
+   "op": "INCREASE_GUNK",
+   "en": "Add [PNUM] [LINKKEY=PROPERTY_GUNK][JOINER=WORD_TO][MULTIPLICITY_CARD]",
+   "zh": "[JOINER=WORD_TO][MULTIPLICITY_CARD]添加 [PNUM] 层[LINKKEY=PROPERTY_GUNK]",
+   "slots": [
+    "PNUM"
+   ],
+   "refs": [
+    "PROPERTY_GUNK"
+   ],
+   "joiners": [
+    "WORD_TO"
+   ],
+   "targets": [
+    "CARD"
+   ],
+   "mods": [],
+   "others": []
+  },
+  {
+   "key": "INTENT_INCREASE_BATTERY",
+   "op": "INCREASE_BATTERY",
+   "en": "Increase [LINKKEY=PROPERTY_BATTERY][JOINER=WORD_ON][MULTIPLICITY_CARD] by [PNUM]",
+   "zh": "[MULTIPLICITY_CARD]提升 [PNUM] 点[LINKKEY=PROPERTY_BATTERY]",
+   "slots": [
+    "PNUM"
+   ],
+   "refs": [
+    "PROPERTY_BATTERY"
+   ],
+   "joiners": [
+    "WORD_ON"
+   ],
+   "targets": [
+    "CARD"
+   ],
+   "mods": [],
+   "others": []
+  },
+  {
+   "key": "INTENT_INCREASE_WARMTH",
+   "op": "INCREASE_WARMTH",
+   "en": "Increase [LINKKEY=PROPERTY_WARMTH][JOINER=WORD_ON][MULTIPLICITY_CARD] by [PNUM]",
+   "zh": "[MULTIPLICITY_CARD]提升 [PNUM] 点[LINKKEY=PROPERTY_WARMTH]",
+   "slots": [
+    "PNUM"
+   ],
+   "refs": [
+    "PROPERTY_WARMTH"
+   ],
+   "joiners": [
+    "WORD_ON"
+   ],
+   "targets": [
+    "CARD"
+   ],
+   "mods": [],
+   "others": []
+  },
+  {
+   "key": "INTENT_STORE_GLOOM",
+   "op": "STORE_GLOOM",
+   "en": "Store [PNUM] [LINKKEY=PROPERTY_STORED_GLOOM][JOINER=WORD_ON][MULTIPLICITY_CARD]",
+   "zh": "存储 [PNUM] 点已揭示的[LINKKEY=PROPERTY_STORED_GLOOM][JOINER=WORD_ON][MULTIPLICITY_CARD]",
+   "slots": [
+    "PNUM"
+   ],
+   "refs": [
+    "PROPERTY_STORED_GLOOM"
+   ],
+   "joiners": [
+    "WORD_ON"
+   ],
+   "targets": [
+    "CARD"
+   ],
+   "mods": [],
+   "others": []
+  },
+  {
+   "key": "INTENT_CREATE_GLOOM",
+   "op": "CREATE_GLOOM",
+   "en": "Summon Glooms X [PNUM]",
+   "zh": "召唤幽暗 X [PNUM]",
+   "slots": [
+    "PNUM"
+   ],
+   "refs": [],
+   "joiners": [],
+   "targets": [],
+   "mods": [],
+   "others": []
+  },
+  {
+   "key": "INTENT_STORE_GUNK",
+   "op": "STORE_GUNK",
+   "en": "Store [PNUM] [LINKKEY=PROPERTY_GUNK][JOINER=WORD_OFF][MULTIPLICITY_CARD]",
+   "zh": "",
+   "slots": [
+    "PNUM"
+   ],
+   "refs": [
+    "PROPERTY_GUNK"
+   ],
+   "joiners": [
+    "WORD_OFF"
+   ],
+   "targets": [
+    "CARD"
+   ],
+   "mods": [],
+   "others": []
+  },
+  {
+   "key": "INTENT_CONSUME_GUNK",
+   "op": "CONSUME_GUNK",
+   "en": "[LINKKEY=WORD_CLEAN] [PNUM]",
+   "zh": "[JOINER=WORD_OFF][MULTIPLICITY_CARD]清洁 [PNUM] 层[LINKKEY=PROPERTY_GUNK]",
+   "slots": [
+    "PNUM"
+   ],
+   "refs": [
+    "WORD_CLEAN"
+   ],
+   "joiners": [],
+   "targets": [],
+   "mods": [],
+   "others": []
+  },
+  {
+   "key": "INTENT_CONSUME_ALL_GUNK",
+   "op": "CONSUME_ALL_GUNK",
+   "en": "Clean all [LINKKEY=PROPERTY_GUNK][JOINER=WORD_ON][MULTIPLICITY_CARD]",
+   "zh": "[JOINER=WORD_OFF][MULTIPLICITY_CARD]清洁所有[LINKKEY=PROPERTY_GUNK]",
+   "slots": [],
+   "refs": [
+    "PROPERTY_GUNK"
+   ],
+   "joiners": [
+    "WORD_ON"
+   ],
+   "targets": [
+    "CARD"
+   ],
+   "mods": [],
+   "others": []
+  },
+  {
+   "key": "INTENT_COLLECT_ALL_GUNK",
+   "op": "COLLECT_ALL_GUNK",
+   "en": "Collect 100% of [LINKKEY=PROPERTY_GUNK][JOINER=WORD_ON][MULTIPLICITY_CARD]",
+   "zh": "收集[MULTIPLICITY_CARD] 100% 的[LINKKEY=PROPERTY_GUNK]",
+   "slots": [],
+   "refs": [
+    "PROPERTY_GUNK"
+   ],
+   "joiners": [
+    "WORD_ON"
+   ],
+   "targets": [
+    "CARD"
+   ],
+   "mods": [],
+   "others": []
+  },
+  {
+   "key": "INTENT_COLLECT_ALL_GUNK_AND_HEAL",
+   "op": "COLLECT_ALL_GUNK_AND_HEAL",
+   "en": "Collect 100% of [LINKKEY=PROPERTY_GUNK][JOINER=WORD_ON][MULTIPLICITY_CARD] and heal [PNUM] X the Collected amount",
+   "zh": "收集[MULTIPLICITY_CARD] 100% 的[LINKKEY=PROPERTY_GUNK]，并治疗收集量 [PNUM] 倍的生命值",
+   "slots": [
+    "PNUM"
+   ],
+   "refs": [
+    "PROPERTY_GUNK"
+   ],
+   "joiners": [
+    "WORD_ON"
+   ],
+   "targets": [
+    "CARD"
+   ],
+   "mods": [],
+   "others": []
+  },
+  {
+   "key": "INTENT_INCREASE_STORED_GUNK",
+   "op": "INCREASE_STORED_GUNK",
+   "en": "[LINKKEY=WORD_STORE] [PNUM] [LINKKEY=PROPERTY_GUNK]",
+   "zh": "",
+   "slots": [
+    "PNUM"
+   ],
+   "refs": [
+    "WORD_STORE",
+    "PROPERTY_GUNK"
+   ],
+   "joiners": [],
+   "targets": [],
+   "mods": [],
+   "others": []
+  },
+  {
+   "key": "INTENT_MOVE_GUNK",
+   "op": "MOVE_GUNK",
+   "en": "Move [PNUM] [LINKKEY=PROPERTY_GUNK] to random card",
+   "zh": "将 [PNUM] [LINKKEY=PROPERTY_GUNK]移动至一张随机牌",
+   "slots": [
+    "PNUM"
+   ],
+   "refs": [
+    "PROPERTY_GUNK"
+   ],
+   "joiners": [],
+   "targets": [],
+   "mods": [],
+   "others": []
+  },
+  {
+   "key": "INTENT_USE_STORED_GUNK",
+   "op": "USE_STORED_GUNK",
+   "en": "Uses [PNUM] [LINKKEY=WORD_STORED_GUNK]",
+   "zh": "",
+   "slots": [
+    "PNUM"
+   ],
+   "refs": [
+    "WORD_STORED_GUNK"
+   ],
+   "joiners": [],
+   "targets": [],
+   "mods": [],
+   "others": []
+  },
+  {
+   "key": "INTENT_DRAW_DAMAGE_CARD_SINGLE",
+   "op": "DRAW_DAMAGE_CARD_SINGLE",
+   "en": "Draw [PNUM] damage card",
+   "zh": "抽取 [PNUM][JNUM=WORD_QUANTIFIERA]伤害牌",
+   "slots": [
+    "PNUM"
+   ],
+   "refs": [],
+   "joiners": [],
+   "targets": [],
+   "mods": [],
+   "others": []
+  },
+  {
+   "key": "INTENT_DRAW_DAMAGE_CARD_MULTI",
+   "op": "DRAW_DAMAGE_CARD_MULTI",
+   "en": "Draw [PNUM] damage cards",
+   "zh": "抽取 [PNUM][JNUM=WORD_QUANTIFIERA]伤害牌",
+   "slots": [
+    "PNUM"
+   ],
+   "refs": [],
+   "joiners": [],
+   "targets": [],
+   "mods": [],
+   "others": []
+  },
+  {
+   "key": "INTENT_DRAW_CONFUSION_CARD_SINGLE",
+   "op": "DRAW_CONFUSION_CARD_SINGLE",
+   "en": "Draw [PNUM] [LINKKEY=STATUS_CONFUSED] card",
+   "zh": "抽取 [PNUM][JNUM=WORD_QUANTIFIERA][LINKKEY=STATUS_CONFUSED]牌",
+   "slots": [
+    "PNUM"
+   ],
+   "refs": [
+    "STATUS_CONFUSED"
+   ],
+   "joiners": [],
+   "targets": [],
+   "mods": [],
+   "others": []
+  },
+  {
+   "key": "INTENT_DRAW_CONFUSION_CARD_MULTI",
+   "op": "DRAW_CONFUSION_CARD_MULTI",
+   "en": "Draw [PNUM] [LINKKEY=STATUS_CONFUSED] cards",
+   "zh": "抽取 [PNUM][JNUM=WORD_QUANTIFIERA][LINKKEY=STATUS_CONFUSED]牌",
+   "slots": [
+    "PNUM"
+   ],
+   "refs": [
+    "STATUS_CONFUSED"
+   ],
+   "joiners": [],
+   "targets": [],
+   "mods": [],
+   "others": []
+  },
+  {
+   "key": "INTENT_DRAW_MACHINE_CARD_SINGLE",
+   "op": "DRAW_MACHINE_CARD_SINGLE",
+   "en": "Draw [PNUM] [LINKKEY=CLASS_MACHINE] card",
+   "zh": "抽取 [PNUM][JNUM=WORD_QUANTIFIERA][LINKKEY=CLASS_MACHINE]牌",
+   "slots": [
+    "PNUM"
+   ],
+   "refs": [
+    "CLASS_MACHINE"
+   ],
+   "joiners": [],
+   "targets": [],
+   "mods": [],
+   "others": []
+  },
+  {
+   "key": "INTENT_DRAW_MACHINE_CARD_MULTI",
+   "op": "DRAW_MACHINE_CARD_MULTI",
+   "en": "Draw [PNUM] [LINKKEY=CLASS_MACHINE] cards",
+   "zh": "抽取 [PNUM][JNUM=WORD_QUANTIFIERA][LINKKEY=CLASS_MACHINE]牌",
+   "slots": [
+    "PNUM"
+   ],
+   "refs": [
+    "CLASS_MACHINE"
+   ],
+   "joiners": [],
+   "targets": [],
+   "mods": [],
+   "others": []
+  },
+  {
+   "key": "INTENT_DRAW_RAGE_CARD_SINGLE",
+   "op": "DRAW_RAGE_CARD_SINGLE",
+   "en": "Draw [PNUM] card with [LINKKEY=PROPERTY_RAGE][WHEN_USED]",
+   "zh": "抽取 [PNUM][JNUM=WORD_QUANTIFIERA]具有[WHEN_USED][LINKKEY=PROPERTY_RAGE]的牌",
+   "slots": [
+    "PNUM"
+   ],
+   "refs": [
+    "PROPERTY_RAGE"
+   ],
+   "joiners": [],
+   "targets": [],
+   "mods": [],
+   "others": [
+    "WHEN_USED"
+   ]
+  },
+  {
+   "key": "INTENT_DRAW_RAGE_CARD_MULTI",
+   "op": "DRAW_RAGE_CARD_MULTI",
+   "en": "Draw [PNUM] cards with [LINKKEY=PROPERTY_RAGE][WHEN_USED]",
+   "zh": "抽取 [PNUM][JNUM=WORD_QUANTIFIERA]具有[WHEN_USED][LINKKEY=PROPERTY_RAGE]的牌",
+   "slots": [
+    "PNUM"
+   ],
+   "refs": [
+    "PROPERTY_RAGE"
+   ],
+   "joiners": [],
+   "targets": [],
+   "mods": [],
+   "others": [
+    "WHEN_USED"
+   ]
+  },
+  {
+   "key": "INTENT_DRAW_FOOD_CARD_SINGLE",
+   "op": "DRAW_FOOD_CARD_SINGLE",
+   "en": "Draw [PNUM] Food",
+   "zh": "抽取 [PNUM][JNUM=WORD_QUANTIFIERA]食物牌",
+   "slots": [
+    "PNUM"
+   ],
+   "refs": [],
+   "joiners": [],
+   "targets": [],
+   "mods": [],
+   "others": []
+  },
+  {
+   "key": "INTENT_DRAW_FOOD_CARD_MULTI",
+   "op": "DRAW_FOOD_CARD_MULTI",
+   "en": "Draw [PNUM] Foods",
+   "zh": "抽取 [PNUM][JNUM=WORD_QUANTIFIERA]食物牌",
+   "slots": [
+    "PNUM"
+   ],
+   "refs": [],
+   "joiners": [],
+   "targets": [],
+   "mods": [],
+   "others": []
+  },
+  {
+   "key": "INTENT_DRAW_STORE_GUNK_CARD_SINGLE",
+   "op": "DRAW_STORE_GUNK_CARD_SINGLE",
+   "en": "Draw a card that stores gunk",
+   "zh": "",
+   "slots": [],
+   "refs": [],
+   "joiners": [],
+   "targets": [],
+   "mods": [],
+   "others": []
+  },
+  {
+   "key": "INTENT_DRAW_STORE_GUNK_CARD_MULTI",
+   "op": "DRAW_STORE_GUNK_CARD_MULTI",
+   "en": "Draw [PNUM] cards that store gunk",
+   "zh": "",
+   "slots": [
+    "PNUM"
+   ],
+   "refs": [],
+   "joiners": [],
+   "targets": [],
+   "mods": [],
+   "others": []
+  },
+  {
+   "key": "INTENT_DISCARD_AND_SHUFFLE_AND_REDRAW_SINGLE",
+   "op": "DISCARD_AND_SHUFFLE_AND_REDRAW_SINGLE",
+   "en": "Discard hand. Shuffle deck. Draw [PNUM] card[WHEN_USED]",
+   "zh": "弃置所有手牌。混洗套牌。抽 [PNUM] 张牌[WHEN_USED]",
+   "slots": [
+    "PNUM"
+   ],
+   "refs": [],
+   "joiners": [],
+   "targets": [],
+   "mods": [],
+   "others": [
+    "WHEN_USED"
+   ]
+  },
+  {
+   "key": "INTENT_DISCARD_AND_SHUFFLE_AND_REDRAW_MULTI",
+   "op": "DISCARD_AND_SHUFFLE_AND_REDRAW_MULTI",
+   "en": "Discard hand. Shuffle deck. Draw [PNUM] cards[WHEN_USED]",
+   "zh": "弃置所有手牌。混洗套牌。抽 [PNUM] 张牌[WHEN_USED]",
+   "slots": [
+    "PNUM"
+   ],
+   "refs": [],
+   "joiners": [],
+   "targets": [],
+   "mods": [],
+   "others": [
+    "WHEN_USED"
+   ]
+  },
+  {
+   "key": "INTENT_TAUNT",
+   "op": "TAUNT",
+   "en": "Taunt[MULTIPLICITY_ENEMY] for [PNUM]",
+   "zh": "对[MULTIPLICITY_ENEMY]施加 [PNUM] 层嘲讽",
+   "slots": [
+    "PNUM"
+   ],
+   "refs": [],
+   "joiners": [],
+   "targets": [
+    "ENEMY"
+   ],
+   "mods": [],
+   "others": []
+  },
+  {
+   "key": "INTENT_MULTIPLY_CONFUSION",
+   "op": "MULTIPLY_CONFUSION",
+   "en": "Cause X[PNUM] [LINKKEY=STATUS_CONFUSED][JOINER=WORD_IN][MULTIPLICITY_ENEMY]",
+   "zh": "[JOINER=WORD_IN][MULTIPLICITY_ENEMY]造成 X[PNUM] [LINKKEY=STATUS_CONFUSED]",
+   "slots": [
+    "PNUM"
+   ],
+   "refs": [
+    "STATUS_CONFUSED"
+   ],
+   "joiners": [
+    "WORD_IN"
+   ],
+   "targets": [
+    "ENEMY"
+   ],
+   "mods": [],
+   "others": []
+  },
+  {
+   "key": "INTENT_APPLY_INFESTED",
+   "op": "APPLY_INFESTED",
+   "en": "Apply [PNUM] [LINKKEY=STATUS_INFEST][JOINER=WORD_IN][MULTIPLICITY_ENEMY]",
+   "zh": "",
+   "slots": [
+    "PNUM"
+   ],
+   "refs": [
+    "STATUS_INFEST"
+   ],
+   "joiners": [
+    "WORD_IN"
+   ],
+   "targets": [
+    "ENEMY"
+   ],
+   "mods": [],
+   "others": []
+  },
+  {
+   "key": "INTENT_APPLY_CHARGED",
+   "op": "APPLY_CHARGED",
+   "en": "Apply x[PNUM] [LINKKEY=STATUS_CHARGED][JOINER=WORD_TO][MULTIPLICITY_ENEMY]",
+   "zh": "[JOINER=WORD_TO][MULTIPLICITY_ENEMY]施加 x[PNUM] [LINKKEY=STATUS_CHARGED]",
+   "slots": [
+    "PNUM"
+   ],
+   "refs": [
+    "STATUS_CHARGED"
+   ],
+   "joiners": [
+    "WORD_TO"
+   ],
+   "targets": [
+    "ENEMY"
+   ],
+   "mods": [],
+   "others": []
+  },
+  {
+   "key": "INTENT_DRAW_CARD_NEXT_TURN_SINGLE",
+   "op": "DRAW_CARD_NEXT_TURN_SINGLE",
+   "en": "Draw [PNUM] extra card next turn",
+   "zh": "下一回合额外抽 [PNUM] 张牌",
+   "slots": [
+    "PNUM"
+   ],
+   "refs": [],
+   "joiners": [],
+   "targets": [],
+   "mods": [],
+   "others": []
+  },
+  {
+   "key": "INTENT_DRAW_CARD_NEXT_TURN_MULTI",
+   "op": "DRAW_CARD_NEXT_TURN_MULTI",
+   "en": "Draw [PNUM] extra cards next turn",
+   "zh": "下一回合额外抽 [PNUM] 张牌",
+   "slots": [
+    "PNUM"
+   ],
+   "refs": [],
+   "joiners": [],
+   "targets": [],
+   "mods": [],
+   "others": []
+  },
+  {
+   "key": "INTENT_MAKE_ROASTIE",
+   "op": "MAKE_ROASTIE",
+   "en": "Make [HEXCODE][CARD_NAME]</color>",
+   "zh": "创造[HEXCODE][CARD_NAME]</color>",
+   "slots": [],
+   "refs": [],
+   "joiners": [],
+   "targets": [],
+   "mods": [],
+   "others": [
+    "HEXCODE",
+    "CARD_NAME"
+   ]
+  },
+  {
+   "key": "INTENT_GAIN_A_REROLL_SINGLE",
+   "op": "GAIN_A_REROLL_SINGLE",
+   "en": "Gain [PNUM] reroll",
+   "zh": "获得 [PNUM][JNUM=WORD_QUANTIFIERA]重选",
+   "slots": [
+    "PNUM"
+   ],
+   "refs": [],
+   "joiners": [],
+   "targets": [],
+   "mods": [],
+   "others": []
+  },
+  {
+   "key": "INTENT_GAIN_A_REROLL_MULTI",
+   "op": "GAIN_A_REROLL_MULTI",
+   "en": "Gain [PNUM] rerolls",
+   "zh": "获得 [PNUM][JNUM=WORD_QUANTIFIERA]重选",
+   "slots": [
+    "PNUM"
+   ],
+   "refs": [],
+   "joiners": [],
+   "targets": [],
+   "mods": [],
+   "others": []
+  },
+  {
+   "key": "INTENT_TRIGGER_TURRET",
+   "op": "TRIGGER_TURRET",
+   "en": "Trigger[MULTIPLICITY_CARD]",
+   "zh": "触发[MULTIPLICITY_CARD]",
+   "slots": [],
+   "refs": [],
+   "joiners": [],
+   "targets": [
+    "CARD"
+   ],
+   "mods": [],
+   "others": []
+  },
+  {
+   "key": "INTENT_REDUCE_COST",
+   "op": "REDUCE_COST",
+   "en": "Temporarily reduce cost[JOINER=WORD_ON][MULTIPLICITY_CARD] by [PNUM]",
+   "zh": "暂时使[MULTIPLICITY_CARD]费用降低 [PNUM] 点",
+   "slots": [
+    "PNUM"
+   ],
+   "refs": [],
+   "joiners": [
+    "WORD_ON"
+   ],
+   "targets": [
+    "CARD"
+   ],
+   "mods": [],
+   "others": []
+  },
+  {
+   "key": "INTENT_SET_COST_TO_ZERO",
+   "op": "SET_COST_TO_ZERO",
+   "en": "Temporarily set cost[JOINER=WORD_ON][MULTIPLICITY_CARD] to ZERO",
+   "zh": "暂时使[MULTIPLICITY_CARD]费用变为 0",
+   "slots": [],
+   "refs": [],
+   "joiners": [
+    "WORD_ON"
+   ],
+   "targets": [
+    "CARD"
+   ],
+   "mods": [],
+   "others": []
+  },
+  {
+   "key": "INTENT_REDUCE_COST_PERMANENTLY",
+   "op": "REDUCE_COST_PERMANENTLY",
+   "en": "Permanently reduce cost[JOINER=WORD_ON][MULTIPLICITY_CARD] by [PNUM]",
+   "zh": "永久使[MULTIPLICITY_CARD]费用降低 [PNUM] 点",
+   "slots": [
+    "PNUM"
+   ],
+   "refs": [],
+   "joiners": [
+    "WORD_ON"
+   ],
+   "targets": [
+    "CARD"
+   ],
+   "mods": [],
+   "others": []
+  },
+  {
+   "key": "INTENT_SET_COST_TO_ZERO_PERMANENTLY",
+   "op": "SET_COST_TO_ZERO_PERMANENTLY",
+   "en": "Permanently set cost[JOINER=WORD_ON][MULTIPLICITY_CARD] to Zero",
+   "zh": "永久使[MULTIPLICITY_CARD]费用变为 0",
+   "slots": [],
+   "refs": [],
+   "joiners": [
+    "WORD_ON"
+   ],
+   "targets": [
+    "CARD"
+   ],
+   "mods": [],
+   "others": []
+  },
+  {
+   "key": "INTENT_MAKE_A_TEMPORARY_COPY",
+   "op": "MAKE_A_TEMPORARY_COPY",
+   "en": "Make a [LINKKEY=PROPERTY_TEMPORARY] copy of target card",
+   "zh": "创造一张目标牌的[LINKKEY=PROPERTY_TEMPORARY]复制",
+   "slots": [],
+   "refs": [
+    "PROPERTY_TEMPORARY"
+   ],
+   "joiners": [],
+   "targets": [],
+   "mods": [],
+   "others": []
+  },
+  {
+   "key": "INTENT_MAKE_A_TEMPORARY_COPY_OF_CREATURE",
+   "op": "MAKE_A_TEMPORARY_COPY_OF_CREATURE",
+   "en": "Make a [LINKKEY=PROPERTY_TEMPORARY] copy of target [LINKKEY=CLASS_CREATURE]",
+   "zh": "创造一张目标[LINKKEY=CLASS_CREATURE]的[LINKKEY=PROPERTY_TEMPORARY]复制",
+   "slots": [],
+   "refs": [
+    "PROPERTY_TEMPORARY",
+    "CLASS_CREATURE"
+   ],
+   "joiners": [],
+   "targets": [],
+   "mods": [],
+   "others": []
+  },
+  {
+   "key": "INTENT_MAKE_A_PERMANENT_COPY",
+   "op": "MAKE_A_PERMANENT_COPY",
+   "en": "Make a [LINKKEY=WORD_PERMANENT] copy of target card",
+   "zh": "创造一张目标牌的[LINKKEY=WORD_PERMANENT]复制",
+   "slots": [],
+   "refs": [
+    "WORD_PERMANENT"
+   ],
+   "joiners": [],
+   "targets": [],
+   "mods": [],
+   "others": []
+  },
+  {
+   "key": "INTENT_REDUCE_STATUS_EFFECTS",
+   "op": "REDUCE_STATUS_EFFECTS",
+   "en": "Reduce[MULTIPLICITY_ENEMY] status effects by [PNUM]",
+   "zh": "使[MULTIPLICITY_ENEMY]效果减少 [PNUM] 层",
+   "slots": [
+    "PNUM"
+   ],
+   "refs": [],
+   "joiners": [],
+   "targets": [
+    "ENEMY"
+   ],
+   "mods": [],
+   "others": []
+  },
+  {
+   "key": "INTENT_SUBSTITUTE_CARD",
+   "op": "SUBSTITUTE_CARD",
+   "en": "when a [HEXCODE][CARD_NAME]</color> is added to your hand,",
+   "zh": "当一张[HEXCODE][CARD_NAME]</color>加入你的手牌时，",
+   "slots": [],
+   "refs": [],
+   "joiners": [],
+   "targets": [],
+   "mods": [],
+   "others": [
+    "HEXCODE",
+    "CARD_NAME"
+   ]
+  },
+  {
+   "key": "INTENT_SUBSTITUTE_CARD_WITH_PROPERTY",
+   "op": "SUBSTITUTE_CARD_WITH_PROPERTY",
+   "en": "when a card with [HEXCODE][CARD_NAME]</color> is added to your hand,",
+   "zh": "当一张具有[HEXCODE][CARD_NAME]</color>的牌加入你的手牌时，",
+   "slots": [],
+   "refs": [],
+   "joiners": [],
+   "targets": [],
+   "mods": [],
+   "others": [
+    "HEXCODE",
+    "CARD_NAME"
+   ]
+  },
+  {
+   "key": "INTENT_SUBSTITUTE_CARD_WITH_PROPERTY_GAIN",
+   "op": "SUBSTITUTE_CARD_WITH_PROPERTY_GAIN",
+   "en": "?",
+   "zh": "",
+   "slots": [],
+   "refs": [],
+   "joiners": [],
+   "targets": [],
+   "mods": [],
+   "others": []
+  },
+  {
+   "key": "INTENT_MAKE_CARD",
+   "op": "MAKE_CARD",
+   "en": "Make [PNUM][HEXCODE][CARD_NAME]</color>",
+   "zh": "创造 [PNUM][JNUM=WORD_QUANTIFIERA][HEXCODE][CARD_NAME]</color>",
+   "slots": [
+    "PNUM"
+   ],
+   "refs": [],
+   "joiners": [],
+   "targets": [],
+   "mods": [],
+   "others": [
+    "HEXCODE",
+    "CARD_NAME"
+   ]
+  },
+  {
+   "key": "INTENT_ADD_MAKE_CARD",
+   "op": "ADD_MAKE_CARD",
+   "en": "Add 'Make [PNUM][HEXCODE][CARD_NAME]</color>' [JOINER=WORD_ON][MULTIPLICITY_CARD]",
+   "zh": "[JOINER=WORD_OFF][MULTIPLICITY_CARD]添加“创造 [PNUM][JNUM=WORD_QUANTIFIERA][HEXCODE][CARD_NAME]</color>”",
+   "slots": [
+    "PNUM"
+   ],
+   "refs": [],
+   "joiners": [
+    "WORD_ON"
+   ],
+   "targets": [
+    "CARD"
+   ],
+   "mods": [],
+   "others": [
+    "HEXCODE",
+    "CARD_NAME"
+   ]
+  },
+  {
+   "key": "INTENT_INCREASE_MAKE_CARD",
+   "op": "INCREASE_MAKE_CARD",
+   "en": "Increase the cards made [JOINER=WORD_ON][MULTIPLICITY_CARD] by [PNUM]",
+   "zh": "使[MULTIPLICITY_CARD]创造的牌张数提升 [PNUM]",
+   "slots": [
+    "PNUM"
+   ],
+   "refs": [],
+   "joiners": [
+    "WORD_ON"
+   ],
+   "targets": [
+    "CARD"
+   ],
+   "mods": [],
+   "others": []
+  },
+  {
+   "key": "INTENT_MAKE_CARD_GAIN",
+   "op": "MAKE_CARD_GAIN",
+   "en": "Gain [PNUM][HEXCODE][CARD_NAME]</color> instead",
+   "zh": "改为获得 [PNUM][JNUM=WORD_QUANTIFIERA][HEXCODE][CARD_NAME]</color>",
+   "slots": [
+    "PNUM"
+   ],
+   "refs": [],
+   "joiners": [],
+   "targets": [],
+   "mods": [],
+   "others": [
+    "HEXCODE",
+    "CARD_NAME"
+   ]
+  },
+  {
+   "key": "INTENT_MAKE_CARD_HALF_DAMAGE",
+   "op": "MAKE_CARD_HALF_DAMAGE",
+   "en": "Make [PNUM][HEXCODE][CARD_NAME]</color> with half the damage",
+   "zh": "创造 [PNUM][JNUM=WORD_QUANTIFIERA]伤害减半的[HEXCODE][CARD_NAME]</color>",
+   "slots": [
+    "PNUM"
+   ],
+   "refs": [],
+   "joiners": [],
+   "targets": [],
+   "mods": [],
+   "others": [
+    "HEXCODE",
+    "CARD_NAME"
+   ]
+  },
+  {
+   "key": "INTENT_MAKE_CARD_DAMAGE_EQUAL_TO_PROTEIN",
+   "op": "MAKE_CARD_DAMAGE_EQUAL_TO_PROTEIN",
+   "en": "Make [PNUM][HEXCODE][CARD_NAME]</color> with damage equal to protein",
+   "zh": "",
+   "slots": [
+    "PNUM"
+   ],
+   "refs": [],
+   "joiners": [],
+   "targets": [],
+   "mods": [],
+   "others": [
+    "HEXCODE",
+    "CARD_NAME"
+   ]
+  },
+  {
+   "key": "INTENT_MAKE_CARD_WITH_DAMAGE",
+   "op": "MAKE_CARD_WITH_DAMAGE",
+   "en": "Make [HEXCODE][CARD_NAME]</color> with [PNUM] damage",
+   "zh": "创造伤害为 [PNUM] 的[HEXCODE][CARD_NAME]</color>",
+   "slots": [
+    "PNUM"
+   ],
+   "refs": [],
+   "joiners": [],
+   "targets": [],
+   "mods": [],
+   "others": [
+    "HEXCODE",
+    "CARD_NAME"
+   ]
+  },
+  {
+   "key": "INTENT_MAKE_CARD_WITH_DECAY",
+   "op": "MAKE_CARD_WITH_DECAY",
+   "en": "Make [HEXCODE][CARD_NAME]</color> with [PNUM] decay",
+   "zh": "",
+   "slots": [
+    "PNUM"
+   ],
+   "refs": [],
+   "joiners": [],
+   "targets": [],
+   "mods": [],
+   "others": [
+    "HEXCODE",
+    "CARD_NAME"
+   ]
+  },
+  {
+   "key": "INTENT_MAKE_CARD_NEXT_COMBAT",
+   "op": "MAKE_CARD_NEXT_COMBAT",
+   "en": "Make [PNUM] [HEXCODE][CARD_NAME]</color> next combat",
+   "zh": "在下一场战斗创造 [PNUM][JNUM=WORD_QUANTIFIERA][HEXCODE][CARD_NAME]</color>",
+   "slots": [
+    "PNUM"
+   ],
+   "refs": [],
+   "joiners": [],
+   "targets": [],
+   "mods": [],
+   "others": [
+    "HEXCODE",
+    "CARD_NAME"
+   ]
+  },
+  {
+   "key": "INTENT_MAKE_CARD_NEXT_EXPLORE",
+   "op": "MAKE_CARD_NEXT_EXPLORE",
+   "en": "Make [PNUM] [HEXCODE][CARD_NAME]</color> next explore ",
+   "zh": "在下一场探索创造 [PNUM][JNUM=WORD_QUANTIFIERA][HEXCODE][CARD_NAME]</color> ",
+   "slots": [
+    "PNUM"
+   ],
+   "refs": [],
+   "joiners": [],
+   "targets": [],
+   "mods": [],
+   "others": [
+    "HEXCODE",
+    "CARD_NAME"
+   ]
+  },
+  {
+   "key": "INTENT_MAKE_CARD_FULL_DAMAGE",
+   "op": "MAKE_CARD_FULL_DAMAGE",
+   "en": "Make [HEXCODE][CARD_NAME]</color> with the same damage",
+   "zh": "创造伤害相同的[HEXCODE][CARD_NAME]</color>",
+   "slots": [],
+   "refs": [],
+   "joiners": [],
+   "targets": [],
+   "mods": [],
+   "others": [
+    "HEXCODE",
+    "CARD_NAME"
+   ]
+  },
+  {
+   "key": "INTENT_MAKE_CARD_WITH_TARGET_DECAY",
+   "op": "MAKE_CARD_WITH_TARGET_DECAY",
+   "en": "Make [HEXCODE][CARD_NAME]</color> with decay equal to target's",
+   "zh": "创造腐朽等同于目标的[HEXCODE][CARD_NAME]</color>",
+   "slots": [],
+   "refs": [],
+   "joiners": [],
+   "targets": [],
+   "mods": [],
+   "others": [
+    "HEXCODE",
+    "CARD_NAME"
+   ]
+  },
+  {
+   "key": "INTENT_ADD_CARD_TO_TOP_OF_DECK",
+   "op": "ADD_CARD_TO_TOP_OF_DECK",
+   "en": "Start next [DECK_TYPE] with [HEXCODE][CARD_NAME]</color>",
+   "zh": "持有[HEXCODE][CARD_NAME]</color>开始下一场[DECK_TYPE]",
+   "slots": [],
+   "refs": [],
+   "joiners": [],
+   "targets": [],
+   "mods": [],
+   "others": [
+    "DECK_TYPE",
+    "HEXCODE",
+    "CARD_NAME"
+   ]
+  },
+  {
+   "key": "INTENT_LEACH_COST",
+   "op": "LEACH_COST",
+   "en": "[PNUM] cost of all Attacks and Skills",
+   "zh": "使所有攻击和技能的费用 [PNUM]",
+   "slots": [
+    "PNUM"
+   ],
+   "refs": [],
+   "joiners": [],
+   "targets": [],
+   "mods": [],
+   "others": []
+  },
+  {
+   "key": "INTENT_BLEED",
+   "op": "BLEED",
+   "en": "bleed for [PNUM] damage",
+   "zh": "",
+   "slots": [
+    "PNUM"
+   ],
+   "refs": [],
+   "joiners": [],
+   "targets": [],
+   "mods": [],
+   "others": []
+  },
+  {
+   "key": "INTENT_LOYAL_LOUSE",
+   "op": "LOYAL_LOUSE",
+   "en": "Is Loyal and Indebted, Finds food",
+   "zh": "忠诚且想要报恩，会寻找食物",
+   "slots": [],
+   "refs": [],
+   "joiners": [],
+   "targets": [],
+   "mods": [],
+   "others": []
+  },
+  {
+   "key": "INTENT_LOYAL_CANARY",
+   "op": "LOYAL_CANARY",
+   "en": "Is Loyal and Indebted, Finds food",
+   "zh": "忠诚且想要报恩，会寻找食物",
+   "slots": [],
+   "refs": [],
+   "joiners": [],
+   "targets": [],
+   "mods": [],
+   "others": []
+  },
+  {
+   "key": "INTENT_DIG_FOR_TREASURE_DEFAULT",
+   "op": "DIG_FOR_TREASURE_DEFAULT",
+   "en": "DIG FOR TREASURE",
+   "zh": "挖掘宝藏",
+   "slots": [],
+   "refs": [],
+   "joiners": [],
+   "targets": [],
+   "mods": [],
+   "others": []
+  },
+  {
+   "key": "INTENT_DIG_FOR_TREASURE_SINGED",
+   "op": "DIG_FOR_TREASURE_SINGED",
+   "en": "DIG FOR FORGOTTEN RELICS. <i>FIND CARDS TO ROAST AND EAT</i>",
+   "zh": "挖掘失落的遗物。<i>寻找可以炙烤与食用的牌。</i>",
+   "slots": [],
+   "refs": [],
+   "joiners": [],
+   "targets": [],
+   "mods": [],
+   "others": []
+  },
+  {
+   "key": "INTENT_DIG_FOR_TREASURE_SHROOM",
+   "op": "DIG_FOR_TREASURE_SHROOM",
+   "en": "DIG FOR FORGOTTEN RELICS. <i>FIND CARDS THAT GROW AND DIE</i>",
+   "zh": "挖掘失落的遗物。<i>寻找可以生长与死亡的牌。</i>",
+   "slots": [],
+   "refs": [],
+   "joiners": [],
+   "targets": [],
+   "mods": [],
+   "others": []
+  },
+  {
+   "key": "INTENT_DIG_FOR_TREASURE_WEIRD",
+   "op": "DIG_FOR_TREASURE_WEIRD",
+   "en": "DIG FOR FORGOTTEN RELICS. <i>FIND CARDS THAT CONFUSE AND TAUNT</i>",
+   "zh": "挖掘失落的遗物。<i>寻找可以困惑与嘲讽的牌。</i>",
+   "slots": [],
+   "refs": [],
+   "joiners": [],
+   "targets": [],
+   "mods": [],
+   "others": []
+  },
+  {
+   "key": "INTENT_DIG_FOR_TREASURE_WILD",
+   "op": "DIG_FOR_TREASURE_WILD",
+   "en": "DIG FOR FORGOTTEN RELICS. <i>FIND CARDS THAT ENRAGE</i>",
+   "zh": "挖掘失落的遗物。<i>寻找可以激怒的牌。</i>",
+   "slots": [],
+   "refs": [],
+   "joiners": [],
+   "targets": [],
+   "mods": [],
+   "others": []
+  },
+  {
+   "key": "INTENT_CREATE_CARD_ENCOUNTER_VAT",
+   "op": "CREATE_CARD_ENCOUNTER_VAT",
+   "en": "Vat",
+   "zh": "",
+   "slots": [],
+   "refs": [],
+   "joiners": [],
+   "targets": [],
+   "mods": [],
+   "others": []
+  },
+  {
+   "key": "INTENT_CREATE_CARD_ENCOUNTER_CAMP_FIRE",
+   "op": "CREATE_CARD_ENCOUNTER_CAMP_FIRE",
+   "en": "ADD [LINKKEY=PROPERTY_WARMTH] to hold danger at bay",
+   "zh": "增加[LINKKEY=PROPERTY_WARMTH]以抵御危险",
+   "slots": [],
+   "refs": [
+    "PROPERTY_WARMTH"
+   ],
+   "joiners": [],
+   "targets": [],
+   "mods": [],
+   "others": []
+  },
+  {
+   "key": "INTENT_CREATE_CARD_ENCOUNTER_COFFIN",
+   "op": "CREATE_CARD_ENCOUNTER_COFFIN",
+   "en": "Oh, no, that's a coffin",
+   "zh": "哇啊，那是个棺材",
+   "slots": [],
+   "refs": [],
+   "joiners": [],
+   "targets": [],
+   "mods": [],
+   "others": []
+  },
+  {
+   "key": "INTENT_CREATE_CARD_ENCOUNTER_GRIMOIRE",
+   "op": "CREATE_CARD_ENCOUNTER_GRIMOIRE",
+   "en": "ENCHANT YOUR ATTACKS",
+   "zh": "为你的攻击附魔",
+   "slots": [],
+   "refs": [],
+   "joiners": [],
+   "targets": [],
+   "mods": [],
+   "others": []
+  },
+  {
+   "key": "INTENT_CREATE_CARD_ENCOUNTER_COFFEE_STATION",
+   "op": "CREATE_CARD_ENCOUNTER_COFFEE_STATION",
+   "en": "Drink some coffee, you addict",
+   "zh": "爱喝咖啡就喝个够吧",
+   "slots": [],
+   "refs": [],
+   "joiners": [],
+   "targets": [],
+   "mods": [],
+   "others": []
+  },
+  {
+   "key": "INTENT_CREATE_CARD_ENCOUNTER_FAT_GRUB",
+   "op": "CREATE_CARD_ENCOUNTER_FAT_GRUB",
+   "en": "FEED A [LINKKEY=WORD_FAT_GRUB].\\r\\nRECEIVE ITS hungry spawn",
+   "zh": "喂食一只[LINKKEY=WORD_FAT_GRUB]。\\r\\n获得它饥饿的子嗣",
+   "slots": [],
+   "refs": [
+    "WORD_FAT_GRUB"
+   ],
+   "joiners": [],
+   "targets": [],
+   "mods": [],
+   "others": []
+  },
+  {
+   "key": "INTENT_CREATE_CARD_ENCOUNTER_LANTERN",
+   "op": "CREATE_CARD_ENCOUNTER_LANTERN",
+   "en": "Place a lantern to reveal more options",
+   "zh": "放置一个提灯来揭示更多选择",
+   "slots": [],
+   "refs": [],
+   "joiners": [],
+   "targets": [],
+   "mods": [],
+   "others": []
+  },
+  {
+   "key": "INTENT_CREATE_CARD_ENCOUNTER_PRACTICE_DUMMY",
+   "op": "CREATE_CARD_ENCOUNTER_PRACTICE_DUMMY",
+   "en": "Build a practice dummy to sharpen your attacks",
+   "zh": "建造一个训练假人来磨练你的攻击",
+   "slots": [],
+   "refs": [],
+   "joiners": [],
+   "targets": [],
+   "mods": [],
+   "others": []
+  },
+  {
+   "key": "INTENT_CREATE_CARD_ENCOUNTER_RAT_TRAP",
+   "op": "CREATE_CARD_ENCOUNTER_RAT_TRAP",
+   "en": "Catch Rats. Rats are useful",
+   "zh": "能抓老鼠。老鼠有用",
+   "slots": [],
+   "refs": [],
+   "joiners": [],
+   "targets": [],
+   "mods": [],
+   "others": []
+  },
+  {
+   "key": "INTENT_CREATE_CARD_ENCOUNTER_MENAGERIE",
+   "op": "CREATE_CARD_ENCOUNTER_MENAGERIE",
+   "en": "Invite an assortment of strange creatures into your camp",
+   "zh": "邀请一系列奇异生物前来你的营地",
+   "slots": [],
+   "refs": [],
+   "joiners": [],
+   "targets": [],
+   "mods": [],
+   "others": []
+  },
+  {
+   "key": "INTENT_CREATE_CARD_ENCOUNTER_RITUAL_SITE",
+   "op": "CREATE_CARD_ENCOUNTER_RITUAL_SITE",
+   "en": "Pay a grave price to earn The Gloom's favour",
+   "zh": "付出沉重的代价，赢得幽暗的恩赐",
+   "slots": [],
+   "refs": [],
+   "joiners": [],
+   "targets": [],
+   "mods": [],
+   "others": []
+  },
+  {
+   "key": "INTENT_CREATE_CARD_ENCOUNTER_SLEEPING_BAG",
+   "op": "CREATE_CARD_ENCOUNTER_SLEEPING_BAG",
+   "en": "Get cozy! Heal for half [LINKKEY=PROPERTY_WARMTH] when resting",
+   "zh": "舒服！休息时得到等于[LINKKEY=PROPERTY_WARMTH]一半的治疗",
+   "slots": [],
+   "refs": [
+    "PROPERTY_WARMTH"
+   ],
+   "joiners": [],
+   "targets": [],
+   "mods": [],
+   "others": []
+  },
+  {
+   "key": "INTENT_CREATE_CARD_ENCOUNTER_SOUP_POT",
+   "op": "CREATE_CARD_ENCOUNTER_SOUP_POT",
+   "en": "PLACE A SOUP POT.\\r\\nUse Edibles to make soups",
+   "zh": "放置一口汤锅。\\r\\n使用食材可以炖汤",
+   "slots": [],
+   "refs": [],
+   "joiners": [],
+   "targets": [],
+   "mods": [],
+   "others": []
+  },
+  {
+   "key": "INTENT_CREATE_CARD_ENCOUNTER_STRANGE_GEODE",
+   "op": "CREATE_CARD_ENCOUNTER_STRANGE_GEODE",
+   "en": "Gather [LINKKEY=PROPERTY_STORED_GLOOM] to empower your attacks",
+   "zh": "收集[LINKKEY=PROPERTY_STORED_GLOOM]来强化你的攻击",
+   "slots": [],
+   "refs": [
+    "PROPERTY_STORED_GLOOM"
+   ],
+   "joiners": [],
+   "targets": [],
+   "mods": [],
+   "others": []
+  },
+  {
+   "key": "INTENT_CREATE_CARD_ENCOUNTER_TRAPDOOR_SPIDER",
+   "op": "CREATE_CARD_ENCOUNTER_TRAPDOOR_SPIDER",
+   "en": "Make a friend to help with DIY projects",
+   "zh": "结交一个朋友，为你的DIY项目提供帮助",
+   "slots": [],
+   "refs": [],
+   "joiners": [],
+   "targets": [],
+   "mods": [],
+   "others": []
+  },
+  {
+   "key": "INTENT_CREATE_CARD_ENCOUNTER_TRUFFLE_PIG",
+   "op": "CREATE_CARD_ENCOUNTER_TRUFFLE_PIG",
+   "en": "BEFRIEND A [LINKKEY=WORD_TRUFFLE_PIG].\\r\\nFINDS TRUFFLES WHEN FED",
+   "zh": "结交一头[LINKKEY=WORD_TRUFFLE_PIG]。\\r\\n得到喂食时会寻找松露",
+   "slots": [],
+   "refs": [
+    "WORD_TRUFFLE_PIG"
+   ],
+   "joiners": [],
+   "targets": [],
+   "mods": [],
+   "others": []
+  },
+  {
+   "key": "INTENT_CREATE_CARD_ENCOUNTER_STRAY_DOG",
+   "op": "CREATE_CARD_ENCOUNTER_STRAY_DOG",
+   "en": "BEFRIEND A [LINKKEY=WORD_STRAY_DOG].\\r\\nFINDS STUFF WHEN FED",
+   "zh": "结交一只[LINKKEY=WORD_STRAY_DOG]。\\r\\n得到喂食时会寻找物品",
+   "slots": [],
+   "refs": [
+    "WORD_STRAY_DOG"
+   ],
+   "joiners": [],
+   "targets": [],
+   "mods": [],
+   "others": []
+  },
+  {
+   "key": "INTENT_CREATE_CARD_ENCOUNTER_SHRINE",
+   "op": "CREATE_CARD_ENCOUNTER_SHRINE",
+   "en": "HARNESS YOUR EMOTIONS TO HELP YOU IN YOUR SEARCH",
+   "zh": "驾驭你的情感，帮助你来搜寻",
+   "slots": [],
+   "refs": [],
+   "joiners": [],
+   "targets": [],
+   "mods": [],
+   "others": []
+  },
+  {
+   "key": "INTENT_CREATE_CARD_ENCOUNTER_TOAD",
+   "op": "CREATE_CARD_ENCOUNTER_TOAD",
+   "en": "Licking [LINKKEY=WORD_TOAD] forgets cards",
+   "zh": "舔[LINKKEY=WORD_TOAD]即可遗忘卡牌",
+   "slots": [],
+   "refs": [
+    "WORD_TOAD"
+   ],
+   "joiners": [],
+   "targets": [],
+   "mods": [],
+   "others": []
+  },
+  {
+   "key": "INTENT_CREATE_CARD_ENCOUNTER_TOAD_KING",
+   "op": "CREATE_CARD_ENCOUNTER_TOAD_KING",
+   "en": "The [LINKKEY=WORD_TOAD] king sits upon their throne",
+   "zh": "[LINKKEY=WORD_TOAD]之王，雄踞于宝座之上",
+   "slots": [],
+   "refs": [
+    "WORD_TOAD"
+   ],
+   "joiners": [],
+   "targets": [],
+   "mods": [],
+   "others": []
+  },
+  {
+   "key": "INTENT_CREATE_CARD_ENCOUNTER_VAGABOND_TOAD",
+   "op": "CREATE_CARD_ENCOUNTER_VAGABOND_TOAD",
+   "en": "REMINISCE WITH THE VAGABOND [LINKKEY=WORD_TOAD].\\r\\n\\r\\n[LINKKEY=WORD_FEEDABLE], [LINKKEY=WORD_STRUCTURE]",
+   "zh": "与流浪[LINKKEY=WORD_TOAD]追忆过往时光。\\r\\n\\r\\n[LINKKEY=WORD_FEEDABLE]，[LINKKEY=WORD_STRUCTURE]",
+   "slots": [],
+   "refs": [
+    "WORD_TOAD",
+    "WORD_FEEDABLE",
+    "WORD_STRUCTURE"
+   ],
+   "joiners": [],
+   "targets": [],
+   "mods": [],
+   "others": []
+  },
+  {
+   "key": "INTENT_CREATE_CARD_ENCOUNTER_KITCHEN",
+   "op": "CREATE_CARD_ENCOUNTER_KITCHEN",
+   "en": "Build a Structure to Season your Weapons",
+   "zh": "建造设施来为你的武器调味",
+   "slots": [],
+   "refs": [],
+   "joiners": [],
+   "targets": [],
+   "mods": [],
+   "others": []
+  },
+  {
+   "key": "INTENT_CREATE_CARD_ENCOUNTER_BIOFUEL_GENERATOR",
+   "op": "CREATE_CARD_ENCOUNTER_BIOFUEL_GENERATOR",
+   "en": "Choose a card to recharge",
+   "zh": "选择卡牌以补充充能",
+   "slots": [],
+   "refs": [],
+   "joiners": [],
+   "targets": [],
+   "mods": [],
+   "others": []
+  },
+  {
+   "key": "INTENT_CREATE_CARD_ENCOUNTER_CLEANER",
+   "op": "CREATE_CARD_ENCOUNTER_CLEANER",
+   "en": "Call a friend to help you clean up",
+   "zh": "呼叫一位朋友帮你清理现场",
+   "slots": [],
+   "refs": [],
+   "joiners": [],
+   "targets": [],
+   "mods": [],
+   "others": []
+  },
+  {
+   "key": "INTENT_CREATE_CARD_ENCOUNTER_NUTRIENT_FABRICATOR",
+   "op": "CREATE_CARD_ENCOUNTER_NUTRIENT_FABRICATOR",
+   "en": "Research a solution to starvation",
+   "zh": "研究解决饥荒的方案",
+   "slots": [],
+   "refs": [],
+   "joiners": [],
+   "targets": [],
+   "mods": [],
+   "others": []
+  },
+  {
+   "key": "INTENT_CREATE_CARD_ENCOUNTER_SCIENTIST_CORPSE",
+   "op": "CREATE_CARD_ENCOUNTER_SCIENTIST_CORPSE",
+   "en": "Consult an expert.\\r\\nHarness the power\\r\\nof [LINKKEY=PROPERTY_GUNK]",
+   "zh": "咨询一位专家。\\r\\n驾驭[LINKKEY=PROPERTY_GUNK]之力",
+   "slots": [],
+   "refs": [
+    "PROPERTY_GUNK"
+   ],
+   "joiners": [],
+   "targets": [],
+   "mods": [],
+   "others": []
+  },
+  {
+   "key": "INTENT_CREATE_CARD_ENCOUNTER_WORKBENCH",
+   "op": "CREATE_CARD_ENCOUNTER_WORKBENCH",
+   "en": "Upgrade Attacks",
+   "zh": "升级攻击",
+   "slots": [],
+   "refs": [],
+   "joiners": [],
+   "targets": [],
+   "mods": [],
+   "others": []
+  },
+  {
+   "key": "INTENT_CREATE_CARD_ENCOUNTER_BIOHAZARD_LAB",
+   "op": "CREATE_CARD_ENCOUNTER_BIOHAZARD_LAB",
+   "en": "Perform dangerous experiments",
+   "zh": "进行危险实验",
+   "slots": [],
+   "refs": [],
+   "joiners": [],
+   "targets": [],
+   "mods": [],
+   "others": []
+  },
+  {
+   "key": "INTENT_CREATE_CARD_ENCOUNTER_SHROOM_EXPERIMENT",
+   "op": "CREATE_CARD_ENCOUNTER_SHROOM_EXPERIMENT",
+   "en": "Feed a specimen to gain data<#1C1F4BFF><nobr>",
+   "zh": "喂食一个样本，获得数据<#1C1F4BFF><nobr>",
+   "slots": [],
+   "refs": [],
+   "joiners": [],
+   "targets": [],
+   "mods": [],
+   "others": []
+  },
+  {
+   "key": "INTENT_CREATE_CARD_ENCOUNTER_TOAD_EXPERIMENT",
+   "op": "CREATE_CARD_ENCOUNTER_TOAD_EXPERIMENT",
+   "en": "Isn't he just a handsome little guy?",
+   "zh": "它是不是很英俊？",
+   "slots": [],
+   "refs": [],
+   "joiners": [],
+   "targets": [],
+   "mods": [],
+   "others": []
+  },
+  {
+   "key": "INTENT_CREATE_CARD_ENCOUNTER_TERMINAL",
+   "op": "CREATE_CARD_ENCOUNTER_TERMINAL",
+   "en": "Unlock strategic protocols",
+   "zh": "解锁战略协议",
+   "slots": [],
+   "refs": [],
+   "joiners": [],
+   "targets": [],
+   "mods": [],
+   "others": []
+  },
+  {
+   "key": "INTENT_CREATE_CARD_ENCOUNTER_CARD_TOAD",
+   "op": "CREATE_CARD_ENCOUNTER_CARD_TOAD",
+   "en": "LICK THE <#2D7621FF><nobr><link=kW>Toad</link></nobr></color> AND [LINKKEY=WORD_FORGET] SOMETHING.",
+   "zh": "舔<#2D7621FF><nobr><link=kW>蟾蜍</link></nobr></color> 来遗忘一张牌",
+   "slots": [],
+   "refs": [
+    "WORD_FORGET"
+   ],
+   "joiners": [],
+   "targets": [],
+   "mods": [],
+   "others": []
+  },
+  {
+   "key": "INTENT_CREATE_CARD_ENCOUNTER_FROG_KING",
+   "op": "CREATE_CARD_ENCOUNTER_FROG_KING",
+   "en": "THE CARD <#2D7621FF><nobr><link=kW>Toad</link></nobr></color> SITS UPON THEIR THRONE<#332F2FFF>. <nobr><link=kW>Structure</link></nobr></color>",
+   "zh": "卡牌<#2D7621FF><nobr><link=kW>蟾蜍</link></nobr></color>，雄踞于宝座之上<#332F2FFF>。<nobr><link=kW>设施</link></nobr></color>",
+   "slots": [],
+   "refs": [],
+   "joiners": [],
+   "targets": [],
+   "mods": [],
+   "others": []
+  },
+  {
+   "key": "INTENT_CREATE_CARD_ENCOUNTER_VAGABOND_FROG",
+   "op": "CREATE_CARD_ENCOUNTER_VAGABOND_FROG",
+   "en": "REMINISCE WITH THE VAGABOND <#2D7621FF><nobr><link=kW>Toad</link></nobr></color><#332F2FFF>. <nobr><link=kW>Structure</link></nobr></color>",
+   "zh": "与流浪<#2D7621FF><nobr><link=kW>蟾蜍</link></nobr></color><#332F2FFF>追忆过往时光。<nobr><link=kW>设施</link></nobr></color>",
+   "slots": [],
+   "refs": [],
+   "joiners": [],
+   "targets": [],
+   "mods": [],
+   "others": []
+  },
+  {
+   "key": "INTENT_CREATE_CARD_ENCOUNTER_DOOMED_EXPERIMENT",
+   "op": "CREATE_CARD_ENCOUNTER_DOOMED_EXPERIMENT",
+   "en": "An experiment destined for doom",
+   "zh": "注定引发毁灭的实验",
+   "slots": [],
+   "refs": [],
+   "joiners": [],
+   "targets": [],
+   "mods": [],
+   "others": []
+  },
+  {
+   "key": "INTENT_UNLOCK",
+   "op": "UNLOCK",
+   "en": "Unlock",
+   "zh": "解锁",
+   "slots": [],
+   "refs": [],
+   "joiners": [],
+   "targets": [],
+   "mods": [],
+   "others": []
+  },
+  {
+   "key": "INTENT_DIG",
+   "op": "DIG",
+   "en": "Dig",
+   "zh": "挖掘",
+   "slots": [],
+   "refs": [],
+   "joiners": [],
+   "targets": [],
+   "mods": [],
+   "others": []
+  },
+  {
+   "key": "INTENT_BREAK",
+   "op": "BREAK",
+   "en": "Break",
+   "zh": "击破",
+   "slots": [],
+   "refs": [],
+   "joiners": [],
+   "targets": [],
+   "mods": [],
+   "others": []
+  },
+  {
+   "key": "INTENT_FIX",
+   "op": "FIX",
+   "en": "Fix",
+   "zh": "修理",
+   "slots": [],
+   "refs": [],
+   "joiners": [],
+   "targets": [],
+   "mods": [],
+   "others": []
+  },
+  {
+   "key": "INTENT_REVEAL",
+   "op": "REVEAL",
+   "en": "Reveal",
+   "zh": "揭示",
+   "slots": [],
+   "refs": [],
+   "joiners": [],
+   "targets": [],
+   "mods": [],
+   "others": []
+  },
+  {
+   "key": "INTENT_IGNITE",
+   "op": "IGNITE",
+   "en": "Ignite",
+   "zh": "点燃",
+   "slots": [],
+   "refs": [],
+   "joiners": [],
+   "targets": [],
+   "mods": [],
+   "others": []
+  },
+  {
+   "key": "INTENT_FEED",
+   "op": "FEED",
+   "en": "Feed",
+   "zh": "喂食",
+   "slots": [],
+   "refs": [],
+   "joiners": [],
+   "targets": [],
+   "mods": [],
+   "others": []
+  },
+  {
+   "key": "INTENT_DRAW_GEAR_CARD",
+   "op": "DRAW_GEAR_CARD",
+   "en": "Draw Gear card",
+   "zh": "抽取装备牌",
+   "slots": [],
+   "refs": [],
+   "joiners": [],
+   "targets": [],
+   "mods": [],
+   "others": []
+  },
+  {
+   "key": "INTENT_ENCOURAGE_PET",
+   "op": "ENCOURAGE_PET",
+   "en": "Encourage your pet",
+   "zh": "",
+   "slots": [],
+   "refs": [],
+   "joiners": [],
+   "targets": [],
+   "mods": [],
+   "others": []
+  },
+  {
+   "key": "INTENT_EXPLODE",
+   "op": "EXPLODE",
+   "en": "Explode",
+   "zh": "爆炸",
+   "slots": [],
+   "refs": [],
+   "joiners": [],
+   "targets": [],
+   "mods": [],
+   "others": []
+  },
+  {
+   "key": "INTENT_FETCH_PET",
+   "op": "FETCH_PET",
+   "en": "Fetch your pet",
+   "zh": "",
+   "slots": [],
+   "refs": [],
+   "joiners": [],
+   "targets": [],
+   "mods": [],
+   "others": []
+  },
+  {
+   "key": "INTENT_GROUP_UP",
+   "op": "GROUP_UP",
+   "en": "Group up",
+   "zh": "",
+   "slots": [],
+   "refs": [],
+   "joiners": [],
+   "targets": [],
+   "mods": [],
+   "others": []
+  },
+  {
+   "key": "INTENT_MAKE_VOLATILE",
+   "op": "MAKE_VOLATILE",
+   "en": "Become Volatile",
+   "zh": "",
+   "slots": [],
+   "refs": [],
+   "joiners": [],
+   "targets": [],
+   "mods": [],
+   "others": []
+  },
+  {
+   "key": "INTENT_MOVE_TOWARDS_FRIEND",
+   "op": "MOVE_TOWARDS_FRIEND",
+   "en": "Move towards friend",
+   "zh": "",
+   "slots": [],
+   "refs": [],
+   "joiners": [],
+   "targets": [],
+   "mods": [],
+   "others": []
+  },
+  {
+   "key": "INTENT_RAISE_GHOSTS",
+   "op": "RAISE_GHOSTS",
+   "en": "Raise ghosts",
+   "zh": "",
+   "slots": [],
+   "refs": [],
+   "joiners": [],
+   "targets": [],
+   "mods": [],
+   "others": []
+  },
+  {
+   "key": "INTENT_REDUCE_COUNTDOWN",
+   "op": "REDUCE_COUNTDOWN",
+   "en": "Reduce countdown",
+   "zh": "",
+   "slots": [],
+   "refs": [],
+   "joiners": [],
+   "targets": [],
+   "mods": [],
+   "others": []
+  },
+  {
+   "key": "INTENT_SHIELD_DONTUSE",
+   "op": "SHIELD_DONTUSE",
+   "en": "DONT USE: Shield",
+   "zh": "",
+   "slots": [],
+   "refs": [],
+   "joiners": [],
+   "targets": [],
+   "mods": [],
+   "others": []
+  },
+  {
+   "key": "INTENT_SWAP_CARD_OUT",
+   "op": "SWAP_CARD_OUT",
+   "en": "Turn all [CLASS_NAME]S into [CARD_NAME]",
+   "zh": "将所有[CLASS_NAME]变为[CARD_NAME]",
+   "slots": [],
+   "refs": [],
+   "joiners": [],
+   "targets": [],
+   "mods": [],
+   "others": [
+    "CLASS_NAME",
+    "CARD_NAME"
+   ]
+  },
+  {
+   "key": "INTENT_WHEN_PLAYED_TRIGGER",
+   "op": "WHEN_PLAYED_TRIGGER",
+   "en": "When played: trigger",
+   "zh": "打出时：触发",
+   "slots": [],
+   "refs": [],
+   "joiners": [],
+   "targets": [],
+   "mods": [],
+   "others": []
+  },
+  {
+   "key": "INTENT_ADD_CARD_TO_HAND",
+   "op": "ADD_CARD_TO_HAND",
+   "en": "Add card to hand",
+   "zh": "将卡牌加入手牌",
+   "slots": [],
+   "refs": [],
+   "joiners": [],
+   "targets": [],
+   "mods": [],
+   "others": []
+  },
+  {
+   "key": "INTENT_DISPELL_CONFUSION",
+   "op": "DISPELL_CONFUSION",
+   "en": "Dispel confusion",
+   "zh": "消解困惑",
+   "slots": [],
+   "refs": [],
+   "joiners": [],
+   "targets": [],
+   "mods": [],
+   "others": []
+  },
+  {
+   "key": "INTENT_INCREASE_SELF_HEALING",
+   "op": "INCREASE_SELF_HEALING",
+   "en": "Increase self healing",
+   "zh": "提升自我治疗",
+   "slots": [],
+   "refs": [],
+   "joiners": [],
+   "targets": [],
+   "mods": [],
+   "others": []
+  },
+  {
+   "key": "INTENT_HEAL_SELF",
+   "op": "HEAL_SELF",
+   "en": "Heal self",
+   "zh": "治疗自己",
+   "slots": [],
+   "refs": [],
+   "joiners": [],
+   "targets": [],
+   "mods": [],
+   "others": []
+  },
+  {
+   "key": "INTENT_DIG_FOR_TREASURE",
+   "op": "DIG_FOR_TREASURE",
+   "en": "Dig for treasure",
+   "zh": "挖掘宝藏",
+   "slots": [],
+   "refs": [],
+   "joiners": [],
+   "targets": [],
+   "mods": [],
+   "others": []
+  },
+  {
+   "key": "INTENT_DIG_OLD",
+   "op": "DIG_OLD",
+   "en": "Dig (Old)",
+   "zh": "",
+   "slots": [],
+   "refs": [],
+   "joiners": [],
+   "targets": [],
+   "mods": [],
+   "others": []
+  },
+  {
+   "key": "INTENT_SCAVENGE",
+   "op": "SCAVENGE",
+   "en": "Scavenge",
+   "zh": "搜刮",
+   "slots": [],
+   "refs": [],
+   "joiners": [],
+   "targets": [],
+   "mods": [],
+   "others": []
+  },
+  {
+   "key": "INTENT_SEARCH_POCKETS",
+   "op": "SEARCH_POCKETS",
+   "en": "Search your pockets",
+   "zh": "搜索你的口袋",
+   "slots": [],
+   "refs": [],
+   "joiners": [],
+   "targets": [],
+   "mods": [],
+   "others": []
+  },
+  {
+   "key": "INTENT_STORED_GLOOM_TO_MAX_HEALTH",
+   "op": "STORED_GLOOM_TO_MAX_HEALTH",
+   "en": "Convert stored gloom into max health",
+   "zh": "将存储的幽暗转化为生命值上限",
+   "slots": [],
+   "refs": [],
+   "joiners": [],
+   "targets": [],
+   "mods": [],
+   "others": []
+  },
+  {
+   "key": "INTENT_TRUFFLE_HUNT",
+   "op": "TRUFFLE_HUNT",
+   "en": "Truffle hunt",
+   "zh": "寻找松露",
+   "slots": [],
+   "refs": [],
+   "joiners": [],
+   "targets": [],
+   "mods": [],
+   "others": []
+  },
+  {
+   "key": "INTENT_BUNCH_OF_KEYS",
+   "op": "BUNCH_OF_KEYS",
+   "en": "Bunch of Keys",
+   "zh": "一串钥匙",
+   "slots": [],
+   "refs": [],
+   "joiners": [],
+   "targets": [],
+   "mods": [],
+   "others": []
+  },
+  {
+   "key": "INTENT_STACK_OF_KEYCARDS",
+   "op": "STACK_OF_KEYCARDS",
+   "en": "Stack of keycards",
+   "zh": "一叠钥匙卡",
+   "slots": [],
+   "refs": [],
+   "joiners": [],
+   "targets": [],
+   "mods": [],
+   "others": []
+  },
+  {
+   "key": "INTENT_DESTROY_CAMP_STRUCTURE",
+   "op": "DESTROY_CAMP_STRUCTURE",
+   "en": "Destroy camp structure",
+   "zh": "摧毁营地设施",
+   "slots": [],
+   "refs": [],
+   "joiners": [],
+   "targets": [],
+   "mods": [],
+   "others": []
+  },
+  {
+   "key": "INTENT_MEDITATE",
+   "op": "MEDITATE",
+   "en": "Meditate",
+   "zh": "冥想",
+   "slots": [],
+   "refs": [],
+   "joiners": [],
+   "targets": [],
+   "mods": [],
+   "others": []
+  },
+  {
+   "key": "INTENT_NOTHING",
+   "op": "NOTHING",
+   "en": "Nothing",
+   "zh": "无",
+   "slots": [],
+   "refs": [],
+   "joiners": [],
+   "targets": [],
+   "mods": [],
+   "others": []
+  },
+  {
+   "key": "INTENT_REST",
+   "op": "REST",
+   "en": "Rest",
+   "zh": "休息",
+   "slots": [],
+   "refs": [],
+   "joiners": [],
+   "targets": [],
+   "mods": [],
+   "others": []
+  },
+  {
+   "key": "INTENT_CREATE_CARD_ENCOUNTER_VENDING_MACHINE",
+   "op": "CREATE_CARD_ENCOUNTER_VENDING_MACHINE",
+   "en": "Violence is an option",
+   "zh": "暴力也是一种选择",
+   "slots": [],
+   "refs": [],
+   "joiners": [],
+   "targets": [],
+   "mods": [],
+   "others": []
+  },
+  {
+   "key": "INTENT_CREATE_CARD_ENCOUNTER_SPACE_HEATER",
+   "op": "CREATE_CARD_ENCOUNTER_SPACE_HEATER",
+   "en": "Keeps you warm",
+   "zh": "让你保持温暖",
+   "slots": [],
+   "refs": [],
+   "joiners": [],
+   "targets": [],
+   "mods": [],
+   "others": []
+  },
+  {
+   "key": "INTENT_APPLY_MARKED",
+   "op": "APPLY_MARKED",
+   "en": "Add [LINKKEY=STATUS_MARK][JOINER=WORD_TO][MULTIPLICITY_ENEMY] for [PNUM] ",
+   "zh": "[JOINER=WORD_TO][MULTIPLICITY_ENEMY]施加 [PNUM] 层[LINKKEY=STATUS_MARK] ",
+   "slots": [
+    "PNUM"
+   ],
+   "refs": [
+    "STATUS_MARK"
+   ],
+   "joiners": [
+    "WORD_TO"
+   ],
+   "targets": [
+    "ENEMY"
+   ],
+   "mods": [],
+   "others": []
+  },
+  {
+   "key": "INTENT_APPLY_STICKY",
+   "op": "APPLY_STICKY",
+   "en": "Apply [PNUM] [LINKKEY=STATUS_STICKY][JOINER=WORD_TO][MULTIPLICITY_ENEMY]",
+   "zh": "[JOINER=WORD_TO][MULTIPLICITY_ENEMY]施加 [PNUM] 层[LINKKEY=STATUS_STICKY]",
+   "slots": [
+    "PNUM"
+   ],
+   "refs": [
+    "STATUS_STICKY"
+   ],
+   "joiners": [
+    "WORD_TO"
+   ],
+   "targets": [
+    "ENEMY"
+   ],
+   "mods": [],
+   "others": []
+  },
+  {
+   "key": "INTENT_APPLY_MELTING",
+   "op": "APPLY_MELTING",
+   "en": "Apply [PNUM] [LINKKEY=STATUS_MELTING][JOINER=WORD_TO][MULTIPLICITY_ENEMY]",
+   "zh": "[JOINER=WORD_TO][MULTIPLICITY_ENEMY]施加 [PNUM] 层[LINKKEY=STATUS_MELTING]",
+   "slots": [
+    "PNUM"
+   ],
+   "refs": [
+    "STATUS_MELTING"
+   ],
+   "joiners": [
+    "WORD_TO"
+   ],
+   "targets": [
+    "ENEMY"
+   ],
+   "mods": [],
+   "others": []
+  },
+  {
+   "key": "INTENT_APPLY_LEECH",
+   "op": "APPLY_LEECH",
+   "en": "Apply [PNUM] [LINKKEY=STATUS_LEECH][JOINER=WORD_TO][MULTIPLICITY_ENEMY]",
+   "zh": "[JOINER=WORD_TO][MULTIPLICITY_ENEMY]施加 [PNUM] 层[LINKKEY=STATUS_LEECH]",
+   "slots": [
+    "PNUM"
+   ],
+   "refs": [
+    "STATUS_LEECH"
+   ],
+   "joiners": [
+    "WORD_TO"
+   ],
+   "targets": [
+    "ENEMY"
+   ],
+   "mods": [],
+   "others": []
+  },
+  {
+   "key": "INTENT_APPLY_DECAY_MULTIPLY",
+   "op": "APPLY_DECAY_MULTIPLY",
+   "en": "Multiply [LINKKEY=STATUS_DECAY] by [PNUM][JOINER=WORD_TO][MULTIPLICITY_ENEMY]",
+   "zh": "令[MULTIPLICITY_ENEMY][LINKKEY=STATUS_DECAY] x[PNUM]",
+   "slots": [
+    "PNUM"
+   ],
+   "refs": [
+    "STATUS_DECAY"
+   ],
+   "joiners": [
+    "WORD_TO"
+   ],
+   "targets": [
+    "ENEMY"
+   ],
+   "mods": [],
+   "others": []
+  },
+  {
+   "key": "INTENT_INCREASE_APPLIED_DECAY",
+   "op": "INCREASE_APPLIED_DECAY",
+   "en": "+[PNUM] Decay[JOINER=WORD_ON][MULTIPLICITY_CARD]",
+   "zh": "令[MULTIPLICITY_CARD]腐朽 +[PNUM]",
+   "slots": [
+    "PNUM"
+   ],
+   "refs": [],
+   "joiners": [
+    "WORD_ON"
+   ],
+   "targets": [
+    "CARD"
+   ],
+   "mods": [],
+   "others": []
+  },
+  {
+   "key": "INTENT_INCREASE_APPLIED_DECAY_MULTIPLY",
+   "op": "INCREASE_APPLIED_DECAY_MULTIPLY",
+   "en": "x[PNUM] Decay[JOINER=WORD_ON][MULTIPLICITY_CARD]",
+   "zh": "令[MULTIPLICITY_CARD]腐朽 x[PNUM]",
+   "slots": [
+    "PNUM"
+   ],
+   "refs": [],
+   "joiners": [
+    "WORD_ON"
+   ],
+   "targets": [
+    "CARD"
+   ],
+   "mods": [],
+   "others": []
+  },
+  {
+   "key": "INTENT_CREATE_LODGED_CARD",
+   "op": "CREATE_LODGED_CARD",
+   "en": "Create LODGED [HEXCODE][CARD_NAME]</color>[JOINER=WORD_IN][MULTIPLICITY_ENEMY]",
+   "zh": "[JOINER=WORD_IN][MULTIPLICITY_ENEMY]创造贴附的[HEXCODE][CARD_NAME]</color>",
+   "slots": [],
+   "refs": [],
+   "joiners": [
+    "WORD_IN"
+   ],
+   "targets": [
+    "ENEMY"
+   ],
+   "mods": [],
+   "others": [
+    "HEXCODE",
+    "CARD_NAME"
+   ]
+  },
+  {
+   "key": "INTENT_CREATE_LODGED_CARD_WITH_DECAY",
+   "op": "CREATE_LODGED_CARD_WITH_DECAY",
+   "en": "Create LODGED [HEXCODE][CARD_NAME]</color>[JOINER=WORD_IN][MULTIPLICITY_ENEMY] with [PNUM] [LINKKEY=STATUS_DECAY]",
+   "zh": "[JOINER=WORD_IN][MULTIPLICITY_ENEMY]创造贴附的[HEXCODE][CARD_NAME]</color>，此牌具有 [PNUM] 层[LINKKEY=STATUS_DECAY]",
+   "slots": [
+    "PNUM"
+   ],
+   "refs": [
+    "STATUS_DECAY"
+   ],
+   "joiners": [
+    "WORD_IN"
+   ],
+   "targets": [
+    "ENEMY"
+   ],
+   "mods": [],
+   "others": [
+    "HEXCODE",
+    "CARD_NAME"
+   ]
+  },
+  {
+   "key": "INTENT_INCREASE_SPELL_WEAKNESS",
+   "op": "INCREASE_SPELL_WEAKNESS",
+   "en": "+[PNUM] [LINKKEY=STATUS_SPELL_WEAKNESS][JOINER=WORD_ON][MULTIPLICITY_CARD]",
+   "zh": "令[MULTIPLICITY_CARD][LINKKEY=STATUS_SPELL_WEAKNESS] +[PNUM]",
+   "slots": [
+    "PNUM"
+   ],
+   "refs": [
+    "STATUS_SPELL_WEAKNESS"
+   ],
+   "joiners": [
+    "WORD_ON"
+   ],
+   "targets": [
+    "CARD"
+   ],
+   "mods": [],
+   "others": []
+  },
+  {
+   "key": "INTENT_PACIFY_RAGE",
+   "op": "PACIFY_RAGE",
+   "en": "Pacify rage",
+   "zh": "平复暴怒情绪",
+   "slots": [],
+   "refs": [],
+   "joiners": [],
+   "targets": [],
+   "mods": [],
+   "others": []
+  },
+  {
+   "key": "INTENT_APPLY_PLUMP",
+   "op": "APPLY_PLUMP",
+   "en": "Apply [LINKKEY=WORD_PLUMP][JOINER=WORD_TO][MULTIPLICITY_ENEMY]",
+   "zh": "[JOINER=WORD_TO][MULTIPLICITY_ENEMY]施加[LINKKEY=STATUS_PLUMP]",
+   "slots": [],
+   "refs": [
+    "WORD_PLUMP"
+   ],
+   "joiners": [
+    "WORD_TO"
+   ],
+   "targets": [
+    "ENEMY"
+   ],
+   "mods": [],
+   "others": []
+  },
+  {
+   "key": "INTENT_MAKE_A_TEMPORARY_OF_TRIGGER_SOURCE",
+   "op": "MAKE_A_TEMPORARY_OF_TRIGGER_SOURCE",
+   "en": "Make a [LINKKEY=PROPERTY_TEMPORARY] of trigger source",
+   "zh": "Make a [LINKKEY=PROPERTY_TEMPORARY] of trigger source",
+   "slots": [],
+   "refs": [
+    "PROPERTY_TEMPORARY"
+   ],
+   "joiners": [],
+   "targets": [],
+   "mods": [],
+   "others": []
+  },
+  {
+   "key": "INTENT_EAT_CREATURE",
+   "op": "EAT_CREATURE",
+   "en": "Eat Creature",
+   "zh": "吃掉生物",
+   "slots": [],
+   "refs": [],
+   "joiners": [],
+   "targets": [],
+   "mods": [],
+   "others": []
+  },
+  {
+   "key": "INTENT_DRAW_CREATURE_CARD",
+   "op": "DRAW_CREATURE_CARD",
+   "en": "Draw creature card",
+   "zh": "抽取生物牌",
+   "slots": [],
+   "refs": [],
+   "joiners": [],
+   "targets": [],
+   "mods": [],
+   "others": []
+  },
+  {
+   "key": "INTENT_DRAW_CREATURE_CARD_SINGLE",
+   "op": "DRAW_CREATURE_CARD_SINGLE",
+   "en": "Draw a creature card",
+   "zh": "抽取一张生物牌",
+   "slots": [],
+   "refs": [],
+   "joiners": [],
+   "targets": [],
+   "mods": [],
+   "others": []
+  },
+  {
+   "key": "INTENT_DRAW_DATA_CARD",
+   "op": "DRAW_DATA_CARD",
+   "en": "Draw data card",
+   "zh": "抽取数据牌",
+   "slots": [],
+   "refs": [],
+   "joiners": [],
+   "targets": [],
+   "mods": [],
+   "others": []
+  },
+  {
+   "key": "INTENT_DRAW_DATA_CARD_SINGLE",
+   "op": "DRAW_DATA_CARD_SINGLE",
+   "en": "Draw data card",
+   "zh": "抽取数据牌",
+   "slots": [],
+   "refs": [],
+   "joiners": [],
+   "targets": [],
+   "mods": [],
+   "others": []
+  },
+  {
+   "key": "INTENT_EAT_DATA",
+   "op": "EAT_DATA",
+   "en": "Eats data",
+   "zh": "吃掉数据",
+   "slots": [],
+   "refs": [],
+   "joiners": [],
+   "targets": [],
+   "mods": [],
+   "others": []
+  },
+  {
+   "key": "INTENT_DRAW_CONSUME_GUNK_CARD_SINGLE",
+   "op": "DRAW_CONSUME_GUNK_CARD_SINGLE",
+   "en": "Draw [PNUM] Gunk Cleaning Card[JOINER=WORD_ON][MULTIPLICITY_CARD]",
+   "zh": "抽取 [PNUM] 张清理黏糊的牌[JOINER=WORD_ON][MULTIPLICITY_CARD]",
+   "slots": [
+    "PNUM"
+   ],
+   "refs": [],
+   "joiners": [
+    "WORD_ON"
+   ],
+   "targets": [
+    "CARD"
+   ],
+   "mods": [],
+   "others": []
+  },
+  {
+   "key": "INTENT_DRAW_CONSUME_GUNK_CARD_MULTI",
+   "op": "DRAW_CONSUME_GUNK_CARD_MULTI",
+   "en": "Draw [PNUM] Gunk Cleaning Cards[JOINER=WORD_ON][MULTIPLICITY_CARD]",
+   "zh": "抽取 [PNUM] 张清理黏糊的牌[JOINER=WORD_ON][MULTIPLICITY_CARD]",
+   "slots": [
+    "PNUM"
+   ],
+   "refs": [],
+   "joiners": [
+    "WORD_ON"
+   ],
+   "targets": [
+    "CARD"
+   ],
+   "mods": [],
+   "others": []
+  },
+  {
+   "key": "INTENT_ADD_PROPERTY_TO_CARD",
+   "op": "ADD_PROPERTY_TO_CARD",
+   "en": "Add [LINKKEY=[PROPERTY_NAME]][JOINER=WORD_ON][MULTIPLICITY_CARD]",
+   "zh": "添加 [LINKKEY=[PROPERTY_NAME]][JOINER=WORD_ON][MULTIPLICITY_CARD]",
+   "slots": [],
+   "refs": [],
+   "joiners": [
+    "WORD_ON"
+   ],
+   "targets": [
+    "CARD"
+   ],
+   "mods": [],
+   "others": [
+    "PROPERTY_NAME"
+   ]
+  },
+  {
+   "key": "INTENT_RETURN_LAST_EXHAUSTED_CARD",
+   "op": "RETURN_LAST_EXHAUSTED_CARD",
+   "en": "Return the last exhausted card to your hand.",
+   "zh": "将上一张消耗的牌返回你的手牌。",
+   "slots": [],
+   "refs": [],
+   "joiners": [],
+   "targets": [],
+   "mods": [],
+   "others": []
+  },
+  {
+   "key": "INTENT_RESET_CAMP_STRUCTURE",
+   "op": "RESET_CAMP_STRUCTURE",
+   "en": "Reset a camp structure.",
+   "zh": "重新准备一个营地设施。",
+   "slots": [],
+   "refs": [],
+   "joiners": [],
+   "targets": [],
+   "mods": [],
+   "others": []
+  },
+  {
+   "key": "INTENT_APPLY_POISONED",
+   "op": "APPLY_POISONED",
+   "en": "Apply [PNUM] [LINKKEY=STATUS_POISONED][JOINER=WORD_TO][MULTIPLICITY_ENEMY]",
+   "zh": "[JOINER=WORD_TO][MULTIPLICITY_ENEMY]施加 [PNUM] 层[LINKKEY=STATUS_POISONED]",
+   "slots": [
+    "PNUM"
+   ],
+   "refs": [
+    "STATUS_POISONED"
+   ],
+   "joiners": [
+    "WORD_TO"
+   ],
+   "targets": [
+    "ENEMY"
+   ],
+   "mods": [],
+   "others": []
+  },
+  {
+   "key": "INTENT_ADOPT",
+   "op": "ADOPT",
+   "en": "[LINKKEY=WORD_ADOPT] target [LINKKEY=CLASS_CREATURE].",
+   "zh": "[LINKKEY=WORD_ADOPT]目标[LINKKEY=CLASS_CREATURE]。",
+   "slots": [],
+   "refs": [
+    "WORD_ADOPT",
+    "CLASS_CREATURE"
+   ],
+   "joiners": [],
+   "targets": [],
+   "mods": [],
+   "others": []
+  },
+  {
+   "key": "INTENT_SHROOM_KEY",
+   "op": "SHROOM_KEY",
+   "en": "\n<b>Unlock a gloom door.</b>\n\n<#331105><link=kW>CONSUME</link></color>.",
+   "zh": "\n<b>解锁一扇幽暗之门。</b>\n\n<#331105><link=kW>销毁</link></color>。",
+   "slots": [],
+   "refs": [],
+   "joiners": [],
+   "targets": [],
+   "mods": [],
+   "others": []
+  },
+  {
+   "key": "INTENT_MECHANIZE",
+   "op": "MECHANIZE",
+   "en": "[LINKKEY=WORD_MECHANIZE] target Card.",
+   "zh": "",
+   "slots": [],
+   "refs": [
+    "WORD_MECHANIZE"
+   ],
+   "joiners": [],
+   "targets": [],
+   "mods": [],
+   "others": []
+  }
+ ]
+}

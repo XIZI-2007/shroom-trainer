@@ -1,0 +1,1764 @@
+{
+ "_comment": "CardIntent 语义层：类别/数值口径/作用对象/得失/场景/是否可计入收益。由 tools/intent_semantics_build.py 从 card_intent_dict.json 生成。",
+ "count": 173,
+ "cats": {
+  "damage": "直接伤害",
+  "heal": "治疗",
+  "defense": "防御",
+  "debuff": "削弱敌人",
+  "buff": "增益自身",
+  "cardgen": "产生/获取牌",
+  "cardmod": "改造牌",
+  "resource": "资源",
+  "eat": "消耗进食",
+  "explore": "探索行动",
+  "summon": "召唤",
+  "pet": "宠物",
+  "misc": "其他"
+ },
+ "metrics": {
+  "damage": "伤害",
+  "heal": "生命",
+  "shield": "护甲",
+  "energy": "精力",
+  "draw": "抽牌",
+  "status": "状态层数",
+  "resource": "资源",
+  "card": "牌",
+  "none": "—"
+ },
+ "intents": {
+  "ApplyBrainless": {
+   "cat": "debuff",
+   "metric": "status",
+   "target": "enemy",
+   "side": "gain",
+   "phase": "combat",
+   "value": 1,
+   "num": true,
+   "mult": true
+  },
+  "ApplyInfested": {
+   "cat": "debuff",
+   "metric": "status",
+   "target": "enemy",
+   "side": "gain",
+   "phase": "combat",
+   "value": 1,
+   "num": true,
+   "mult": true
+  },
+  "Bleed": {
+   "cat": "debuff",
+   "metric": "damage",
+   "target": "enemy",
+   "side": "gain",
+   "phase": "combat",
+   "value": 1,
+   "num": true,
+   "mult": false
+  },
+  "ConfusedBrawl": {
+   "cat": "damage",
+   "metric": "damage",
+   "target": "enemy",
+   "side": "gain",
+   "phase": "combat",
+   "value": 1,
+   "num": true,
+   "mult": false
+  },
+  "CreatePet": {
+   "cat": "pet",
+   "metric": "none",
+   "target": "self",
+   "side": "gain",
+   "phase": "combat",
+   "value": 0,
+   "num": false,
+   "mult": true
+  },
+  "Drain": {
+   "cat": "damage",
+   "metric": "damage",
+   "target": "enemy",
+   "side": "gain",
+   "phase": "combat",
+   "value": 1,
+   "num": true,
+   "mult": false
+  },
+  "DrawConfusionCard": {
+   "cat": "cardgen",
+   "metric": "card",
+   "target": "self",
+   "side": "gain",
+   "phase": "combat",
+   "value": 1,
+   "num": true,
+   "mult": false
+  },
+  "DrawDataCard": {
+   "cat": "cardgen",
+   "metric": "card",
+   "target": "self",
+   "side": "gain",
+   "phase": "combat",
+   "value": 1,
+   "num": false,
+   "mult": false
+  },
+  "DrawMachineCard": {
+   "cat": "cardgen",
+   "metric": "card",
+   "target": "self",
+   "side": "gain",
+   "phase": "combat",
+   "value": 1,
+   "num": true,
+   "mult": false
+  },
+  "DrawRageCard": {
+   "cat": "cardgen",
+   "metric": "card",
+   "target": "self",
+   "side": "gain",
+   "phase": "combat",
+   "value": 1,
+   "num": true,
+   "mult": false
+  },
+  "DrawCardNextTurn": {
+   "cat": "cardgen",
+   "metric": "draw",
+   "target": "self",
+   "side": "gain",
+   "phase": "combat",
+   "value": 1,
+   "num": true,
+   "mult": false
+  },
+  "EncouragePet": {
+   "cat": "pet",
+   "metric": "none",
+   "target": "self",
+   "side": "gain",
+   "phase": "combat",
+   "value": 0,
+   "num": false,
+   "mult": false
+  },
+  "FetchPet": {
+   "cat": "pet",
+   "metric": "none",
+   "target": "self",
+   "side": "gain",
+   "phase": "combat",
+   "value": 0,
+   "num": false,
+   "mult": false
+  },
+  "IncreaseConfusion": {
+   "cat": "debuff",
+   "metric": "status",
+   "target": "enemy",
+   "side": "gain",
+   "phase": "combat",
+   "value": 1,
+   "num": true,
+   "mult": true
+  },
+  "LayEggs": {
+   "cat": "pet",
+   "metric": "none",
+   "target": "self",
+   "side": "gain",
+   "phase": "combat",
+   "value": 0,
+   "num": false,
+   "mult": true
+  },
+  "LevelUpCard": {
+   "cat": "cardmod",
+   "metric": "card",
+   "target": "card",
+   "side": "gain",
+   "phase": "both",
+   "value": 0,
+   "num": false,
+   "mult": false
+  },
+  "MakeOrScaleExistingCard": {
+   "cat": "cardgen",
+   "metric": "card",
+   "target": "card",
+   "side": "gain",
+   "phase": "both",
+   "value": 0,
+   "num": false,
+   "mult": false
+  },
+  "MakeVolatile": {
+   "cat": "debuff",
+   "metric": "status",
+   "target": "enemy",
+   "side": "gain",
+   "phase": "combat",
+   "value": 1,
+   "num": false,
+   "mult": false
+  },
+  "MoveTowardsFriend": {
+   "cat": "misc",
+   "metric": "none",
+   "target": "self",
+   "side": "neutral",
+   "phase": "combat",
+   "value": 0,
+   "num": false,
+   "mult": false
+  },
+  "MultiplyConfusion": {
+   "cat": "debuff",
+   "metric": "status",
+   "target": "enemy",
+   "side": "gain",
+   "phase": "combat",
+   "value": 1,
+   "num": true,
+   "mult": true
+  },
+  "RaiseGhosts": {
+   "cat": "summon",
+   "metric": "none",
+   "target": "self",
+   "side": "gain",
+   "phase": "combat",
+   "value": 1,
+   "num": false,
+   "mult": false
+  },
+  "ReduceCountdown": {
+   "cat": "buff",
+   "metric": "none",
+   "target": "self",
+   "side": "gain",
+   "phase": "combat",
+   "value": 1,
+   "num": false,
+   "mult": false
+  },
+  "ReturnRandomExhaustedFood": {
+   "cat": "cardgen",
+   "metric": "card",
+   "target": "self",
+   "side": "gain",
+   "phase": "combat",
+   "value": 0,
+   "num": true,
+   "mult": false
+  },
+  "ShieldDONTUSE": {
+   "cat": "defense",
+   "metric": "shield",
+   "target": "self",
+   "side": "gain",
+   "phase": "combat",
+   "value": 1,
+   "num": false,
+   "mult": false
+  },
+  "Taunt": {
+   "cat": "debuff",
+   "metric": "status",
+   "target": "enemy",
+   "side": "gain",
+   "phase": "combat",
+   "value": 1,
+   "num": true,
+   "mult": true
+  },
+  "GetStoked": {
+   "cat": "buff",
+   "metric": "status",
+   "target": "self",
+   "side": "gain",
+   "phase": "combat",
+   "value": 1,
+   "num": false,
+   "mult": false
+  },
+  "Prepare": {
+   "cat": "buff",
+   "metric": "none",
+   "target": "self",
+   "side": "gain",
+   "phase": "combat",
+   "value": 1,
+   "num": false,
+   "mult": false
+  },
+  "AddCardToTopOfDeck": {
+   "cat": "cardgen",
+   "metric": "card",
+   "target": "self",
+   "side": "gain",
+   "phase": "both",
+   "value": 0,
+   "num": false,
+   "mult": false
+  },
+  "AddPropertyToCard": {
+   "cat": "cardmod",
+   "metric": "card",
+   "target": "card",
+   "side": "gain",
+   "phase": "both",
+   "value": 0,
+   "num": false,
+   "mult": true
+  },
+  "DischargeAllBattery": {
+   "cat": "resource",
+   "metric": "energy",
+   "target": "self",
+   "side": "gain",
+   "phase": "combat",
+   "value": 1,
+   "num": true,
+   "mult": true
+  },
+  "IncreaseBattery": {
+   "cat": "resource",
+   "metric": "energy",
+   "target": "self",
+   "side": "gain",
+   "phase": "combat",
+   "value": 1,
+   "num": true,
+   "mult": true
+  },
+  "UseBattery": {
+   "cat": "resource",
+   "metric": "energy",
+   "target": "self",
+   "side": "gain",
+   "phase": "combat",
+   "value": 1,
+   "num": true,
+   "mult": false
+  },
+  "ConsumeCard": {
+   "cat": "eat",
+   "metric": "resource",
+   "target": "card",
+   "side": "gain",
+   "phase": "both",
+   "value": 0,
+   "num": false,
+   "mult": false
+  },
+  "CreateGloom": {
+   "cat": "cardgen",
+   "metric": "card",
+   "target": "self",
+   "side": "gain",
+   "phase": "both",
+   "value": 0,
+   "num": true,
+   "mult": false
+  },
+  "DrawConsumeGunkCard": {
+   "cat": "cardgen",
+   "metric": "card",
+   "target": "self",
+   "side": "gain",
+   "phase": "combat",
+   "value": 1,
+   "num": true,
+   "mult": true
+  },
+  "DrawCreatureCard": {
+   "cat": "cardgen",
+   "metric": "card",
+   "target": "self",
+   "side": "gain",
+   "phase": "combat",
+   "value": 1,
+   "num": false,
+   "mult": false
+  },
+  "DrawDamageCard": {
+   "cat": "cardgen",
+   "metric": "card",
+   "target": "self",
+   "side": "gain",
+   "phase": "combat",
+   "value": 1,
+   "num": true,
+   "mult": false
+  },
+  "DrawFoodCard": {
+   "cat": "cardgen",
+   "metric": "card",
+   "target": "self",
+   "side": "gain",
+   "phase": "combat",
+   "value": 1,
+   "num": true,
+   "mult": false
+  },
+  "DrawGearCard": {
+   "cat": "cardgen",
+   "metric": "card",
+   "target": "self",
+   "side": "gain",
+   "phase": "combat",
+   "value": 1,
+   "num": false,
+   "mult": false
+  },
+  "DrawStoreGunkCard": {
+   "cat": "cardgen",
+   "metric": "card",
+   "target": "self",
+   "side": "gain",
+   "phase": "combat",
+   "value": 1,
+   "num": false,
+   "mult": false
+  },
+  "EatCreature": {
+   "cat": "eat",
+   "metric": "heal",
+   "target": "self",
+   "side": "gain",
+   "phase": "combat",
+   "value": 1,
+   "num": false,
+   "mult": false
+  },
+  "EatData": {
+   "cat": "eat",
+   "metric": "heal",
+   "target": "self",
+   "side": "gain",
+   "phase": "combat",
+   "value": 1,
+   "num": false,
+   "mult": false
+  },
+  "EatFood": {
+   "cat": "eat",
+   "metric": "heal",
+   "target": "self",
+   "side": "gain",
+   "phase": "combat",
+   "value": 1,
+   "num": false,
+   "mult": false
+  },
+  "EatFoodAndAbsorbDamage": {
+   "cat": "eat",
+   "metric": "heal",
+   "target": "self",
+   "side": "gain",
+   "phase": "combat",
+   "value": 1,
+   "num": false,
+   "mult": false
+  },
+  "EatFoodAndStoreProtein": {
+   "cat": "eat",
+   "metric": "resource",
+   "target": "self",
+   "side": "gain",
+   "phase": "combat",
+   "value": 1,
+   "num": false,
+   "mult": false
+  },
+  "ExhaustTargetCard": {
+   "cat": "cardmod",
+   "metric": "card",
+   "target": "card",
+   "side": "gain",
+   "phase": "combat",
+   "value": 0,
+   "num": false,
+   "mult": true
+  },
+  "ExhaustTargetFood": {
+   "cat": "eat",
+   "metric": "resource",
+   "target": "card",
+   "side": "gain",
+   "phase": "both",
+   "value": 0,
+   "num": false,
+   "mult": false
+  },
+  "GainAReroll": {
+   "cat": "resource",
+   "metric": "resource",
+   "target": "self",
+   "side": "gain",
+   "phase": "both",
+   "value": 1,
+   "num": true,
+   "mult": false
+  },
+  "IncreaseRage": {
+   "cat": "buff",
+   "metric": "status",
+   "target": "self",
+   "side": "gain",
+   "phase": "combat",
+   "value": 1,
+   "num": true,
+   "mult": true
+  },
+  "MakeAPermanentCopy": {
+   "cat": "cardgen",
+   "metric": "card",
+   "target": "card",
+   "side": "gain",
+   "phase": "both",
+   "value": 0,
+   "num": false,
+   "mult": false
+  },
+  "MakeATemporaryCopy": {
+   "cat": "cardgen",
+   "metric": "card",
+   "target": "card",
+   "side": "gain",
+   "phase": "both",
+   "value": 0,
+   "num": false,
+   "mult": false
+  },
+  "MakeATemporaryCopyOfCreature": {
+   "cat": "cardgen",
+   "metric": "card",
+   "target": "card",
+   "side": "gain",
+   "phase": "combat",
+   "value": 0,
+   "num": false,
+   "mult": false
+  },
+  "MakeATemporaryOfTriggerSource": {
+   "cat": "cardgen",
+   "metric": "card",
+   "target": "card",
+   "side": "gain",
+   "phase": "combat",
+   "value": 0,
+   "num": false,
+   "mult": false
+  },
+  "MakeCard": {
+   "cat": "cardgen",
+   "metric": "card",
+   "target": "card",
+   "side": "gain",
+   "phase": "both",
+   "value": 0,
+   "num": true,
+   "mult": false
+  },
+  "MakeCardDamageEqualToProtein": {
+   "cat": "cardgen",
+   "metric": "damage",
+   "target": "card",
+   "side": "gain",
+   "phase": "combat",
+   "value": 0,
+   "num": true,
+   "mult": false
+  },
+  "MakeCardFullDamage": {
+   "cat": "cardgen",
+   "metric": "damage",
+   "target": "card",
+   "side": "gain",
+   "phase": "combat",
+   "value": 0,
+   "num": false,
+   "mult": false
+  },
+  "MakeCardHalfDamage": {
+   "cat": "cardgen",
+   "metric": "damage",
+   "target": "card",
+   "side": "gain",
+   "phase": "combat",
+   "value": 0,
+   "num": true,
+   "mult": false
+  },
+  "MakeCardNextCombat": {
+   "cat": "cardgen",
+   "metric": "card",
+   "target": "card",
+   "side": "gain",
+   "phase": "combat",
+   "value": 0,
+   "num": true,
+   "mult": false
+  },
+  "MakeCardNextExplore": {
+   "cat": "cardgen",
+   "metric": "card",
+   "target": "card",
+   "side": "gain",
+   "phase": "explore",
+   "value": 0,
+   "num": true,
+   "mult": false
+  },
+  "MakeCardWithDamage": {
+   "cat": "cardgen",
+   "metric": "damage",
+   "target": "card",
+   "side": "gain",
+   "phase": "combat",
+   "value": 0,
+   "num": true,
+   "mult": false
+  },
+  "MakeCardWithDecay": {
+   "cat": "cardgen",
+   "metric": "card",
+   "target": "card",
+   "side": "gain",
+   "phase": "combat",
+   "value": 0,
+   "num": true,
+   "mult": false
+  },
+  "MakeCardWithTargetDecay": {
+   "cat": "cardgen",
+   "metric": "card",
+   "target": "card",
+   "side": "gain",
+   "phase": "combat",
+   "value": 0,
+   "num": false,
+   "mult": false
+  },
+  "MakeSacrifice": {
+   "cat": "misc",
+   "metric": "none",
+   "target": "self",
+   "side": "neutral",
+   "phase": "combat",
+   "value": 0,
+   "num": false,
+   "mult": false
+  },
+  "AddMakeCard": {
+   "cat": "cardgen",
+   "metric": "card",
+   "target": "card",
+   "side": "gain",
+   "phase": "both",
+   "value": 0,
+   "num": true,
+   "mult": true
+  },
+  "Consume": {
+   "cat": "eat",
+   "metric": "resource",
+   "target": "card",
+   "side": "gain",
+   "phase": "both",
+   "value": 0,
+   "num": false,
+   "mult": false
+  },
+  "IncreaseAppliedDecay": {
+   "cat": "debuff",
+   "metric": "status",
+   "target": "enemy",
+   "side": "gain",
+   "phase": "combat",
+   "value": 1,
+   "num": true,
+   "mult": true
+  },
+  "IncreaseAppliedDecayMultiply": {
+   "cat": "debuff",
+   "metric": "status",
+   "target": "enemy",
+   "side": "gain",
+   "phase": "combat",
+   "value": 1,
+   "num": true,
+   "mult": true
+  },
+  "IncreaseDamage": {
+   "cat": "buff",
+   "metric": "status",
+   "target": "self",
+   "side": "gain",
+   "phase": "combat",
+   "value": 1,
+   "num": true,
+   "mult": true
+  },
+  "IncreaseHealing": {
+   "cat": "buff",
+   "metric": "status",
+   "target": "self",
+   "side": "gain",
+   "phase": "combat",
+   "value": 1,
+   "num": true,
+   "mult": true
+  },
+  "IncreaseMakeCard": {
+   "cat": "buff",
+   "metric": "card",
+   "target": "self",
+   "side": "gain",
+   "phase": "both",
+   "value": 0,
+   "num": true,
+   "mult": true
+  },
+  "IncreaseSelfHealing": {
+   "cat": "buff",
+   "metric": "status",
+   "target": "self",
+   "side": "gain",
+   "phase": "both",
+   "value": 1,
+   "num": false,
+   "mult": false
+  },
+  "IncreaseSpellWeakness": {
+   "cat": "debuff",
+   "metric": "status",
+   "target": "enemy",
+   "side": "gain",
+   "phase": "combat",
+   "value": 1,
+   "num": true,
+   "mult": true
+  },
+  "IncreaseUses": {
+   "cat": "cardmod",
+   "metric": "card",
+   "target": "card",
+   "side": "gain",
+   "phase": "both",
+   "value": 0,
+   "num": true,
+   "mult": true
+  },
+  "LeachCost": {
+   "cat": "resource",
+   "metric": "energy",
+   "target": "enemy",
+   "side": "gain",
+   "phase": "combat",
+   "value": 1,
+   "num": true,
+   "mult": false
+  },
+  "ReduceCost": {
+   "cat": "cardmod",
+   "metric": "card",
+   "target": "card",
+   "side": "gain",
+   "phase": "both",
+   "value": 0,
+   "num": true,
+   "mult": true
+  },
+  "ReduceCostPermanently": {
+   "cat": "cardmod",
+   "metric": "card",
+   "target": "card",
+   "side": "gain",
+   "phase": "both",
+   "value": 0,
+   "num": true,
+   "mult": true
+  },
+  "ResetDamage": {
+   "cat": "buff",
+   "metric": "status",
+   "target": "self",
+   "side": "gain",
+   "phase": "combat",
+   "value": 1,
+   "num": false,
+   "mult": true
+  },
+  "ResetHealing": {
+   "cat": "buff",
+   "metric": "status",
+   "target": "self",
+   "side": "gain",
+   "phase": "combat",
+   "value": 1,
+   "num": false,
+   "mult": true
+  },
+  "SetCostToZero": {
+   "cat": "cardmod",
+   "metric": "card",
+   "target": "card",
+   "side": "gain",
+   "phase": "both",
+   "value": 0,
+   "num": false,
+   "mult": true
+  },
+  "SetCostToZeroPermanently": {
+   "cat": "cardmod",
+   "metric": "card",
+   "target": "card",
+   "side": "gain",
+   "phase": "both",
+   "value": 0,
+   "num": false,
+   "mult": true
+  },
+  "MultiplyDamage": {
+   "cat": "buff",
+   "metric": "status",
+   "target": "self",
+   "side": "gain",
+   "phase": "combat",
+   "value": 1,
+   "num": true,
+   "mult": true
+  },
+  "PacifyRage": {
+   "cat": "debuff",
+   "metric": "status",
+   "target": "enemy",
+   "side": "gain",
+   "phase": "combat",
+   "value": 1,
+   "num": false,
+   "mult": false
+  },
+  "ReturnLastExhaustedCard": {
+   "cat": "cardgen",
+   "metric": "card",
+   "target": "self",
+   "side": "gain",
+   "phase": "both",
+   "value": 0,
+   "num": false,
+   "mult": false
+  },
+  "ReturnRandomExhaustedCard": {
+   "cat": "cardgen",
+   "metric": "card",
+   "target": "self",
+   "side": "gain",
+   "phase": "both",
+   "value": 0,
+   "num": true,
+   "mult": false
+  },
+  "ReturnRandomExhaustedCreature": {
+   "cat": "cardgen",
+   "metric": "card",
+   "target": "self",
+   "side": "gain",
+   "phase": "combat",
+   "value": 0,
+   "num": true,
+   "mult": false
+  },
+  "SubstituteCard": {
+   "cat": "cardmod",
+   "metric": "card",
+   "target": "card",
+   "side": "gain",
+   "phase": "both",
+   "value": 0,
+   "num": false,
+   "mult": false
+  },
+  "SubstituteCardWithProperty": {
+   "cat": "cardmod",
+   "metric": "card",
+   "target": "card",
+   "side": "gain",
+   "phase": "both",
+   "value": 0,
+   "num": false,
+   "mult": false
+  },
+  "SwapCardOut": {
+   "cat": "cardmod",
+   "metric": "card",
+   "target": "card",
+   "side": "gain",
+   "phase": "both",
+   "value": 0,
+   "num": false,
+   "mult": false
+  },
+  "TriggerEnemyDeath": {
+   "cat": "summon",
+   "metric": "none",
+   "target": "self",
+   "side": "gain",
+   "phase": "combat",
+   "value": 1,
+   "num": false,
+   "mult": false
+  },
+  "TriggerTurret": {
+   "cat": "summon",
+   "metric": "damage",
+   "target": "enemy",
+   "side": "gain",
+   "phase": "combat",
+   "value": 1,
+   "num": false,
+   "mult": true
+  },
+  "IncreaseWarmth": {
+   "cat": "buff",
+   "metric": "status",
+   "target": "self",
+   "side": "gain",
+   "phase": "both",
+   "value": 1,
+   "num": true,
+   "mult": true
+  },
+  "CollectAllGunk": {
+   "cat": "resource",
+   "metric": "resource",
+   "target": "self",
+   "side": "gain",
+   "phase": "combat",
+   "value": 1,
+   "num": false,
+   "mult": true
+  },
+  "CollectAllGunkAndHeal": {
+   "cat": "resource",
+   "metric": "heal",
+   "target": "self",
+   "side": "gain",
+   "phase": "combat",
+   "value": 1,
+   "num": true,
+   "mult": true
+  },
+  "ConsumeAllGunk": {
+   "cat": "resource",
+   "metric": "resource",
+   "target": "self",
+   "side": "gain",
+   "phase": "combat",
+   "value": 1,
+   "num": false,
+   "mult": true
+  },
+  "ConsumeGunk": {
+   "cat": "eat",
+   "metric": "heal",
+   "target": "self",
+   "side": "gain",
+   "phase": "combat",
+   "value": 1,
+   "num": true,
+   "mult": false
+  },
+  "IncreaseGunk": {
+   "cat": "resource",
+   "metric": "resource",
+   "target": "self",
+   "side": "gain",
+   "phase": "both",
+   "value": 1,
+   "num": true,
+   "mult": true
+  },
+  "MoveGunk": {
+   "cat": "resource",
+   "metric": "resource",
+   "target": "self",
+   "side": "gain",
+   "phase": "combat",
+   "value": 1,
+   "num": true,
+   "mult": false
+  },
+  "IncreaseStoredGunk": {
+   "cat": "resource",
+   "metric": "resource",
+   "target": "self",
+   "side": "gain",
+   "phase": "both",
+   "value": 1,
+   "num": true,
+   "mult": false
+  },
+  "StoreGunk": {
+   "cat": "resource",
+   "metric": "resource",
+   "target": "self",
+   "side": "gain",
+   "phase": "both",
+   "value": 1,
+   "num": true,
+   "mult": true
+  },
+  "UseStoredGunk": {
+   "cat": "resource",
+   "metric": "resource",
+   "target": "self",
+   "side": "gain",
+   "phase": "combat",
+   "value": 1,
+   "num": true,
+   "mult": false
+  },
+  "EndTurn": {
+   "cat": "explore",
+   "metric": "none",
+   "target": "world",
+   "side": "neutral",
+   "phase": "combat",
+   "value": 0,
+   "num": false,
+   "mult": false
+  },
+  "Rest": {
+   "cat": "explore",
+   "metric": "heal",
+   "target": "self",
+   "side": "gain",
+   "phase": "explore",
+   "value": 1,
+   "num": false,
+   "mult": false
+  },
+  "Adopt": {
+   "cat": "explore",
+   "metric": "none",
+   "target": "self",
+   "side": "gain",
+   "phase": "explore",
+   "value": 0,
+   "num": false,
+   "mult": false
+  },
+  "ApplyBlessed": {
+   "cat": "buff",
+   "metric": "status",
+   "target": "self",
+   "side": "gain",
+   "phase": "combat",
+   "value": 1,
+   "num": true,
+   "mult": true
+  },
+  "ApplyCharged": {
+   "cat": "buff",
+   "metric": "status",
+   "target": "self",
+   "side": "gain",
+   "phase": "combat",
+   "value": 1,
+   "num": true,
+   "mult": true
+  },
+  "ApplyConfuse": {
+   "cat": "debuff",
+   "metric": "status",
+   "target": "enemy",
+   "side": "gain",
+   "phase": "combat",
+   "value": 1,
+   "num": true,
+   "mult": true
+  },
+  "ApplyDecay": {
+   "cat": "debuff",
+   "metric": "status",
+   "target": "enemy",
+   "side": "gain",
+   "phase": "combat",
+   "value": 1,
+   "num": true,
+   "mult": true
+  },
+  "ApplyDecayMultiply": {
+   "cat": "debuff",
+   "metric": "status",
+   "target": "enemy",
+   "side": "gain",
+   "phase": "combat",
+   "value": 1,
+   "num": true,
+   "mult": true
+  },
+  "ApplyHotSauced": {
+   "cat": "debuff",
+   "metric": "status",
+   "target": "enemy",
+   "side": "gain",
+   "phase": "combat",
+   "value": 1,
+   "num": false,
+   "mult": true
+  },
+  "ApplyLeech": {
+   "cat": "debuff",
+   "metric": "status",
+   "target": "enemy",
+   "side": "gain",
+   "phase": "combat",
+   "value": 1,
+   "num": true,
+   "mult": true
+  },
+  "ApplyMarked": {
+   "cat": "debuff",
+   "metric": "status",
+   "target": "enemy",
+   "side": "gain",
+   "phase": "combat",
+   "value": 1,
+   "num": true,
+   "mult": true
+  },
+  "ApplyMelting": {
+   "cat": "debuff",
+   "metric": "status",
+   "target": "enemy",
+   "side": "gain",
+   "phase": "combat",
+   "value": 1,
+   "num": true,
+   "mult": true
+  },
+  "ApplyNanoLaced": {
+   "cat": "debuff",
+   "metric": "status",
+   "target": "enemy",
+   "side": "gain",
+   "phase": "combat",
+   "value": 1,
+   "num": true,
+   "mult": true
+  },
+  "ApplyPlump": {
+   "cat": "debuff",
+   "metric": "status",
+   "target": "enemy",
+   "side": "gain",
+   "phase": "combat",
+   "value": 1,
+   "num": false,
+   "mult": true
+  },
+  "ApplyPoisoned": {
+   "cat": "debuff",
+   "metric": "damage",
+   "target": "enemy",
+   "side": "gain",
+   "phase": "combat",
+   "value": 1,
+   "num": true,
+   "mult": true
+  },
+  "ApplySeasoned": {
+   "cat": "debuff",
+   "metric": "status",
+   "target": "enemy",
+   "side": "gain",
+   "phase": "combat",
+   "value": 1,
+   "num": false,
+   "mult": true
+  },
+  "ApplySpellWeakness": {
+   "cat": "debuff",
+   "metric": "status",
+   "target": "enemy",
+   "side": "gain",
+   "phase": "combat",
+   "value": 1,
+   "num": true,
+   "mult": true
+  },
+  "ApplySticky": {
+   "cat": "debuff",
+   "metric": "status",
+   "target": "enemy",
+   "side": "gain",
+   "phase": "combat",
+   "value": 1,
+   "num": true,
+   "mult": true
+  },
+  "ApplyStudied": {
+   "cat": "debuff",
+   "metric": "status",
+   "target": "enemy",
+   "side": "gain",
+   "phase": "combat",
+   "value": 1,
+   "num": true,
+   "mult": true
+  },
+  "ApplyStunned": {
+   "cat": "debuff",
+   "metric": "status",
+   "target": "enemy",
+   "side": "gain",
+   "phase": "combat",
+   "value": 1,
+   "num": true,
+   "mult": true
+  },
+  "ApplyThorns": {
+   "cat": "defense",
+   "metric": "shield",
+   "target": "self",
+   "side": "gain",
+   "phase": "combat",
+   "value": 1,
+   "num": true,
+   "mult": true
+  },
+  "ApplyVibrating": {
+   "cat": "debuff",
+   "metric": "status",
+   "target": "enemy",
+   "side": "gain",
+   "phase": "combat",
+   "value": 1,
+   "num": true,
+   "mult": true
+  },
+  "ApplyVulnerable": {
+   "cat": "debuff",
+   "metric": "status",
+   "target": "enemy",
+   "side": "gain",
+   "phase": "combat",
+   "value": 1,
+   "num": true,
+   "mult": true
+  },
+  "BecomeLodged": {
+   "cat": "cardmod",
+   "metric": "card",
+   "target": "card",
+   "side": "gain",
+   "phase": "combat",
+   "value": 0,
+   "num": false,
+   "mult": true
+  },
+  "BindToCard": {
+   "cat": "cardmod",
+   "metric": "card",
+   "target": "card",
+   "side": "gain",
+   "phase": "both",
+   "value": 0,
+   "num": false,
+   "mult": false
+  },
+  "CreateLodgedCard": {
+   "cat": "cardgen",
+   "metric": "card",
+   "target": "card",
+   "side": "gain",
+   "phase": "combat",
+   "value": 0,
+   "num": false,
+   "mult": true
+  },
+  "CreateLodgedCardWithDecay": {
+   "cat": "cardgen",
+   "metric": "card",
+   "target": "card",
+   "side": "gain",
+   "phase": "combat",
+   "value": 0,
+   "num": true,
+   "mult": true
+  },
+  "Cripple": {
+   "cat": "debuff",
+   "metric": "status",
+   "target": "enemy",
+   "side": "gain",
+   "phase": "combat",
+   "value": 1,
+   "num": false,
+   "mult": true
+  },
+  "DealHalfHealthInDamage": {
+   "cat": "damage",
+   "metric": "damage",
+   "target": "enemy",
+   "side": "gain",
+   "phase": "combat",
+   "value": 1,
+   "num": false,
+   "mult": false
+  },
+  "DispellConfusion": {
+   "cat": "buff",
+   "metric": "status",
+   "target": "self",
+   "side": "gain",
+   "phase": "combat",
+   "value": 1,
+   "num": false,
+   "mult": false
+  },
+  "EatenDamage": {
+   "cat": "damage",
+   "metric": "damage",
+   "target": "enemy",
+   "side": "gain",
+   "phase": "combat",
+   "value": 1,
+   "num": true,
+   "mult": false
+  },
+  "ReduceStatusEffects": {
+   "cat": "buff",
+   "metric": "status",
+   "target": "self",
+   "side": "gain",
+   "phase": "combat",
+   "value": 1,
+   "num": true,
+   "mult": true
+  },
+  "DamageSelf": {
+   "cat": "damage",
+   "metric": "damage",
+   "target": "self",
+   "side": "harm",
+   "phase": "combat",
+   "value": 1,
+   "num": true,
+   "mult": false
+  },
+  "GainEnergy": {
+   "cat": "resource",
+   "metric": "energy",
+   "target": "self",
+   "side": "gain",
+   "phase": "combat",
+   "value": 1,
+   "num": true,
+   "mult": true
+  },
+  "GainMaxEnergy": {
+   "cat": "buff",
+   "metric": "energy",
+   "target": "self",
+   "side": "gain",
+   "phase": "combat",
+   "value": 1,
+   "num": true,
+   "mult": false
+  },
+  "HealSelf": {
+   "cat": "heal",
+   "metric": "heal",
+   "target": "self",
+   "side": "gain",
+   "phase": "combat",
+   "value": 1,
+   "num": false,
+   "mult": false
+  },
+  "IncreaseGloomStored": {
+   "cat": "resource",
+   "metric": "resource",
+   "target": "self",
+   "side": "gain",
+   "phase": "both",
+   "value": 1,
+   "num": true,
+   "mult": true
+  },
+  "IncreaseMaxHealth": {
+   "cat": "buff",
+   "metric": "status",
+   "target": "self",
+   "side": "gain",
+   "phase": "both",
+   "value": 1,
+   "num": true,
+   "mult": false
+  },
+  "WarmPlayer": {
+   "cat": "buff",
+   "metric": "status",
+   "target": "self",
+   "side": "gain",
+   "phase": "explore",
+   "value": 1,
+   "num": true,
+   "mult": false
+  },
+  "CauseRevengeArc": {
+   "cat": "misc",
+   "metric": "damage",
+   "target": "enemy",
+   "side": "gain",
+   "phase": "combat",
+   "value": 1,
+   "num": false,
+   "mult": false
+  },
+  "ChooseCardToForget": {
+   "cat": "cardmod",
+   "metric": "card",
+   "target": "card",
+   "side": "gain",
+   "phase": "both",
+   "value": 0,
+   "num": false,
+   "mult": false
+  },
+  "BunchOfKeys": {
+   "cat": "cardgen",
+   "metric": "card",
+   "target": "self",
+   "side": "gain",
+   "phase": "explore",
+   "value": 0,
+   "num": false,
+   "mult": false
+  },
+  "DigForTreasure": {
+   "cat": "explore",
+   "metric": "none",
+   "target": "world",
+   "side": "gain",
+   "phase": "explore",
+   "value": 0,
+   "num": false,
+   "mult": false
+  },
+  "Meditate": {
+   "cat": "explore",
+   "metric": "heal",
+   "target": "self",
+   "side": "gain",
+   "phase": "explore",
+   "value": 1,
+   "num": false,
+   "mult": false
+  },
+  "Scavenge": {
+   "cat": "explore",
+   "metric": "none",
+   "target": "world",
+   "side": "gain",
+   "phase": "explore",
+   "value": 0,
+   "num": false,
+   "mult": false
+  },
+  "SearchPockets": {
+   "cat": "explore",
+   "metric": "none",
+   "target": "world",
+   "side": "gain",
+   "phase": "explore",
+   "value": 0,
+   "num": false,
+   "mult": false
+  },
+  "StackOfKeycards": {
+   "cat": "cardgen",
+   "metric": "card",
+   "target": "self",
+   "side": "gain",
+   "phase": "explore",
+   "value": 0,
+   "num": false,
+   "mult": false
+  },
+  "TruffleHunt": {
+   "cat": "explore",
+   "metric": "none",
+   "target": "world",
+   "side": "gain",
+   "phase": "explore",
+   "value": 0,
+   "num": false,
+   "mult": false
+  },
+  "DiscardAndShuffleAndRedraw": {
+   "cat": "cardmod",
+   "metric": "draw",
+   "target": "self",
+   "side": "gain",
+   "phase": "combat",
+   "value": 1,
+   "num": true,
+   "mult": false
+  },
+  "DiscardCard": {
+   "cat": "cardmod",
+   "metric": "card",
+   "target": "card",
+   "side": "gain",
+   "phase": "both",
+   "value": 0,
+   "num": false,
+   "mult": true
+  },
+  "DrawCardsEffect": {
+   "cat": "cardgen",
+   "metric": "draw",
+   "target": "self",
+   "side": "gain",
+   "phase": "combat",
+   "value": 1,
+   "num": true,
+   "mult": false
+  },
+  "CreateCardEncounter": {
+   "cat": "cardgen",
+   "metric": "card",
+   "target": "card",
+   "side": "gain",
+   "phase": "explore",
+   "value": 0,
+   "num": false,
+   "mult": false
+  },
+  "DestroyCampStructure": {
+   "cat": "explore",
+   "metric": "none",
+   "target": "world",
+   "side": "neutral",
+   "phase": "explore",
+   "value": 0,
+   "num": false,
+   "mult": false
+  },
+  "ResetCampStructure": {
+   "cat": "explore",
+   "metric": "none",
+   "target": "world",
+   "side": "neutral",
+   "phase": "explore",
+   "value": 0,
+   "num": false,
+   "mult": false
+  },
+  "ExecuteProtocol": {
+   "cat": "explore",
+   "metric": "none",
+   "target": "world",
+   "side": "gain",
+   "phase": "explore",
+   "value": 0,
+   "num": false,
+   "mult": false
+  },
+  "LoyalCanary": {
+   "cat": "pet",
+   "metric": "none",
+   "target": "self",
+   "side": "gain",
+   "phase": "combat",
+   "value": 0,
+   "num": false,
+   "mult": false
+  },
+  "LoyalLouse": {
+   "cat": "pet",
+   "metric": "none",
+   "target": "self",
+   "side": "gain",
+   "phase": "combat",
+   "value": 0,
+   "num": false,
+   "mult": false
+  },
+  "OpenMap": {
+   "cat": "explore",
+   "metric": "none",
+   "target": "world",
+   "side": "gain",
+   "phase": "explore",
+   "value": 0,
+   "num": false,
+   "mult": false
+  },
+  "DigOld": {
+   "cat": "explore",
+   "metric": "none",
+   "target": "world",
+   "side": "gain",
+   "phase": "explore",
+   "value": 0,
+   "num": false,
+   "mult": false
+  },
+  "RevealAll": {
+   "cat": "explore",
+   "metric": "none",
+   "target": "world",
+   "side": "gain",
+   "phase": "explore",
+   "value": 0,
+   "num": false,
+   "mult": false
+  },
+  "StoreGloom": {
+   "cat": "resource",
+   "metric": "resource",
+   "target": "self",
+   "side": "gain",
+   "phase": "both",
+   "value": 1,
+   "num": true,
+   "mult": true
+  },
+  "StoredGloomToMaxHealth": {
+   "cat": "resource",
+   "metric": "heal",
+   "target": "self",
+   "side": "gain",
+   "phase": "both",
+   "value": 1,
+   "num": false,
+   "mult": false
+  },
+  "RemoveTempProperties": {
+   "cat": "cardmod",
+   "metric": "card",
+   "target": "card",
+   "side": "neutral",
+   "phase": "both",
+   "value": 0,
+   "num": false,
+   "mult": false
+  },
+  "Break": {
+   "cat": "explore",
+   "metric": "none",
+   "target": "world",
+   "side": "gain",
+   "phase": "explore",
+   "value": 0,
+   "num": false,
+   "mult": false
+  },
+  "Dig": {
+   "cat": "explore",
+   "metric": "none",
+   "target": "world",
+   "side": "gain",
+   "phase": "explore",
+   "value": 0,
+   "num": false,
+   "mult": false
+  },
+  "Feed": {
+   "cat": "explore",
+   "metric": "heal",
+   "target": "self",
+   "side": "gain",
+   "phase": "explore",
+   "value": 1,
+   "num": false,
+   "mult": false
+  },
+  "Fix": {
+   "cat": "explore",
+   "metric": "none",
+   "target": "world",
+   "side": "gain",
+   "phase": "explore",
+   "value": 0,
+   "num": false,
+   "mult": false
+  },
+  "Ignite": {
+   "cat": "explore",
+   "metric": "none",
+   "target": "world",
+   "side": "gain",
+   "phase": "explore",
+   "value": 0,
+   "num": false,
+   "mult": false
+  },
+  "Reveal": {
+   "cat": "explore",
+   "metric": "none",
+   "target": "world",
+   "side": "gain",
+   "phase": "explore",
+   "value": 0,
+   "num": false,
+   "mult": false
+  },
+  "Undiscovered": {
+   "cat": "explore",
+   "metric": "none",
+   "target": "world",
+   "side": "neutral",
+   "phase": "explore",
+   "value": 0,
+   "num": false,
+   "mult": false
+  },
+  "Unlock": {
+   "cat": "explore",
+   "metric": "none",
+   "target": "world",
+   "side": "gain",
+   "phase": "explore",
+   "value": 0,
+   "num": false,
+   "mult": false
+  },
+  "DealDamage": {
+   "cat": "damage",
+   "metric": "damage",
+   "target": "enemy",
+   "side": "gain",
+   "phase": "combat",
+   "value": 1,
+   "num": true,
+   "mult": true,
+   "runtimeOnly": true
+  },
+  "Nothing": {
+   "cat": "misc",
+   "metric": "none",
+   "target": "world",
+   "side": "neutral",
+   "phase": "both",
+   "value": 0,
+   "num": false,
+   "mult": false,
+   "runtimeOnly": true
+  }
+ }
+}
